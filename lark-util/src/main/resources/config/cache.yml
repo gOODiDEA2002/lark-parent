@@ -1,0 +1,15 @@
+#缓存配置
+cache:
+  config:
+    provider: Redis
+    - :
+      - :
+        key: GetGroup
+        time: 10
+        versionKey: GetGroupVersion
+      - :
+          key: Goods_GetGoods
+          time: 3
+      - :
+        key: test
+        time: 3

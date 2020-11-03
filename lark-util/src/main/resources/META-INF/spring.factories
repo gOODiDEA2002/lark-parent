@@ -1,0 +1,4 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+lark.util.cache.config.RedisConfiguration, \
+lark.util.lock.LockService, \
+lark.util.msg.MessageService
