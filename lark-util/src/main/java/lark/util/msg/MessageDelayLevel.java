@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit;
  * @author weixiaodong yhid: 80752866
  */
 public enum MessageDelayLevel {
+    
     L0_NO_DELAY(0, "不延时", 0, TimeUnit.SECONDS),
     L1_ONE_SEC(1, "1秒钟", 1, TimeUnit.SECONDS),
     L2_FIVE_SEC(2, "5秒钟", 5, TimeUnit.SECONDS),
@@ -63,7 +64,9 @@ public enum MessageDelayLevel {
         }
         int lDiff = (int) (sec - values()[id - 1].getUnit().toSeconds(values()[id - 1].getValue()));
         int rDiff = (int) (values()[id].getUnit().toSeconds(values()[id].getValue()) - sec);
-        if (lDiff <= rDiff) return values()[id - 1];
+        if (lDiff <= rDiff) {
+            return values()[id - 1];
+        }
         return values()[id];
     }
 
