@@ -1,11 +1,7 @@
 package lark.task.boot;
 
 import lark.core.boot.Application;
-import org.apache.commons.logging.Log;
 import org.springframework.core.io.ResourceLoader;
-
-import java.util.ArrayList;
-
 
 /**
  * @author cuigh

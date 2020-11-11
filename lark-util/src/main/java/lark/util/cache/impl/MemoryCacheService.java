@@ -57,7 +57,9 @@ public class MemoryCacheService implements CacheService {
     private <T> T getData(String key, String versionKey) {
         CacheItem ci = this.caches.get(key);
         if (ci != null && !ci.isExpired()) {
-            if (!get(versionKey, String.class).equals(ci.version)) return null;
+            if (!get(versionKey, String.class).equals(ci.version)) { 
+                return null;
+            }
             return (T) ci.value;
         }
         return null;
