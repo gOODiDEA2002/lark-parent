@@ -35,12 +35,9 @@ public class ServiceProxy {
     public <T> T get( String serverName, Class<T> clazz ) {
         //手动模式下无法路由，先这样
         String serverList = getServerList( serverName );
-        if ( Strings.isEmpty( serverList ) ) {
-            //可能服务还没注册
-            return null;
+        if ( !Strings.isEmpty( serverList ) ) {
+            setServerList( serverName, serverList );
         }
-        //
-        setServerList( serverName, serverList );
         //
         T service = Feign.builder()
                 .encoder(new JacksonEncoder())
