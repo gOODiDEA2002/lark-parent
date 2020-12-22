@@ -13,6 +13,7 @@
         <spring.cloud.netflix.version>2.2.0.RELEASE</spring.cloud.netflix.version>
         <spring.cloud.openfeign.version>2.2.0.RELEASE</spring.cloud.openfeign.version>
         <alibaba.nacos.version>2.2.0.RELEASE</alibaba.nacos.version>
+        <asm.version>7.2</asm.version>
     </properties>
     <dependencies>
         <dependency>
@@ -27,6 +28,11 @@
             <groupId>lark</groupId>
             <artifactId>lark-core</artifactId>
             <version>${lark.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.ow2.asm</groupId>
+            <artifactId>asm</artifactId>
+            <version>${asm.version}</version>
         </dependency>
         <!--spring cloud-->
         <dependency>
@@ -59,6 +65,15 @@
         <dependency>
             <groupId>io.github.openfeign</groupId>
             <artifactId>feign-jackson</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba.nacos</groupId>
+            <artifactId>nacos-client</artifactId>
+            <version>1.4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
         </dependency>
     </dependencies>
 </project>

@@ -76,13 +76,21 @@
 
     <distributionManagement>
         <repository>
-            <id>nexus-releases</id>
-            <url>http://192.168.99.90:8081/repository/maven-releases/</url>
+            <id>sanqlt-releases</id>
+            <url>http://nexus-dev.sanqlt.com/repository/maven-releases/</url>
         </repository>
         <snapshotRepository>
-            <id>nexus-snapshots</id>
-            <url>http://192.168.99.90:8081/repository/maven-snapshots/</url>
+            <id>sanqlt-snapshots</id>
+            <url>http://nexus-dev.sanqlt.com/repository/maven-snapshots/</url>
         </snapshotRepository>
+<!--        <repository>-->
+<!--            <id>playground-releases</id>-->
+<!--            <url>http://nexus.foo.com:8081/repository/maven-releases/</url>-->
+<!--        </repository>-->
+<!--        <snapshotRepository>-->
+<!--            <id>playground-snapshots</id>-->
+<!--            <url>http://nexus.foo.com:8081/repository/maven-snapshots/</url>-->
+<!--        </snapshotRepository>-->
     </distributionManagement>
 
     <profiles>

@@ -27,10 +27,4 @@ public @interface RpcMethod {
     String description() default "";
 
     String value() default "";
-    /**
-     * Invoke mode
-     *
-     * @return Invoke mode
-     */
-//    InvokeMode invoke() default InvokeMode.FAIL_OVER;
 }

@@ -17,6 +17,7 @@ public @interface RpcService {
      *
      * @return Service name
      */
+
     String name() default "";
 
     /**
@@ -26,10 +27,5 @@ public @interface RpcService {
      */
     String description() default "";
 
-    /**
-     * Invoke mode
-     *
-     * @return Invoke mode
-     */
-//    InvokeMode invoke() default InvokeMode.FAIL_OVER;
+    String value() default "";
 }

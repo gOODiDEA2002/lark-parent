@@ -5,6 +5,7 @@ import feign.hystrix.HystrixFeign;
 import feign.jackson.JacksonDecoder;
 import feign.jackson.JacksonEncoder;
 import feign.ribbon.LoadBalancingTarget;
+import lark.net.rpc.client.ServiceFactory;
 import org.apache.commons.configuration.AbstractConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
