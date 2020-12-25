@@ -14,6 +14,7 @@ import java.util.*;
 /**
  * @author cuigh
  */
+
 public class Application extends SpringApplication {
     protected ConfigurableApplicationContext ctx;
     private String id = new Guid().toString();

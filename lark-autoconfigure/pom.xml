@@ -45,6 +45,13 @@
         </dependency>
         <dependency>
             <groupId>lark</groupId>
+            <artifactId>lark-db</artifactId>
+            <version>${lark.version}</version>
+            <scope>compile</scope>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>lark</groupId>
             <artifactId>lark-net</artifactId>
             <version>${lark.version}</version>
             <scope>compile</scope>
@@ -68,6 +75,13 @@
             <groupId>lark</groupId>
             <artifactId>lark-api</artifactId>
             <version>${lark.version}</version>
+            <scope>compile</scope>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongodb-driver</artifactId>
+            <version>3.11.1</version>
             <scope>compile</scope>
             <optional>true</optional>
         </dependency>

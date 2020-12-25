@@ -1,0 +1,12 @@
+include:
+  - project: 'devops/ci-templates'
+    file: '/build/java.build.gitlab-ci.yml'
+  - project: 'devops/ci-templates'
+    file: '/deploy/java.deploy.gitlab-ci.yml'
+
+build_sanqlt:
+  extends:
+    - .sanqlt
+    - .build
+  script:
+  - mvn deploy -ff -B
