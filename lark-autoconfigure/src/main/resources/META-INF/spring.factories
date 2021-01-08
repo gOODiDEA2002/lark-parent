@@ -1,3 +1,5 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 lark.autoconfigure.db.MongoAutoConfiguration,\
-lark.autoconfigure.db.SqlAutoConfiguration
+lark.autoconfigure.db.SqlAutoConfiguration, \
+lark.autoconfigure.util.oss.OssAutoConfiguration, \
+lark.autoconfigure.util.index.IndexAutoConfiguration

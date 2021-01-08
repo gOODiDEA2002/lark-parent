@@ -16,7 +16,7 @@ import javax.sql.DataSource;
  * @author cuigh
  */
 @Configuration
-@ConditionalOnClass({DataSource.class})
+@ConditionalOnClass({SqlQuery.class, DataSource.class})
 public class SqlAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
