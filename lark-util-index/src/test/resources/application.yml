@@ -1,0 +1,6 @@
+lark:
+  util:
+    index:
+      host: es-00-qa.sanqlt.com
+      port: 9200
+      timeout: 3000
