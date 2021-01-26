@@ -9,9 +9,6 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>lark-task</artifactId>
-    <properties>
-        <xxl-job.version>2.2.0</xxl-job.version>
-    </properties>
     <dependencies>
         <dependency>
             <groupId>lark</groupId>
@@ -20,14 +17,13 @@
         </dependency>
         <dependency>
             <groupId>lark</groupId>
-            <artifactId>lark-util</artifactId>
+            <artifactId>lark-net</artifactId>
             <version>${lark.version}</version>
         </dependency>
         <!-- xxl-job-core -->
         <dependency>
             <groupId>com.xuxueli</groupId>
             <artifactId>xxl-job-core</artifactId>
-            <version>${xxl-job.version}</version>
         </dependency>
     </dependencies>
 </project>

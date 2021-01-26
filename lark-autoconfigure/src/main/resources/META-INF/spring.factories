@@ -1,5 +1,13 @@
+org.springframework.boot.autoconfigure.AutoConfigurationImportFilter=\
+  lark.autoconfigure.ExclusionFliter\
+
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-lark.autoconfigure.db.MongoAutoConfiguration,\
-lark.autoconfigure.db.SqlAutoConfiguration, \
-lark.autoconfigure.util.oss.OssAutoConfiguration, \
-lark.autoconfigure.util.index.IndexAutoConfiguration
+  lark.autoconfigure.core.CoreAutoConfiguration,\
+  lark.autoconfigure.registry.RegistryAutoConfiguration,\
+  lark.autoconfigure.data.DatabaseAutoConfiguration, \
+  lark.autoconfigure.task.TaskAutoConfiguration, \
+  lark.autoconfigure.msg.MsgPublisherAutoConfiguration, \
+  lark.autoconfigure.msg.MsgSubscriberAutoConfiguration, \
+  lark.autoconfigure.util.oss.OssAutoConfiguration, \
+  lark.autoconfigure.util.cache.CacheAutoConfiguration, \
+  lark.autoconfigure.util.index.IndexAutoConfiguration

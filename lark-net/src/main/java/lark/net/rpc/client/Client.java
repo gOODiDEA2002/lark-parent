@@ -1,36 +1,42 @@
 package lark.net.rpc.client;
 
+import lark.core.boot.RegistryService;
 import lark.core.codec.JsonCodec;
 import lark.net.Address;
 import lark.net.rpc.RpcError;
 import lark.net.rpc.RpcException;
-import lark.net.rpc.nacos.NacosClient;
 import okhttp3.*;
 import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
  * @author cuigh
  */
 public class Client {
-    private static final NacosClient NACOS_CLIENT = new NacosClient();
-    private static final OkHttpClient HTTP_CLIENT = new OkHttpClient();
+    private static final int TIMEOUT = 30;
+    private static final OkHttpClient HTTP_CLIENT = new OkHttpClient.Builder().
+            connectTimeout(TIMEOUT, TimeUnit.SECONDS).
+            readTimeout(TIMEOUT, TimeUnit.SECONDS).
+            writeTimeout( TIMEOUT, TimeUnit.SECONDS ).
+            build();
     private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
     private static final Logger log = LoggerFactory.getLogger(Client.class);
     private String server;
     private ClientOptions options;
     private List<Node> nodes;
+    RegistryService registryService;
 
-    public Client(String server, ClientOptions options) {
+    public Client(RegistryService registryService, String server, ClientOptions options) {
         Objects.requireNonNull(options);
+        this.registryService = registryService;
         this.server = server;
         this.options = options;
     }
@@ -39,7 +45,7 @@ public class Client {
 //        if (this.nodes == null) {
 //            initNodes();
 //        }
-        String nodeAddress = NACOS_CLIENT.getNodeAddress( this.server );
+        String nodeAddress = registryService.getService( this.server, Strings.EMPTY );
         nodeAddress += method.getPath();
         //
         String bodyJson = Strings.EMPTY;
@@ -49,14 +55,17 @@ public class Client {
         //
         RequestBody requestBody = RequestBody.create( JSON, bodyJson );
         Request request = new Request.Builder().url(nodeAddress).post(requestBody).build();
+        log.info("===> Request begin: server: {}, url: {}, data: {}", server, nodeAddress, bodyJson );
         try (Response response = HTTP_CLIENT.newCall(request).execute()) {
             ResponseBody responseBody = response.body();
             if ( responseBody != null ) {
                 String result = responseBody.string();
+                log.info("===> Request end: server: {}, url: {}, result: {}", server, nodeAddress, result );
                 return JsonCodec.decode( result, method.getReturnType());
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             log.error("Request failure: server: {}, url: {}, data: {} , Cause:{}", server, nodeAddress, bodyJson, e.getMessage() );
+            throw new RpcException( RpcError.CLIENT_DEADLINE_EXCEEDED, e );
         }
         return null;
     }

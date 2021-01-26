@@ -1,9 +1,9 @@
 package lark.msg.boot;
 
 import lark.core.boot.Application;
+import lark.msg.Subscriber;
 import lark.msg.Handler;
 import lark.msg.MsgHandler;
-import lark.msg.Subscriber;
 import lark.msg.Subscription;
 import org.apache.commons.logging.Log;
 import org.springframework.core.io.ResourceLoader;
@@ -12,9 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-/**
- * @author cuigh
- */
 public class MsgApplication extends Application {
     private Subscriber consumer;
     private List<Subscription> subs = new ArrayList<>();
@@ -30,23 +27,23 @@ public class MsgApplication extends Application {
     @Override
     protected void load() {
         super.load();
-        //this.consumer = ctx.getBean(Subscriber.class);
-        //subscribe();
+        this.consumer = ctx.getBean(Subscriber.class);
+        subscribe();
     }
 
     @Override
     protected void start() {
-//        Log logger = getApplicationLog();
-//        subs.forEach(sub -> {
-//            try {
-//                consumer.subscribe(sub);
-//                logger.info(String.format("subscribe > ok, topic:%s, channel:%s, threads:%d, handler:%s",
-//                        sub.getTopic(), sub.getChannel(), sub.getThreads(), sub.getHandler().getClass()));
-//            } catch (Exception e) {
-//                logger.error(String.format("subscribe > failed, topic:%s, channel:%s, handler:%s",
-//                        sub.getTopic(), sub.getChannel(), sub.getHandler().getClass()), e);
-//            }
-//        });
+        Log logger = getApplicationLog();
+        subs.forEach(sub -> {
+            try {
+                consumer.subscribe(sub);
+                logger.info(String.format("subscribe > ok, topic:%s, channel:%s, threads:%d, handler:%s",
+                        sub.getTopic(), sub.getChannel(), sub.getThreads(), sub.getHandler().getClass()));
+            } catch (Exception e) {
+                logger.error(String.format("subscribe > failed, topic:%s, channel:%s, handler:%s",
+                        sub.getTopic(), sub.getChannel(), sub.getHandler().getClass()), e);
+            }
+        });
     }
 
     private void subscribe() {
@@ -64,7 +61,6 @@ public class MsgApplication extends Application {
             }
 
             Subscription sub = new Subscription(msgHandler, handler);
-//            ctx.getBean(msgHandler.provider()).subscribe(sub);
             subs.add(sub);
         });
     }

@@ -12,6 +12,5 @@ import java.lang.annotation.*;
 public @interface MsgHandler {
     String topic() default "";
     String channel() default "";
-    int threads() default 4;
-    Class<? extends Subscriber> provider();
+    int threads() default 2;
 }

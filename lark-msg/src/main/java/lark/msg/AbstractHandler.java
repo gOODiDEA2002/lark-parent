@@ -2,7 +2,6 @@ package lark.msg;
 
 import lark.core.codec.JsonCodec;
 import lark.core.util.Exceptions;
-import lark.util.msg.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.ResolvableType;
@@ -26,6 +25,9 @@ public abstract class AbstractHandler<T> implements Handler {
     public AbstractHandler() {
         ResolvableType resolvableType = ResolvableType.forClass(this.getClass());
         this.msgClass = (Class<T>) (resolvableType.getSuperType().getGeneric(0).resolve());
+        if ( this.msgClass == null ) {
+            this.msgClass = (Class<T>) (resolvableType.getSuperType().getSuperType().getGeneric(0).resolve());
+        }
     }
 
     /**

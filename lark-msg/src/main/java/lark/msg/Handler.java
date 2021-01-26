@@ -1,7 +1,5 @@
 package lark.msg;
 
-import lark.util.msg.Message;
-
 /**
  * @author cuigh
  */

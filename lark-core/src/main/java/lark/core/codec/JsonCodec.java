@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.databind.type.MapType;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lark.core.util.Exceptions;
 
 import java.lang.reflect.Type;
@@ -31,7 +32,8 @@ public final class JsonCodec {
         MAPPER.disable(WRITE_DURATIONS_AS_TIMESTAMPS);
         MAPPER.disable(FAIL_ON_EMPTY_BEANS);
         MAPPER.disable(FAIL_ON_UNKNOWN_PROPERTIES);
-        MAPPER.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        //MAPPER.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        MAPPER.registerModule( new JavaTimeModule() );
     }
 
     private JsonCodec() {

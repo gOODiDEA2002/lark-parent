@@ -1,4 +1,0 @@
-# Auto Configure
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-lark.net.rpc.ServiceProxy, \
-lark.net.rpc.client.ServiceFactory

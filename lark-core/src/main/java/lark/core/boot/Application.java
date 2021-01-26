@@ -1,14 +1,18 @@
 package lark.core.boot;
 
+import lark.core.util.Networks;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.event.ContextClosedEvent;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.ResourceLoader;
 import lark.core.data.Guid;
 import lark.core.lang.FatalException;
+import org.springframework.util.StringUtils;
 
+import javax.annotation.PreDestroy;
 import java.util.*;
 
 /**
@@ -17,6 +21,7 @@ import java.util.*;
 
 public class Application extends SpringApplication {
     protected ConfigurableApplicationContext ctx;
+    protected Environment env;
     private String id = new Guid().toString();
 
     public Application(Class<?>... primarySources) {
@@ -44,21 +49,29 @@ public class Application extends SpringApplication {
      * @return 程序名称
      */
     public String getName() {
-        return ctx.getId();
+        return env.getProperty( "spring.application.name");
     }
 
+    public String getAddress() {
+        return Networks.getLocalIP4();
+    }
+
+    public String getPort() {
+        return env.getProperty( "server.port");
+    }
     /**
      * 获取程序版本
      *
      * @return 程序版本
      */
     public String getVersion() {
-        return ctx.getEnvironment().getProperty("lark.application.version");
+        return env.getProperty("lark.application.version");
     }
 
     protected void init() {
         System.setProperty("java.net.preferIPv4Stack", "true");
         setBannerMode(Banner.Mode.OFF);
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> stop()));
     }
 
     protected void load() {
@@ -69,9 +82,15 @@ public class Application extends SpringApplication {
         // 留给子类扩展
     }
 
+    protected void stop() {
+        // 留给子类扩展
+    }
+
     @Override
     protected void afterRefresh(ConfigurableApplicationContext ctx, ApplicationArguments args) {
         this.ctx = ctx;
+        this.env = ctx.getEnvironment();
+        //
         try {
             load();
             start();
@@ -82,25 +101,15 @@ public class Application extends SpringApplication {
     }
 
     private void register() {
-//        Registry registry = findBean(Registry.class);
-//        if (registry == null) {
-//            return;
-//        }
-//
-//        Map<String, Collector> collectors = ctx.getBeansOfType(Collector.class);
-//        registry.setInfo(this.getName(), this.getId(), () -> collectProperties(collectors));
-//        registry.start();
-//
-//        ctx.addApplicationListener((ContextClosedEvent e) -> registry.stop());
+        RegistryService registry = findBean(RegistryService.class);
+        if (registry == null) {
+            return;
+        }
+        //
+        registry.registerService();
+        //
+        ctx.addApplicationListener((ContextClosedEvent e) -> registry.deregisterService());
     }
-
-//    private Map<String, Object> collectProperties(Map<String, Collector> collectors) {
-//        Map<String, Object> properties = new HashMap<>();
-//        properties.put("version", getVersion());
-//        properties.put("start_time", ctx.getStartupDate());
-//        collectors.forEach((k, v) -> v.collect(properties));
-//        return properties;
-//    }
 
     /**
      * Find bean by type, return null if no bean was found

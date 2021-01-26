@@ -1,5 +1,7 @@
 package lark.net.rpc.client;
 
+import lark.core.boot.RegistryService;
+
 import java.lang.reflect.Constructor;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -14,6 +16,11 @@ public class ServiceFactory {
     private final ServiceClassLoader classLoader = new ServiceClassLoader(Thread.currentThread().getContextClassLoader());
     private String serverName;
 
+    private RegistryService registryService;
+
+    public ServiceFactory( RegistryService registryService ) {
+        this.registryService = registryService;
+    }
     /**
      * 获取编解码器
      *
@@ -48,7 +55,7 @@ public class ServiceFactory {
         if (options == null) {
             options = new ClientOptions();
         }
-        Client client = new Client(server, options);
+        Client client = new Client( registryService, server, options);
         return client;
     }
 

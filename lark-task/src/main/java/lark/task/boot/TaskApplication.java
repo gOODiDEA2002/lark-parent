@@ -1,14 +1,36 @@
 package lark.task.boot;
 
 import lark.core.boot.Application;
+import lark.task.Executor;
+import lark.task.ScheduleService;
+import lark.task.Task;
+import lark.task.TaskService;
+import org.apache.commons.logging.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.scheduling.TaskScheduler;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
+import org.springframework.util.StringUtils;
+
+import java.time.Duration;
+import java.util.Map;
+import java.util.concurrent.ScheduledFuture;
 
 /**
  * @author cuigh
  */
 public class TaskApplication extends Application {
+    private static final Logger LOGGER = LoggerFactory.getLogger(TaskApplication.class);
+    //
+    private ScheduleService scheduleService;
+    private TaskService executorService;
+    //
+    private TaskScheduler scheduler;
+    private ScheduledFuture future;
+    private final Duration interval = Duration.ofMinutes( 3 );
 
-    public TaskApplication(Class<?>... primarySources) {
+    public TaskApplication( Class<?>... primarySources) {
         this(null, primarySources);
     }
 
@@ -19,11 +41,40 @@ public class TaskApplication extends Application {
     @Override
     protected void load() {
         super.load();
+        //
+        scheduleService = ctx.getBean( ScheduleService.class );
+        executorService = ctx.getBean( TaskService.class );
+        //
+        Log logger = getApplicationLog();
+        Map<String, Executor> beans = ctx.getBeansOfType(Executor.class);
+        logger.info(String.format("Found %d executors", beans.size()));
+        //
+        beans.forEach((n, executor) -> {
+            Class<?> clazz = executor.getClass();
+            Task task = clazz.getAnnotation(Task.class);
+            String name = (task == null || StringUtils.isEmpty(task.name())) ? clazz.getSimpleName() : task.name();
+            logger.info(String.format("Register executor: %s -> %s", name, executor.getClass().getName()));
+            executorService.setExecutor(name, executor);
+        });
     }
 
     @Override
     protected void start() {
+        scheduler = ctx.getBean( "registryTaskScheduler", ThreadPoolTaskScheduler.class );
+        executorService.registry();
+        //
+        this.future = scheduler.scheduleWithFixedDelay(() -> {
+            executorService.registry();
+        }, interval);
+    }
 
+    @Override
+    protected void stop() {
+        if ( this.future != null ) {
+            this.future.cancel(false );
+        }
+        //
+        executorService.deregistry();
     }
 
 }

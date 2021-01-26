@@ -10,6 +10,80 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>lark-autoconfigure</artifactId>
     <dependencies>
+        <!--Core-->
+        <dependency>
+            <groupId>lark</groupId>
+            <artifactId>lark-core</artifactId>
+            <version>${lark.version}</version>
+            <scope>compile</scope>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>lark</groupId>
+            <artifactId>lark-net</artifactId>
+            <version>${lark.version}</version>
+            <scope>compile</scope>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>lark</groupId>
+            <artifactId>lark-db</artifactId>
+            <version>${lark.version}</version>
+            <scope>compile</scope>
+            <optional>true</optional>
+        </dependency>
+        <!--App-->
+        <dependency>
+            <groupId>lark</groupId>
+            <artifactId>lark-api</artifactId>
+            <version>${lark.version}</version>
+            <scope>compile</scope>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>lark</groupId>
+            <artifactId>lark-service</artifactId>
+            <version>${lark.version}</version>
+            <scope>compile</scope>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>lark</groupId>
+            <artifactId>lark-msg</artifactId>
+            <version>${lark.version}</version>
+            <scope>compile</scope>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>lark</groupId>
+            <artifactId>lark-task</artifactId>
+            <version>${lark.version}</version>
+            <scope>compile</scope>
+            <optional>true</optional>
+        </dependency>
+        <!--Util-->
+        <dependency>
+            <groupId>lark</groupId>
+            <artifactId>lark-util-index</artifactId>
+            <version>${lark.version}</version>
+            <scope>compile</scope>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>lark</groupId>
+            <artifactId>lark-util-oss</artifactId>
+            <version>${lark.version}</version>
+            <scope>compile</scope>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>lark</groupId>
+            <artifactId>lark-util-cache</artifactId>
+            <version>${lark.version}</version>
+            <scope>compile</scope>
+            <optional>true</optional>
+        </dependency>
+        <!--Vendor-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot</artifactId>
@@ -26,76 +100,13 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-            <scope>compile</scope>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-mongodb</artifactId>
-            <scope>compile</scope>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>lark</groupId>
-            <artifactId>lark-core</artifactId>
-            <version>${lark.version}</version>
-            <scope>compile</scope>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>lark</groupId>
-            <artifactId>lark-db</artifactId>
-            <version>${lark.version}</version>
-            <scope>compile</scope>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>lark</groupId>
-            <artifactId>lark-net</artifactId>
-            <version>${lark.version}</version>
-            <scope>compile</scope>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>lark</groupId>
-            <artifactId>lark-util</artifactId>
-            <version>${lark.version}</version>
-            <scope>compile</scope>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>lark</groupId>
-            <artifactId>lark-service</artifactId>
-            <version>${lark.version}</version>
-            <scope>compile</scope>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>lark</groupId>
-            <artifactId>lark-api</artifactId>
-            <version>${lark.version}</version>
-            <scope>compile</scope>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>lark</groupId>
-            <artifactId>lark-util-index</artifactId>
-            <version>${lark.version}</version>
-            <scope>compile</scope>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>lark</groupId>
-            <artifactId>lark-util-oss</artifactId>
-            <version>${lark.version}</version>
             <scope>compile</scope>
             <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.mongodb</groupId>
             <artifactId>mongodb-driver</artifactId>
-            <version>3.11.1</version>
             <scope>compile</scope>
             <optional>true</optional>
         </dependency>

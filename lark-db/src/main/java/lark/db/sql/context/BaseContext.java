@@ -36,7 +36,7 @@ public abstract class BaseContext<T extends BaseContext<T>> implements Linkable<
 
     static void log(BuildResult result) {
         //if (LOGGER.isTraceEnabled()) {
-            LOGGER.debug("sql: {}, args: {}", result.getSql(), result.getArgs());
+            LOGGER.info("JSD sql: {}, args: {}", result.getSql(), result.getArgs());
         //}
     }
 

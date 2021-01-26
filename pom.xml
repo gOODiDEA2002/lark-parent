@@ -17,21 +17,42 @@
     <modules>
         <module>lark-core</module>
         <module>lark-net</module>
+        <module>lark-db</module>
+        <!--project-->
         <module>lark-api</module>
         <module>lark-service</module>
-        <module>lark-util</module>
-        <module>lark-autoconfigure</module>
         <module>lark-msg</module>
         <module>lark-task</module>
-        <module>lark-db</module>
+        <!--util-->
+        <module>lark-util-index</module>
+        <module>lark-util-oss</module>
+        <module>lark-util-cache</module>
+        <!--config-->
+        <module>lark-autoconfigure</module>
     </modules>
 
     <properties>
         <lark.version>${project.version}</lark.version>
         <java.version>1.8</java.version>
         <!--Vendor-->
-        <spring.cloud.version>Hoxton.SR9</spring.cloud.version>
+        <spring.boot.version>2.3.5.RELEASE</spring.boot.version>
         <guava.version>28.1-jre</guava.version>
+        <rocketmq.version>4.8.0</rocketmq.version>
+        <minio.version>7.1.4</minio.version>
+        <aliyun-sdk-oss.version>3.9.1</aliyun-sdk-oss.version>
+        <elasticsearch.version>7.5.2</elasticsearch.version>
+        <redisson.version>3.14.1</redisson.version>
+        <xxl-job.version>2.2.0</xxl-job.version>
+        <nacos.version>1.4.1</nacos.version>
+        <asm.version>7.2</asm.version>
+        <shardingsphere.version>4.1.1</shardingsphere.version>
+        <HikariCP.version>4.0.1</HikariCP.version>
+        <mongodb.version>3.11.1</mongodb.version>
+        <spring.data.mongodb.version>2.2.0.RELEASE</spring.data.mongodb.version>
+        <reflectasm.version>1.11.9</reflectasm.version>
+        <persistence.version>2.2</persistence.version>
+        <swagger.version>3.0.0</swagger.version>
+
     </properties>
 
     <dependencyManagement>
@@ -41,15 +62,118 @@
                 <artifactId>guava</artifactId>
                 <version>${guava.version}</version>
             </dependency>
+            <!-- minio -->
             <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-dependencies</artifactId>
-                <version>${spring.cloud.version}</version>
-                <scope>import</scope>
-                <type>pom</type>
+                <groupId>io.minio</groupId>
+                <artifactId>minio</artifactId>
+                <version>${minio.version}</version>
+            </dependency>
+            <!-- ali oss-->
+            <dependency>
+                <groupId>com.aliyun.oss</groupId>
+                <artifactId>aliyun-sdk-oss</artifactId>
+                <version>${aliyun-sdk-oss.version}</version>
+            </dependency>
+            <!-- elasticsearch -->
+            <dependency>
+                <groupId>org.elasticsearch.client</groupId>
+                <artifactId>elasticsearch-rest-high-level-client</artifactId>
+                <version>${elasticsearch.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.elasticsearch</groupId>
+                <artifactId>elasticsearch</artifactId>
+                <version>${elasticsearch.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.elasticsearch.client</groupId>
+                <artifactId>elasticsearch-rest-client</artifactId>
+                <version>${elasticsearch.version}</version>
+            </dependency>
+            <!--Redis-->
+            <dependency>
+                <groupId>org.redisson</groupId>
+                <artifactId>redisson</artifactId>
+                <version>${redisson.version}</version>
+            </dependency>
+            <!-- xxl-job-core -->
+            <dependency>
+                <groupId>com.xuxueli</groupId>
+                <artifactId>xxl-job-core</artifactId>
+                <version>${xxl-job.version}</version>
+            </dependency>
+            <!-- asm -->
+            <dependency>
+                <groupId>org.ow2.asm</groupId>
+                <artifactId>asm</artifactId>
+                <version>${asm.version}</version>
+            </dependency>
+            <!-- nacos -->
+            <dependency>
+                <groupId>com.alibaba.nacos</groupId>
+                <artifactId>nacos-client</artifactId>
+                <version>${nacos.version}</version>
+            </dependency>
+            <!--RocketMQ-->
+            <dependency>
+                <groupId>org.apache.rocketmq</groupId>
+                <artifactId>rocketmq-client</artifactId>
+                <version>${rocketmq.version}</version>
+            </dependency>
+            <!--persistence-->
+            <dependency>
+                <groupId>javax.persistence</groupId>
+                <artifactId>javax.persistence-api</artifactId>
+                <version>${persistence.version}</version>
+            </dependency>
+            <!--reflectasm-->
+            <dependency>
+                <groupId>com.esotericsoftware</groupId>
+                <artifactId>reflectasm</artifactId>
+                <version>${reflectasm.version}</version>
+            </dependency>
+            <!--HikariCP-->
+            <dependency>
+                <groupId>com.zaxxer</groupId>
+                <artifactId>HikariCP</artifactId>
+                <version>${HikariCP.version}</version>
+            </dependency>
+            <!--ShardingSphere-->
+            <dependency>
+                <groupId>org.apache.shardingsphere</groupId>
+                <artifactId>sharding-jdbc-spring-boot-starter</artifactId>
+                <version>${shardingsphere.version}</version>
+            </dependency>
+            <!--MongoDB-->
+            <dependency>
+                <groupId>org.mongodb</groupId>
+                <artifactId>mongodb-driver</artifactId>
+                <version>${mongodb.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.data</groupId>
+                <artifactId>spring-data-mongodb</artifactId>
+                <version>${spring.data.mongodb.version}</version>
+            </dependency>
+            <!--swagger-->
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-boot-starter</artifactId>
+                <version>${swagger.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger-ui</artifactId>
+                <version>${swagger.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+    </dependencies>
 
     <build>
         <plugins>

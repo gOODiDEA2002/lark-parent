@@ -4,8 +4,8 @@ package lark.core.lang;
  * @author cuigh
  */
 public class BusinessException extends RuntimeException implements Error {
-    private int code;
-    private String detail;
+    protected int code;
+    protected String detail;
 
     public BusinessException() {
         super();
