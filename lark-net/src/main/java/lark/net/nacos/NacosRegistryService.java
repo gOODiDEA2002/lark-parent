@@ -45,7 +45,7 @@ public class NacosRegistryService implements RegistryService {
         this.future = scheduler.scheduleWithFixedDelay(() -> {
             try {
                 namingService.registerInstance( registryConfig.getName(), DEFAULT_GROUP, registryConfig.getIp(), registryConfig.getPort() );
-                LOGGER.info("registerService: name:{}, group:{}, ip:{}, port:{}", registryConfig.getName(), DEFAULT_GROUP, registryConfig.getIp(), registryConfig.getPort() );
+                LOGGER.debug("registerService: name:{}, group:{}, ip:{}, port:{}", registryConfig.getName(), DEFAULT_GROUP, registryConfig.getIp(), registryConfig.getPort() );
             } catch (Exception e) {
                 LOGGER.error("===> Failed to registerService", e);
             }
@@ -61,7 +61,7 @@ public class NacosRegistryService implements RegistryService {
         this.future.cancel(true);
         try {
             namingService.deregisterInstance( registryConfig.getName(), DEFAULT_GROUP, registryConfig.getIp(), registryConfig.getPort() );
-            LOGGER.info("deregisterService: name:{}, group:{}, ip:{}, port:{}", registryConfig.getName(), DEFAULT_GROUP, registryConfig.getIp(), registryConfig.getPort());
+            LOGGER.debug("deregisterService: name:{}, group:{}, ip:{}, port:{}", registryConfig.getName(), DEFAULT_GROUP, registryConfig.getIp(), registryConfig.getPort());
         } catch (Exception e) {
             LOGGER.error("===> Failed to deregisterService", e);
         } finally {

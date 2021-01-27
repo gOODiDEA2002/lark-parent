@@ -1,5 +1,0 @@
-# Auto Configure
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-lark.api.spring.ApiWebMvcConfig, \
-lark.api.spring.ApiResponseHandlerConfig, \
-lark.api.spring.SpringFoxConfig

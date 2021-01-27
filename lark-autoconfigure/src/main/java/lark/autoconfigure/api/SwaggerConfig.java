@@ -1,4 +1,4 @@
-package lark.api.spring;
+package lark.autoconfigure.api;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,7 +13,7 @@ import springfox.documentation.spring.web.plugins.Docket;
  * @date 2020/11/1
  */
 @Configuration
-public class SpringFoxConfig {
+public class SwaggerConfig {
 
   @Bean
   public Docket api() {

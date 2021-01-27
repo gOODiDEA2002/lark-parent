@@ -6,6 +6,7 @@ org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   lark.autoconfigure.registry.RegistryAutoConfiguration,\
   lark.autoconfigure.data.DatabaseAutoConfiguration, \
   lark.autoconfigure.task.TaskAutoConfiguration, \
+  lark.autoconfigure.api.ApiAutoConfiguration, \
   lark.autoconfigure.msg.MsgPublisherAutoConfiguration, \
   lark.autoconfigure.msg.MsgSubscriberAutoConfiguration, \
   lark.autoconfigure.util.oss.OssAutoConfiguration, \

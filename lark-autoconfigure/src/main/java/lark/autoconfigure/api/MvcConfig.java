@@ -1,14 +1,14 @@
-package lark.api.spring;
+package lark.autoconfigure.api;
 
+import lark.api.web.ApiFilter;
+import lark.api.web.ApiInterceptor;
+import lark.api.web.ApiServlet;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import lark.api.web.ApiFilter;
-import lark.api.web.ApiInterceptor;
-import lark.api.web.ApiServlet;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +17,7 @@ import java.util.List;
  * Created by Andy Yuan on 2020/8/18.
  */
 @Configuration
-public class ApiWebMvcConfig implements WebMvcConfigurer {
+public class MvcConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new ApiInterceptor()).addPathPatterns("/**");

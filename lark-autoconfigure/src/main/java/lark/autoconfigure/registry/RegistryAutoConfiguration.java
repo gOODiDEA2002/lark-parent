@@ -62,6 +62,7 @@ public class RegistryAutoConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean
     public ServiceFactory serviceFactory( RegistryService registryService ) {
         ServiceFactory serviceFactory = new ServiceFactory( registryService );
         return serviceFactory;

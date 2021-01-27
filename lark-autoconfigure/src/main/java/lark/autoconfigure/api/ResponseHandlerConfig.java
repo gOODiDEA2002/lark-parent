@@ -1,12 +1,13 @@
-package lark.api.spring;
+package lark.autoconfigure.api;
 
+import lark.api.response.ApiResponseBodyWrapHandler;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 import org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor;
-import lark.api.response.ApiResponseBodyWrapHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,11 +18,14 @@ import java.util.List;
  * @author Andy Yuan
  * @date 2020/7/30
  */
-@Component
-public class ApiResponseHandlerConfig implements InitializingBean {
+@Configuration
+public class ResponseHandlerConfig implements InitializingBean {
 
-    @Autowired
-    private RequestMappingHandlerAdapter adapter;
+    private final RequestMappingHandlerAdapter adapter;
+
+    public ResponseHandlerConfig( RequestMappingHandlerAdapter adapter ) {
+        this.adapter = adapter;
+    }
 
     @Override
     public void afterPropertiesSet() throws Exception {

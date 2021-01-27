@@ -1,13 +1,15 @@
 package lark.service.boot;
 
-import org.springframework.core.io.ResourceLoader;
 import lark.core.boot.Application;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.core.io.ResourceLoader;
 
 /**
  * @author cuigh
  */
 public class ServiceApplication extends Application {
-//    protected Server server;
+    private static final Logger LOGGER = LoggerFactory.getLogger(ServiceApplication.class);
 
     public ServiceApplication(Class<?>... primarySources) {
         this(null, primarySources);
@@ -36,7 +38,7 @@ public class ServiceApplication extends Application {
 //        Map<String, ServerFilter> filters = ctx.getBeansOfType(ServerFilter.class);
 //        this.server.use(filters.values().toArray(new ServerFilter[0]));
 //
-//        registerServices();
+        registerServices();
     }
 
     @Override
@@ -49,18 +51,11 @@ public class ServiceApplication extends Application {
 //        this.server.registerService(SystemService.class, new SystemServiceImp(server, ctx.getStartupDate()));
 //        this.server.registerService(MetaService.class, new MetaServiceImp(server));
 //
-//        // 注册自定义服务
-//        Map<String, Object> beans = ctx.getBeansWithAnnotation(RpcService.class);
+        // 获取服务列表
+//        Map<String, Object> beans = ctx.getBeansWithAnnotation(RestController.class);
 //        beans.forEach((name, bean) -> {
-//            if (!(bean instanceof BaseService)) {
-//                List<Class<?>> classes = Arrays.stream(bean.getClass().getInterfaces()).
-//                        filter(i -> i.isAnnotationPresent(RpcService.class)).collect(Collectors.toList());
-//                if (classes.isEmpty()) {
-//                    server.registerService(bean);
-//                } else {
-//                    classes.forEach(c -> server.registerService(c, bean));
-//                }
-//            }
+//            RestController service = ( RestController ) bean;
+//            LOGGER.info( "find service: {}, {}", name, service.value() );
 //        });
     }
 }

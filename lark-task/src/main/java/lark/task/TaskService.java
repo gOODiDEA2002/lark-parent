@@ -3,11 +3,11 @@ package lark.task;
 import lark.core.codec.JsonCodec;
 import lark.core.sync.ThreadPoolBuilder;
 import lark.core.util.Exceptions;
+import lark.core.util.Strings;
 import lark.task.data.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 import java.time.Duration;
 import java.util.Date;
@@ -79,7 +79,7 @@ public class TaskService implements lark.task.ExecutorService  {
             return newResult(null);
         }
 
-        String name = StringUtils.isEmpty(param.getAlias()) ? param.getName() : param.getAlias();
+        String name = Strings.isEmpty(param.getAlias()) ? param.getName() : param.getAlias();
         lark.task.Executor executor = executors.get(name);
         if (executor == null) {
             LOGGER.error("找不到任务:{}", name);
@@ -111,7 +111,7 @@ public class TaskService implements lark.task.ExecutorService  {
             LOGGER.info("任务执行成功, 耗时:{}", Duration.ofMillis(System.currentTimeMillis() - start.getTime()));
         } catch (Exception e) {
             String error = e.getMessage();
-            if (StringUtils.isEmpty(error)) {
+            if (Strings.isEmpty(error)) {
                 error = e.toString();
             }
             this.notify( param, param.getName(), param.getId(), newResult(error), start, new Date());
@@ -154,7 +154,7 @@ public class TaskService implements lark.task.ExecutorService  {
 
     private Result newResult(String error) {
         Result result = new Result();
-        result.setSuccess(StringUtils.isEmpty(error));
+        result.setSuccess(Strings.isEmpty(error));
         result.setErrorInfo(error);
         return result;
     }

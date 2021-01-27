@@ -28,7 +28,7 @@ public class Client {
             writeTimeout( TIMEOUT, TimeUnit.SECONDS ).
             build();
     private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
-    private static final Logger log = LoggerFactory.getLogger(Client.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Client.class);
     private String server;
     private ClientOptions options;
     private List<Node> nodes;
@@ -55,16 +55,16 @@ public class Client {
         //
         RequestBody requestBody = RequestBody.create( JSON, bodyJson );
         Request request = new Request.Builder().url(nodeAddress).post(requestBody).build();
-        log.info("===> Request begin: server: {}, url: {}, data: {}", server, nodeAddress, bodyJson );
+        LOGGER.info("===> Request begin: server: {}, url: {}, data: {}", server, nodeAddress, bodyJson );
         try (Response response = HTTP_CLIENT.newCall(request).execute()) {
             ResponseBody responseBody = response.body();
             if ( responseBody != null ) {
                 String result = responseBody.string();
-                log.info("===> Request end: server: {}, url: {}, result: {}", server, nodeAddress, result );
+                LOGGER.info("===> Request end: server: {}, url: {}, result: {}", server, nodeAddress, result );
                 return JsonCodec.decode( result, method.getReturnType());
             }
         } catch (Exception e) {
-            log.error("Request failure: server: {}, url: {}, data: {} , Cause:{}", server, nodeAddress, bodyJson, e.getMessage() );
+            LOGGER.error("Request failure: server: {}, url: {}, data: {} , Cause:{}", server, nodeAddress, bodyJson, e.getMessage() );
             throw new RpcException( RpcError.CLIENT_DEADLINE_EXCEEDED, e );
         }
         return null;
