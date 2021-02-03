@@ -40,7 +40,6 @@ public class XxlJobHttpClient {
             }
         } catch (Exception e) {
             log.error("Request failure: address: {}, path: {}, request: {} , Cause:{}", address, path, json, e.getMessage() );
-            throw new FatalException( e );
         }
         return null;
     }

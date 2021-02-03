@@ -42,6 +42,7 @@ public class XxlJobExecuteRequest {
 
     public ExecuteParam toExecuteParam() {
         ExecuteParam executeParam = new ExecuteParam();
+        executeParam.setId( String.valueOf( jobId ) );
         executeParam.setName( executorHandler );
         executeParam.setLogId( logId );
         executeParam.setLogDateTime( logDateTime );

@@ -3,6 +3,8 @@ package lark.task;
 import lark.task.data.Arg;
 import lark.task.data.ExecuteLogger;
 import lark.task.data.ExecuteParam;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
 
 import java.util.HashMap;
@@ -13,6 +15,7 @@ import java.util.Map;
  * @author cuigh
  */
 public class TaskContext {
+    private static final Logger LOGGER = LoggerFactory.getLogger(TaskContext.class);
     private String name;
     private String id;
     private String alias;
@@ -47,6 +50,7 @@ public class TaskContext {
     }
 
     public void info( String format, Object... args ) {
+        LOGGER.info( format, args );
         this.logger.info( format, args );
     }
 }

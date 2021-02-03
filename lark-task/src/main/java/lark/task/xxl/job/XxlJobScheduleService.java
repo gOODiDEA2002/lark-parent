@@ -28,6 +28,10 @@ public class XxlJobScheduleService implements ScheduleService {
     public Result registryTask(RegistryTaskRequest param) {
         XxlJobRegistryTaskRequest request =  new XxlJobRegistryTaskRequest( param );
         XxlJobResult xxlJobResult = client.request( "/api/registry", JsonCodec.encode( request ), XxlJobResult.class );
+        if ( xxlJobResult == null ) {
+            LOGGER.info( "===>>> Task registry fail!" );
+            return new Result();
+        }
         Result result = xxlJobResult.toResult();
         LOGGER.info( "===>>> Task registry: name:{}, address:{}, result:{}", param.getName(), param.getAddress(), result.isSuccess() );
         return result;
@@ -37,6 +41,10 @@ public class XxlJobScheduleService implements ScheduleService {
     public Result removeTask(RemoveTaskRequest param) {
         XxlJobRemoveTaskRequest request =  new XxlJobRemoveTaskRequest( param );
         XxlJobResult xxlJobResult = client.request( "/api/registryRemove", JsonCodec.encode( request ), XxlJobResult.class );
+        if ( xxlJobResult == null ) {
+            LOGGER.info( "===>>> Task remove fail!" );
+            return new Result();
+        }
         Result result = xxlJobResult.toResult();
         LOGGER.info( "===>>> Task remove: name:{}, address:{}, result:{}", param.getName(), param.getAddress(), result.isSuccess() );
         return result;
