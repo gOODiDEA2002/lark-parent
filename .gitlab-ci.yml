@@ -4,9 +4,9 @@ include:
   - project: 'devops/ci-templates'
     file: '/deploy/java.deploy.gitlab-ci.yml'
 
-build_sanqlt:
+build:
   extends:
-    - .sanqlt
+    - .playground
     - .build
   script:
   - mvn deploy -ff -B
