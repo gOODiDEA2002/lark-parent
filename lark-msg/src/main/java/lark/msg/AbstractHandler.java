@@ -2,11 +2,14 @@ package lark.msg;
 
 import lark.core.codec.JsonCodec;
 import lark.core.util.Exceptions;
+import lark.msg.rocketmq.RocketmqMessage;
+import org.apache.rocketmq.common.message.MessageExt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.ResolvableType;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
 
 /**
  * 消息处理器抽象基类
@@ -93,4 +96,19 @@ public abstract class AbstractHandler<T> implements Handler {
      * @param raw 原始消息
      */
     protected abstract void process(T msg, Message raw);
+
+    @Override
+    public MsgHandlerService.ExecuteResult execute( String name, String body ) {
+        MsgHandlerService.ExecuteResult result = new MsgHandlerService.ExecuteResult();
+        try {
+            T msg = decodeMessage(body);
+            this.process( msg, null );
+            result.setSuccess( true );
+            result.setErrorInfo( String.format( ">>>Handler %s: 执行成功, 内容: %s", name, body ) );
+        } catch (Exception e) {
+            result.setSuccess( false );
+            result.setErrorInfo( String.format( ">>>Handler %s: 执行失败, 异常: %s", name, e.getMessage() ) );
+        }
+        return result;
+    }
 }

@@ -1,6 +1,8 @@
 package lark.autoconfigure.msg;
 
+import lark.msg.MsgHandlerService;
 import lark.msg.Subscriber;
+import lark.msg.api.HandlerApi;
 import lark.msg.rocketmq.RocketmqSubscriber;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,5 +38,17 @@ public class MsgSubscriberAutoConfiguration {
     @ConditionalOnMissingBean
     public Subscriber subscriber( DefaultMQPushConsumer consumer ) {
         return new RocketmqSubscriber( consumer );
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public MsgHandlerService handlerService() {
+        return new MsgHandlerService();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public HandlerApi handlerApi( MsgHandlerService handlerService ) {
+        return new HandlerApi( handlerService );
     }
 }

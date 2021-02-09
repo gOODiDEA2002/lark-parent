@@ -1,10 +1,7 @@
 package lark.msg.boot;
 
 import lark.core.boot.Application;
-import lark.msg.Subscriber;
-import lark.msg.Handler;
-import lark.msg.MsgHandler;
-import lark.msg.Subscription;
+import lark.msg.*;
 import org.apache.commons.logging.Log;
 import org.springframework.core.io.ResourceLoader;
 
@@ -14,7 +11,7 @@ import java.util.Map;
 
 public class MsgApplication extends Application {
     private Subscriber consumer;
-    private List<Subscription> subs = new ArrayList<>();
+    MsgHandlerService handlerService;
 
     public MsgApplication(Class<?>... primarySources) {
         this(null, primarySources);
@@ -28,13 +25,14 @@ public class MsgApplication extends Application {
     protected void load() {
         super.load();
         this.consumer = ctx.getBean(Subscriber.class);
+        this.handlerService = ctx.getBean(MsgHandlerService.class);
         subscribe();
     }
 
     @Override
     protected void start() {
         Log logger = getApplicationLog();
-        subs.forEach(sub -> {
+        this.handlerService.getSubs().forEach((k, sub) -> {
             try {
                 consumer.subscribe(sub);
                 logger.info(String.format("subscribe > ok, topic:%s, channel:%s, threads:%d, handler:%s",
@@ -61,7 +59,7 @@ public class MsgApplication extends Application {
             }
 
             Subscription sub = new Subscription(msgHandler, handler);
-            subs.add(sub);
+            this.handlerService.addSubs( k.toLowerCase(), sub);
         });
     }
 }

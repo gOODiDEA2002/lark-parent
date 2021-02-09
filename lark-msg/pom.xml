@@ -15,6 +15,11 @@
             <artifactId>lark-core</artifactId>
             <version>${lark.version}</version>
         </dependency>
+        <dependency>
+            <groupId>lark</groupId>
+            <artifactId>lark-net</artifactId>
+            <version>${lark.version}</version>
+        </dependency>
         <!--RocketMQ-->
         <dependency>
             <groupId>org.apache.rocketmq</groupId>
