@@ -2,6 +2,7 @@ package lark.autoconfigure.data;
 
 import lark.autoconfigure.msg.MsgServiceProperties;
 import lark.core.lang.ServiceException;
+import lark.core.util.Strings;
 import lark.db.DatabaseConfig;
 import lark.db.DatabaseService;
 import lark.db.TableShardingConfig;
@@ -31,6 +32,9 @@ import java.util.List;
 @EnableConfigurationProperties(DatabaseServiceProperties.class)
 public class DatabaseAutoConfiguration {
 
+    private static final int DEFAULT_POOL_MIN_SIZE = 1;
+    private static final int DEFAULT_POOL_MAX_SIZE = 2;
+
     @Autowired
     Environment environment;
 
@@ -46,7 +50,18 @@ public class DatabaseAutoConfiguration {
                 String address = environment.getProperty( String.format( "lark.db.%s.address", source ) );
                 String username = environment.getProperty( String.format( "lark.db.%s.username", source ) );
                 String password = environment.getProperty( String.format( "lark.db.%s.password", source ) );
-                DatabaseConfig config = new DatabaseConfig( name, address, username, password );
+                //
+                String minPoolProperty = environment.getProperty( String.format( "lark.db.%s.min-pool", source ) );
+                int minPoolSize = DEFAULT_POOL_MIN_SIZE;
+                if (!Strings.isEmpty( minPoolProperty ) ) {
+                    minPoolSize = Integer.getInteger( minPoolProperty );
+                }
+                String maxPoolProperty = environment.getProperty( String.format( "lark.db.%s.max-pool", source ) );
+                int maxPoolSize = DEFAULT_POOL_MAX_SIZE;
+                if (!Strings.isEmpty( maxPoolProperty ) ) {
+                    maxPoolSize = Integer.getInteger( maxPoolProperty );
+                }
+                DatabaseConfig config = new DatabaseConfig( name, address, username, password, minPoolSize, maxPoolSize );
                 databaseService.setConfig( source, config );
             }
         }

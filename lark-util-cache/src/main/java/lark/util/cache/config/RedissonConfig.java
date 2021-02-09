@@ -15,10 +15,15 @@ public class RedissonConfig {
     
     private final static String REDIS_CONNECT_TEMPLATE = "redis://%s:%s";
 
-    public RedissonConfig( String host, int port, String password ) {
+    private int minPoolSize;
+    private int maxPoolSize;
+
+    public RedissonConfig( String host, int port, String password, int minPoolSize, int maxPoolSize ) {
         this.host = host;
         this.port = port;
         this.password = password;
+        this.minPoolSize = minPoolSize;
+        this.maxPoolSize = maxPoolSize;
     }
 
     @Bean
@@ -27,8 +32,8 @@ public class RedissonConfig {
         config.useSingleServer().
                 setAddress( String.format( REDIS_CONNECT_TEMPLATE, host, port ) ).
                 setPassword( password ).
-                setConnectionMinimumIdleSize(1).
-                setConnectionPoolSize(1);
+                setConnectionMinimumIdleSize( minPoolSize ).
+                setConnectionPoolSize( maxPoolSize );
         return Redisson.create(config);
     }
 }

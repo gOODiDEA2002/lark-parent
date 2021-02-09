@@ -9,4 +9,4 @@ build:
     - .playground
     - .build
   script:
-  - mvn deploy -ff -B
+    - mvn deploy -ff -B

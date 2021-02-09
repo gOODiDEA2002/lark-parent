@@ -38,8 +38,9 @@ public class DatabaseService {
         hikariConfig.setUsername( config.getUsername());
         hikariConfig.setPassword( config.getPassword() );
         //
-        hikariConfig.addDataSourceProperty("minimum-idle", "2");
-        hikariConfig.addDataSourceProperty("maximum-pool-size", "20");
+        hikariConfig.setMinimumIdle( config.getMinPoolSize());
+        hikariConfig.setMaximumPoolSize( config.getMaxPoolSize());
+        hikariConfig.setPoolName( dbName );
         //
         hikariConfig.addDataSourceProperty("cachePrepStmts", "true");
         hikariConfig.addDataSourceProperty("prepStmtCacheSize", "250");

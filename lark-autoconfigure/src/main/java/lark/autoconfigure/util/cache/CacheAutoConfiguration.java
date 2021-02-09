@@ -26,7 +26,7 @@ public class CacheAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public RedissonConfig redissonConfig(CacheServiceProperties props) {
-        return new RedissonConfig( props.getHost(), props.getPort(), props.getPassword() );
+        return new RedissonConfig( props.getHost(), props.getPort(), props.getPassword(), props.getMinPoolSize(), props.getMaxPoolSize() );
     }
 
     @Bean
