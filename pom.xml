@@ -211,22 +211,6 @@
             <id>playground-snapshots</id>
             <url>http://package-repo-dev.lark-cloud.com/repository/maven-snapshots/</url>
         </snapshotRepository>
-        <!--        <repository>-->
-        <!--            <id>sanqlt-releases</id>-->
-        <!--            <url>http://nexus-dev.sanqlt.com/repository/maven-releases/</url>-->
-        <!--        </repository>-->
-        <!--        <snapshotRepository>-->
-        <!--            <id>sanqlt-snapshots</id>-->
-        <!--            <url>http://nexus-dev.sanqlt.com/repository/maven-snapshots/</url>-->
-        <!--        </snapshotRepository>-->
-        <!--        <repository>-->
-        <!--            <id>playground-releases</id>-->
-        <!--            <url>http://nexus.foo.com:8081/repository/maven-releases/</url>-->
-        <!--        </repository>-->
-        <!--        <snapshotRepository>-->
-        <!--            <id>playground-snapshots</id>-->
-        <!--            <url>http://nexus.foo.com:8081/repository/maven-snapshots/</url>-->
-        <!--        </snapshotRepository>-->
     </distributionManagement>
 
     <profiles>

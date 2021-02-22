@@ -6,7 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "lark.util.oss")
 public class OssServiceProperties {
 
-    private static final String HTTP_SCHEME = "http://";
+    private static final String SCHEME = "https://";
 
     private String address;
     private String username;
@@ -28,7 +28,7 @@ public class OssServiceProperties {
     }
 
     public String getEndpoint() {
-        return HTTP_SCHEME + address;
+        return SCHEME + address;
     }
     public void setAddress(String address) {
         this.address = address;
