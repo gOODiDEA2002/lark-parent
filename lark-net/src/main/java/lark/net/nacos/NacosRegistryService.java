@@ -14,13 +14,16 @@ import org.springframework.scheduling.TaskScheduler;
 import java.time.Duration;
 import java.util.concurrent.ScheduledFuture;
 
+/**
+ * 基于Nacos注册服务
+ */
 public class NacosRegistryService implements RegistryService {
     private static final Logger LOGGER = LoggerFactory.getLogger(NacosRegistryService.class);
     RegistryConfig registryConfig;
     NamingService namingService;
     ConfigService configService;
-    private final String DEFAULT_GROUP = "LARK";
-    private TaskScheduler scheduler;
+    private final static String DEFAULT_GROUP = "LARK";
+    private final TaskScheduler scheduler;
     private ScheduledFuture future;
     private final Duration interval = Duration.ofMinutes( 3 );
 
@@ -29,11 +32,6 @@ public class NacosRegistryService implements RegistryService {
         this.namingService = namingService;
         this.configService = configService;
         this.scheduler = scheduler;
-    }
-
-    @Override
-    public String getConfig(String id, String groupName) {
-        return null;
     }
 
     @Override
@@ -71,7 +69,7 @@ public class NacosRegistryService implements RegistryService {
     }
 
     @Override
-    public String getService(String serviceName, String groupName) {
+    public String getServiceUrl(String serviceName, String groupName) {
         try {
             if ( Strings.isEmpty( groupName ) ) {
                 groupName = DEFAULT_GROUP;

@@ -10,6 +10,7 @@ import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -21,13 +22,6 @@ import java.util.stream.Collectors;
  * @author cuigh
  */
 public class Client {
-    private static final int TIMEOUT = 30;
-    private static final OkHttpClient HTTP_CLIENT = new OkHttpClient.Builder().
-            connectTimeout(TIMEOUT, TimeUnit.SECONDS).
-            readTimeout(TIMEOUT, TimeUnit.SECONDS).
-            writeTimeout( TIMEOUT, TimeUnit.SECONDS ).
-            build();
-    private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
     private static final Logger LOGGER = LoggerFactory.getLogger(Client.class);
     private String server;
     private ClientOptions options;
@@ -43,38 +37,12 @@ public class Client {
 
     public Object invoke(RpcMethodInfo method, Object[] args) {
         String serviceUrl = getServiceUrl(method);
-        //
-        String serviceParam = getServiceParam(args);
-        //
-        RequestBody requestBody = RequestBody.create( JSON, serviceParam );
-        Request request = new Request.Builder().url(serviceUrl).post(requestBody).build();
-        LOGGER.info("===> Request begin: server: {}, url: {}, data: {}", server, serviceUrl, serviceParam );
-        try (Response response = HTTP_CLIENT.newCall(request).execute()) {
-            ResponseBody responseBody = response.body();
-            if ( responseBody != null ) {
-                String result = responseBody.string();
-                LOGGER.info("===> Request end: server: {}, url: {}, result: {}", server, serviceUrl, result );
-                return JsonCodec.decode( result, method.getReturnType());
-            }
-        } catch (Exception e) {
-            LOGGER.error("Request failure: server: {}, url: {}, data: {} , Cause:{}", server, serviceUrl, serviceParam, e.getMessage() );
-            throw new RpcException( RpcError.CLIENT_DEADLINE_EXCEEDED, e );
-        }
-        return null;
-    }
-
-    private String getServiceParam(Object[] args) {
-        String serviceParam = Strings.EMPTY;
-        if ( args != null && args.length > 0 ) {
-            serviceParam = JsonCodec.encode( args[0] );
-        }
-        return serviceParam;
+        return ClientInvoker.invoke( serviceUrl, method.getService(), method.getName(), args, method.getReturnType() );
     }
 
     private String getServiceUrl(RpcMethodInfo method) {
-        String nodeAddress = registryService.getService( this.server, Strings.EMPTY );
-        String serviceUrl = nodeAddress + method.getPath();
-        return serviceUrl;
+        String nodeAddress = registryService.getServiceUrl( this.server, Strings.EMPTY );
+        return nodeAddress + method.getPath();
     }
 
     private synchronized void initNodes() {

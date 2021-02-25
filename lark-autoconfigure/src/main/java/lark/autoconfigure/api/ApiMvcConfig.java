@@ -17,7 +17,7 @@ import java.util.List;
  * Created by Andy Yuan on 2020/8/18.
  */
 @Configuration
-public class MvcConfig implements WebMvcConfigurer {
+public class ApiMvcConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new ApiInterceptor()).addPathPatterns("/**");

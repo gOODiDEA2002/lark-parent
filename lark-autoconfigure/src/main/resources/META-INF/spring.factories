@@ -1,9 +1,10 @@
 org.springframework.boot.autoconfigure.AutoConfigurationImportFilter=\
   lark.autoconfigure.ExclusionFliter\
 
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  lark.autoconfigure.core.CoreAutoConfiguration,\
-  lark.autoconfigure.registry.RegistryAutoConfiguration,\
+org.springframework.boot.autoconfigure.EnableAutoConfiguration= \
+  lark.autoconfigure.core.CoreAutoConfiguration, \
+  lark.autoconfigure.registry.RegistryAutoConfiguration, \
+  lark.autoconfigure.rpc.RpcAutoConfiguration, \
   lark.autoconfigure.data.DatabaseAutoConfiguration, \
   lark.autoconfigure.task.TaskAutoConfiguration, \
   lark.autoconfigure.api.ApiAutoConfiguration, \

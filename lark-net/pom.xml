@@ -28,6 +28,10 @@
             <artifactId>asm</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.esotericsoftware</groupId>
+            <artifactId>reflectasm</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.alibaba.nacos</groupId>
             <artifactId>nacos-client</artifactId>
         </dependency>

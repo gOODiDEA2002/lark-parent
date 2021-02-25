@@ -24,5 +24,10 @@
             <artifactId>lark-core</artifactId>
             <version>${lark.version}</version>
         </dependency>
+        <dependency>
+            <groupId>lark</groupId>
+            <artifactId>lark-net</artifactId>
+            <version>${lark.version}</version>
+        </dependency>
     </dependencies>
 </project>

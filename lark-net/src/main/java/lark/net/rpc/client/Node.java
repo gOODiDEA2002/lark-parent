@@ -1,5 +1,6 @@
 package lark.net.rpc.client;
 
+import lark.core.boot.RegistryService;
 import lark.net.Address;
 
 /**

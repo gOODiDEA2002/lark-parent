@@ -1,10 +1,9 @@
 package lark.net.rpc.client;
 
+import lark.core.util.Strings;
 import lark.net.rpc.annotation.RpcMethod;
 import lark.net.rpc.annotation.RpcService;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -16,16 +15,17 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class RpcMethodInfo {
     private static final Map<Class<?>, Map<String, RpcMethodInfo>> CACHES = new ConcurrentHashMap<>();
-    private String service;
-    private String name;
+    private final String service;
+    private final String name;
     private Class<?> returnType;
     private String path;
+    private final static String PATH_TEMPLATE = "/lark/%s/%s";
 
-    public RpcMethodInfo(String service, Method method, PostMapping rpcMethod, RequestMapping rpcService) {
+    public RpcMethodInfo(String service, Method method, RpcMethod rpcMethod, RpcService rpcService) {
         this.service = service;
         this.name = getMethodName(method, rpcMethod);
         this.returnType = method.getReturnType();
-        this.path = rpcService.value()[0] + rpcMethod.value()[0];
+        this.path = String.format( PATH_TEMPLATE, this.service.toLowerCase(), this.name.toLowerCase() );
     }
 
     public static Map<String, RpcMethodInfo> get(Class<?> clazz) {
@@ -33,8 +33,8 @@ public class RpcMethodInfo {
             String service;
             Map<String, RpcMethodInfo> methods = new HashMap<>();
             //
-            RequestMapping rpcService = clazz.getAnnotation(RequestMapping.class);
-            if (rpcService == null || StringUtils.isEmpty(rpcService.name())) {
+            RpcService rpcService = clazz.getAnnotation(RpcService.class);
+            if (rpcService == null || Strings.isEmpty(rpcService.name())) {
                 service = clazz.getSimpleName();
             } else {
                 service = rpcService.name();
@@ -46,7 +46,7 @@ public class RpcMethodInfo {
                     continue;
                 }
                 //
-                PostMapping rpcMethod = m.getAnnotation(PostMapping.class);
+                RpcMethod rpcMethod = m.getAnnotation(RpcMethod.class);
                 methods.put(m.getName(), new RpcMethodInfo(service, m, rpcMethod, rpcService));
             }
             return methods;
@@ -69,12 +69,12 @@ public class RpcMethodInfo {
         return returnType;
     }
 
-    public static String getMethodName(Method method, PostMapping rpcMethod) {
+    public static String getMethodName(Method method, RpcMethod rpcMethod) {
         String name = null;
         if (rpcMethod != null) {
             name = rpcMethod.name();
         }
-        if (StringUtils.isEmpty(name)) {
+        if (Strings.isEmpty(name)) {
             name = StringUtils.capitalize(method.getName());
         }
         return name;

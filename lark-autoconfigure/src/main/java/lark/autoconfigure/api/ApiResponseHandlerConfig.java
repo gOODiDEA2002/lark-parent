@@ -19,11 +19,11 @@ import java.util.List;
  * @date 2020/7/30
  */
 @Configuration
-public class ResponseHandlerConfig implements InitializingBean {
+public class ApiResponseHandlerConfig implements InitializingBean {
 
     private final RequestMappingHandlerAdapter adapter;
 
-    public ResponseHandlerConfig( RequestMappingHandlerAdapter adapter ) {
+    public ApiResponseHandlerConfig(RequestMappingHandlerAdapter adapter ) {
         this.adapter = adapter;
     }
 
