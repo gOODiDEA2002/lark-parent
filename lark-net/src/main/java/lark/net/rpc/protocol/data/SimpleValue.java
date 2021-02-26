@@ -16,7 +16,7 @@ public class SimpleValue {
     private String data;
 
     public SimpleValue(int dataType, String data) {
-        this.type = type;
+        this.type = dataType;
         this.data = data;
     }
 }
