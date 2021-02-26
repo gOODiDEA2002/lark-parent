@@ -1,6 +1,7 @@
 package lark.net.rpc.server;
 
 import com.esotericsoftware.reflectasm.MethodAccess;
+import lark.core.util.Strings;
 import lark.net.rpc.annotation.RpcMethod;
 import lark.net.rpc.annotation.RpcService;
 import org.slf4j.Logger;
@@ -39,7 +40,7 @@ public class ServiceContainer {
         if (rpcMethod != null) {
             name = rpcMethod.name();
         }
-        if (StringUtils.isEmpty(name)) {
+        if (Strings.isEmpty(name)) {
             name = StringUtils.capitalize(method.getName());
         }
         return name;
@@ -65,7 +66,7 @@ public class ServiceContainer {
         if (rpcService != null) {
             name = rpcService.name();
         }
-        if (StringUtils.isEmpty(name)) {
+        if (Strings.isEmpty(name)) {
             name = clazz.getSimpleName();
         }
 
@@ -89,15 +90,15 @@ public class ServiceContainer {
             } catch (IllegalArgumentException e) {
                 LOGGER.warn("find method index failed: {}", e);
             }
-            //
-            String methodName = getMethodName(m);
-            RequestMappingInfo.Builder builder = RequestMappingInfo
-                    .paths( "/" + name.toLowerCase() + "/" + methodName.toLowerCase() )
-                    .methods(RequestMethod.POST)
-                    .consumes(MediaType.APPLICATION_JSON_VALUE)
-                    .produces(MediaType.APPLICATION_JSON_VALUE);
-
-            requestMappingHandlerMapping.registerMapping(builder.build(),instance,m);
+//            // for spring mvc
+//            String methodName = getMethodName(m);
+//            RequestMappingInfo.Builder builder = RequestMappingInfo
+//                    .paths( "/" + name.toLowerCase() + "/" + methodName.toLowerCase() )
+//                    .methods(RequestMethod.POST)
+//                    .consumes(MediaType.APPLICATION_JSON_VALUE)
+//                    .produces(MediaType.APPLICATION_JSON_VALUE);
+//
+//            requestMappingHandlerMapping.registerMapping(builder.build(),instance,m);
         }
 
         ServiceInfo serviceInfo = new ServiceInfo(clazz, name, description);
@@ -113,6 +114,6 @@ public class ServiceContainer {
     }
 
     private String buildKey(String serviceName, String methodName) {
-        return serviceName + "." + methodName;
+        return serviceName.toLowerCase() + "." + methodName.toLowerCase();
     }
 }

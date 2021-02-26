@@ -16,6 +16,7 @@ public class ResponseMessage {
     private Object result;
     private String errorInfo;
     private long serverTime;
+    private long executeTime;
     private int errorCode;
     private String errorDetail;
 
