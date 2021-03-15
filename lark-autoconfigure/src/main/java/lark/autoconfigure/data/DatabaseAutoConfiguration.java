@@ -1,21 +1,14 @@
 package lark.autoconfigure.data;
 
-import lark.autoconfigure.msg.MsgServiceProperties;
 import lark.core.lang.ServiceException;
 import lark.core.util.Strings;
 import lark.db.DatabaseConfig;
 import lark.db.DatabaseService;
 import lark.db.TableShardingConfig;
-import lark.msg.Publisher;
-import lark.msg.rocketmq.RocketmqPublisher;
-import org.apache.rocketmq.client.exception.MQClientException;
-import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

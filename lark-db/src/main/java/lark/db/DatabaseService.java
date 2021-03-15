@@ -1,9 +1,9 @@
 package lark.db;
-
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lark.core.lang.ServiceException;
-import lark.db.sql.SqlQuery;
+import lark.db.jsd.Database;
+import lark.db.jsd.DatabaseFactory;
 import org.apache.shardingsphere.api.config.sharding.KeyGeneratorConfiguration;
 import org.apache.shardingsphere.api.config.sharding.ShardingRuleConfiguration;
 import org.apache.shardingsphere.api.config.sharding.TableRuleConfiguration;
@@ -22,10 +22,10 @@ import java.util.Properties;
  */
 public class DatabaseService {
     private final Map<String, DataSource> datasources = new HashMap<>();
-    private final Map<String, SqlQuery> configs = new HashMap<>();
-    private final Map<String, SqlQuery> shardConfigs = new HashMap<>();
+    private final Map<String, Database> configs = new HashMap<>();
+    private final Map<String, Database> shardConfigs = new HashMap<>();
 
-    public SqlQuery get( String dbName ) {
+    public Database get( String dbName ) {
         if ( configs.containsKey( dbName ) ) {
             return configs.get( dbName );
         }
@@ -56,10 +56,10 @@ public class DatabaseService {
          */
         //
         datasources.put( dbName, dataSource );
-        configs.put( dbName, new SqlQuery( dataSource ) );
+        configs.put( dbName, DatabaseFactory.create( dataSource ) );
     }
 
-    public SqlQuery getShard( String logicTableName ) {
+    public Database getShard( String logicTableName ) {
         if ( shardConfigs.containsKey( logicTableName ) ) {
             return shardConfigs.get( logicTableName );
         }
@@ -75,7 +75,7 @@ public class DatabaseService {
         String logicTableName = shardingConfig.getLogicTableName();
         DataSource shardingDatasource = createShardingDataSource( logicTableName, shardingConfig.getActualDataNodes(), shardingConfig.getKeyColumnName(), shardingConfig.getDatabaseShardingColumnName(), shardingConfig.getDatabaseShardingAlgorithmExpression(), shardingConfig.getTableShardingColumnName(), shardingConfig.getTableShardingAlgorithmExpression(), dataSourceMap );
         //
-        shardConfigs.put( logicTableName, new SqlQuery( shardingDatasource ) );
+        shardConfigs.put( logicTableName, DatabaseFactory.create( shardingDatasource ) );
     }
 
     private DataSource createShardingDataSource(String logicTableName, String actualDataNodes, String keyColumnName, String databaseShardingColumnName, String databaseShardingAlgorithmExpression, String tableShardingColumnName, String tableShardingAlgorithmExpression, Map<String, DataSource> dataSourceMap ) throws SQLException {
