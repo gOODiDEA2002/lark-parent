@@ -1,9 +1,11 @@
 package lark.net.rpc.protocol;
 
+import lark.core.codec.JsonCodec;
 import lark.core.lang.BusinessException;
 import lark.core.util.Strings;
 import lark.net.rpc.RpcError;
 import lark.net.rpc.protocol.data.SimpleEncoder;
+import lark.net.rpc.protocol.data.SimpleValue;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -13,7 +15,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode
 public class ResponseMessage {
     private boolean success;
-    private Object result;
+    private SimpleValue result;
     private String errorInfo;
     private long serverTime;
     private long executeTime;

@@ -3,6 +3,7 @@ package lark.service.boot.web;
 import lark.core.codec.JsonCodec;
 import lark.core.util.Times;
 import lark.net.rpc.protocol.ResponseMessage;
+import lark.net.rpc.protocol.ResponseProcess;
 import lark.net.rpc.server.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,17 +43,18 @@ public class ServiceServlet extends HttpServlet {
         //
         String requestData = req.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
         //
-        ResponseMessage responseMessage = ServerExecuter.execute( server, requestData );
+        ResponseProcess response = ServerExecuter.execute( server, requestData );
         //
         long now = System.currentTimeMillis();
         long executeTime = now - startTime;
-        responseMessage.setServerTime(now);
-        responseMessage.setExecuteTime( executeTime );
+        //
+        response.setServerTime(now);
+        response.setExecuteTime( executeTime );
         //
         PrintWriter out = resp.getWriter();
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
-        out.print(JsonCodec.encode( responseMessage ));
+        out.print(response.toMessage());
         out.flush();
     }
 }
