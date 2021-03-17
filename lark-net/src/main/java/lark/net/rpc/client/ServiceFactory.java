@@ -26,7 +26,7 @@ public class ServiceFactory {
         this.registryService = registryService;
     }
 
-    public Set<Class<?>> getServices( String packageName, String serverName ) {
+    public Set<Class<?>> getServices( String packageName ) {
         Reflections reflections = new Reflections(packageName);
         Set<Class<?>> classes = reflections.getTypesAnnotatedWith(RpcService.class);
         return classes;
