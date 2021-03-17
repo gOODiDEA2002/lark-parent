@@ -52,6 +52,7 @@
         <reflectasm.version>1.11.9</reflectasm.version>
         <persistence.version>2.2</persistence.version>
         <swagger.version>3.0.0</swagger.version>
+        <reflections8.version>0.11.7</reflections8.version>
     </properties>
 
     <dependencyManagement>
@@ -130,6 +131,12 @@
                 <groupId>com.esotericsoftware</groupId>
                 <artifactId>reflectasm</artifactId>
                 <version>${reflectasm.version}</version>
+            </dependency>
+            <!--reflections-->
+            <dependency>
+                <groupId>net.oneandone.reflections8</groupId>
+                <artifactId>reflections8</artifactId>
+                <version>${reflections8.version}</version>
             </dependency>
             <!--HikariCP-->
             <dependency>

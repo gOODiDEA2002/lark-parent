@@ -1,9 +1,13 @@
 package lark.net.rpc.client;
 
 import lark.core.boot.RegistryService;
+import lark.net.rpc.annotation.RpcService;
+import org.reflections8.Reflections;
 
 import java.lang.reflect.Constructor;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -20,6 +24,18 @@ public class ServiceFactory {
 
     public ServiceFactory( RegistryService registryService ) {
         this.registryService = registryService;
+    }
+
+    public Set<Class<?>> getServices( String packageName ) {
+        Reflections reflections = new Reflections(packageName);
+        Set<Class<?>> classes = reflections.getTypesAnnotatedWith(RpcService.class);
+        return classes;
+//        if ( classes != null && classes.size() > 0 ) {
+//            for ( Class clazz : classes ) {
+//                get(serverName, clazz);
+//            }
+//        }
+//        return proxies;
     }
     /**
      * 获取编解码器
