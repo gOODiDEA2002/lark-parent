@@ -51,10 +51,10 @@ public class ServiceServlet extends HttpServlet {
         response.setServerTime(now);
         response.setExecuteTime( executeTime );
         //
-        PrintWriter out = resp.getWriter();
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
-        out.print(response.toMessage());
+        PrintWriter out = resp.getWriter();
+        out.write(response.toMessage());
         out.flush();
     }
 }
