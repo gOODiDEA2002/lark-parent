@@ -114,6 +114,7 @@ public interface Query {
      */
     SelectEndClause select(Object obj);
 
+
     /**
      * 直接执行 SQL 语句
      *

@@ -1,11 +1,14 @@
 package lark.core.lang;
 
+import lark.core.enums.BaseEnum;
+
 /**
  * @author cuigh
  */
 public class BusinessException extends RuntimeException implements Error {
     protected int code;
     protected String detail;
+
 
     public BusinessException() {
         super();
@@ -23,6 +26,10 @@ public class BusinessException extends RuntimeException implements Error {
     public BusinessException(int code, String msg) {
         super(msg);
         this.code = code;
+    }
+
+    public BusinessException(BaseEnum baseEnum) {
+        this(baseEnum.getCode(), baseEnum.getMsg());
     }
 
     public BusinessException(int code, Throwable inner) {
@@ -55,4 +62,15 @@ public class BusinessException extends RuntimeException implements Error {
     public String getDetail() {
         return detail;
     }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    public void setDetail(String detail) {
+        this.detail = detail;
+    }
+
+
+
 }
