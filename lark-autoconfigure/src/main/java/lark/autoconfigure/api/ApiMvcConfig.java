@@ -7,6 +7,7 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -24,7 +25,7 @@ public class ApiMvcConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public FilterRegistrationBean<ApiFilter> filterRegistrationBean(){
+    public FilterRegistrationBean<ApiFilter> filterRegistrationBean() {
         FilterRegistrationBean<ApiFilter> filterRegistrationBean = new FilterRegistrationBean<>();
         List<String> uriList = new ArrayList<>(1);
         uriList.add("/**");
@@ -37,7 +38,27 @@ public class ApiMvcConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public ServletRegistrationBean servletRegistrationBean(){
+    public ServletRegistrationBean servletRegistrationBean() {
         return new ServletRegistrationBean(new ApiServlet(), "/servlet");
+    }
+
+    /**
+     * 设置允许跨域访问
+     *
+     * @param registry 配置注册信息
+     */
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry
+                //允许访问的接口地址
+                .addMapping("/**")
+                //允许发起跨域访问的域名
+                .allowedOriginPatterns("*")
+                //允许跨域访问的方法
+                .allowedMethods("GET", "HEAD", "POST", "PUT", "DELETE", "OPTIONS")
+                //是否带上cookie信息
+                .allowCredentials(true)
+                .maxAge(3600)
+                .allowedHeaders("*");
     }
 }

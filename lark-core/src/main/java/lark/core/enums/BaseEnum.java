@@ -10,6 +10,7 @@ public interface BaseEnum {
 
 
         SUCCESS(1000, "SUCCESS"),
+        CODE1001(1001,"参数验证失败->{}"),
 
         ERROR(9999, "服务器开小差了");
 

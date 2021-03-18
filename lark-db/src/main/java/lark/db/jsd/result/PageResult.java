@@ -19,12 +19,6 @@ public final class PageResult implements AutoCloseable {
     private Integer pageSize;
     private Integer pageIndex;
 
-    public PageResult(ConnectionManager manager, String sql, List<Object> args) {
-        this.manager = manager;
-        this.sql = sql;
-        this.args = args;
-    }
-
     public PageResult(ConnectionManager manager, String sql, List<Object> args, Integer pageIndex, Integer pageSize) {
         this.manager = manager;
         this.sql = sql;
@@ -63,14 +57,6 @@ public final class PageResult implements AutoCloseable {
     }
 
 
-    /**
-     * 移动到下一行数据记录
-     *
-     * @return
-     */
-//    public boolean read() {
-//        return false;
-//    }
     @Override
     public void close() {
         Releaser.release(rs);
@@ -123,10 +109,7 @@ public final class PageResult implements AutoCloseable {
         } catch (Exception e) {
             throw new JsdException(e);
         } finally {
-            Releaser.release(rs);
-            Releaser.release(statement);
-            rs = null;
-            statement = null;
+            close();
         }
     }
 

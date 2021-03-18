@@ -9,6 +9,7 @@ import okhttp3.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.beans.Introspector;
 import java.util.concurrent.TimeUnit;
 
 public class ClientInvoker {
@@ -52,8 +53,9 @@ public class ClientInvoker {
         if (process.isSuccess()) {
             return process.getResult(returnType);
         }
-        if (process.getDataException() != null) {
-            throw process.getDataException();
+        DataException dataException = process.getDataException();
+        if (dataException != null) {
+            throw dataException;
         }
 
         throw process.getError();

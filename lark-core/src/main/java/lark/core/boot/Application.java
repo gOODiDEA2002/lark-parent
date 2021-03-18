@@ -18,7 +18,6 @@ import java.util.*;
 /**
  * @author cuigh
  */
-
 public class Application extends SpringApplication {
     protected ConfigurableApplicationContext ctx;
     protected Environment env;
@@ -76,6 +75,7 @@ public class Application extends SpringApplication {
 
     protected void load() {
         // 留给子类扩展
+
     }
 
     protected void start() {
