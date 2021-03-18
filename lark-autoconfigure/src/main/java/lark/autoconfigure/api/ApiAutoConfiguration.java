@@ -16,8 +16,8 @@ public class ApiAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public ApiResponseHandlerConfig responseHandlerConfig(RequestMappingHandlerAdapter requestMappingHandlerAdapter ) {
-        ApiResponseHandlerConfig responseHandlerConfig = new ApiResponseHandlerConfig( requestMappingHandlerAdapter );
+    public ApiResponseHandlerConfig responseHandlerConfig(RequestMappingHandlerAdapter requestMappingHandlerAdapter) {
+        ApiResponseHandlerConfig responseHandlerConfig = new ApiResponseHandlerConfig(requestMappingHandlerAdapter);
         return responseHandlerConfig;
     }
 
@@ -32,4 +32,5 @@ public class ApiAutoConfiguration {
         ApiDocConfig swaggerConfig = new ApiDocConfig();
         return swaggerConfig;
     }
+
 }

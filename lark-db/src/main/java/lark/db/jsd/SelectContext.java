@@ -2,6 +2,7 @@ package lark.db.jsd;
 
 import lark.db.jsd.clause.*;
 import lark.db.jsd.result.BuildResult;
+import lark.db.jsd.result.PageResult;
 import lark.db.jsd.result.SelectResult;
 
 import java.util.ArrayList;
@@ -177,6 +178,14 @@ public final class SelectContext implements SelectClause, FromClause, WhereClaus
     public BuildResult print() {
         return this.builder.buildSelect(this.info);
     }
+
+    @Override
+    public PageResult page() {
+        BuildResult br = this.builder.buildSelect(this.info);
+        Debug.log(br);
+        return new PageResult(manager, br.getSql(), br.getArgs(), this.info.skip, this.info.take);
+    }
+
 
     static class SelectInfo {
         Table table;

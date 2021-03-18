@@ -1,12 +1,13 @@
 package lark.api.response;
 
+import lark.core.enums.BaseEnum;
+import lark.core.lang.DataException;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 /**
- *
  * @author Andy Yuan
  * @date 2020/7/30
  */
@@ -29,16 +30,32 @@ public class ApiResponseBodyWrapHandler implements HandlerMethodReturnValueHandl
     }
 
     private ApiResponse wrapApiResult(Object o) {
-        if ( o == null ) {
+        if (o == null) {
             return new ApiResponse.ErrorResponse();
         }
         //
-        ApiResponse result = new ApiResponse( o );
-        if ( o instanceof ApiFaultException ) {
+        ApiResponse result = new ApiResponse(o);
+
+        if (o instanceof ApiFaultException) {
             ApiFaultException e = ((ApiFaultException) o);
-            result.setCode( e.getCode() );
-            result.setMsg( e.getMessage() );
+            result.setCode(e.getCode());
+            result.setMsg(e.getMessage());
         }
+
+        if (o instanceof DataException) {
+            DataException e = ((DataException) o);
+            result.setCode(e.getCode());
+            result.setMsg(e.getMessage());
+            result.setData(e.getData());
+        }
+
+        if (o instanceof Exception) {
+            Exception e = ((Exception) o);
+            result.setCode(BaseEnum.DefaultEnum.ERROR.getCode());
+            result.setMsg(BaseEnum.DefaultEnum.ERROR.getMsg());
+        }
+
+
         return result;
     }
 
