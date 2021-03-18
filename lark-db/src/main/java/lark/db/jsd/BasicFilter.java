@@ -9,6 +9,8 @@ import java.util.List;
  * Created by guohua.cui on 15/5/26.
  */
 public final class BasicFilter extends Filter {
+    //private static final ExprFilterItem EMPTY_FILTER_ITEM = new ExprFilterItem("1=1");
+    private static final BasicFilter EMPTY_FILTER = new BasicFilter().add( "1=1" );
     private List<FilterItem> items;
 
     BasicFilter() {
@@ -16,6 +18,10 @@ public final class BasicFilter extends Filter {
 
     public List<FilterItem> getItems() {
         return items;
+    }
+
+    public static BasicFilter emptyFilter() {
+        return EMPTY_FILTER;
     }
 
     boolean hasItems() {

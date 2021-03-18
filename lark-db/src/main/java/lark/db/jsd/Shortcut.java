@@ -28,6 +28,27 @@ public final class Shortcut {
         return Filter.create().add(table1, column1, FilterType.EQ, table2, column2);
     }
 
+    public static BasicFilter fIf(String column, Object value) {
+        if ( value == null ) {
+            return BasicFilter.emptyFilter();
+        }
+        return Filter.create(column, value);
+    }
+
+    public static BasicFilter fIf(String column, FilterType filterType, Object value) {
+        if ( value == null ) {
+            return BasicFilter.emptyFilter();
+        }
+        return Filter.create(column, filterType, value);
+    }
+
+    public static BasicFilter fIf(Table table, String column, FilterType filterType, Object value) {
+        if ( value == null ) {
+            return BasicFilter.emptyFilter();
+        }
+        return Filter.create().add(table, column, filterType, value);
+    }
+
     public static Table t(String name) {
         return Table.create(name);
     }
