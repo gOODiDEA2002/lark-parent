@@ -93,8 +93,8 @@ public class InsertContext implements InsertClause, ColumnsClause, ValuesClause,
             statement = conn.prepareStatement(result.getSql(), option);
             List<Object> args = result.getArgs();
             if (args != null) {
-                for (int i=0; i<args.size(); i++) {
-                    statement.setObject(i+1, args.get(i));
+                for (int i = 0; i < args.size(); i++) {
+                    statement.setObject(i + 1, args.get(i));
                 }
             }
 

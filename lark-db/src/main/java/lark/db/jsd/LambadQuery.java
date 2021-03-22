@@ -83,8 +83,8 @@ public class LambadQuery<T> {
     }
 
 
-    public int insert(Collection<? extends Serializable> entitys) {
-        return new InsertContext(this.manager, this.builder, entitys).result().getKeys().size();
+    public int insert(List<? extends Serializable> list) {
+        return new InsertContext(this.manager, this.builder, list).result().getKeys().size();
     }
 
     public int updateById(Object entity) {
