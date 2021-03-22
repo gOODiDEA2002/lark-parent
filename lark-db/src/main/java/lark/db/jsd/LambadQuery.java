@@ -2,11 +2,14 @@ package lark.db.jsd;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.json.JSONUtil;
 import lark.db.jsd.clause.DeleteClause;
 import lark.db.jsd.clause.FromClause;
 import lark.db.jsd.lambad.*;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.List;
 
@@ -98,7 +101,7 @@ public class LambadQuery<T> {
     }
 
     public int update(UpdateFilter<T> updateFilter) {
-        UpdateContext updateContext = new UpdateContext(this.manager, builder, this.entityClass);
+        UpdateContext updateContext = new UpdateContext(this.manager, builder, this.entityClass,true);
         return updateContext.set(updateFilter.set()).where(updateFilter.select()).result().getAffectedRows();
     }
 

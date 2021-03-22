@@ -25,14 +25,19 @@ public class RedissonCacheService implements CacheService {
     private static final int COMPRESS_THRESHOLD = 16 * 1024;
     RedissonClient redissonClient;
 
-    public RedissonCacheService( String keyPrefix, RedissonClient redissonClient ) {
+    public RedissonCacheService(String keyPrefix, RedissonClient redissonClient) {
         this.keyPrefix = keyPrefix;
         this.redissonClient = redissonClient;
     }
 
     @Override
+    public void set(String key, Object value) {
+        set(key, value, DEFAULT_VERSION_KEY, Duration.ZERO);
+    }
+
+    @Override
     public void set(String key, Object value, Duration time) {
-        set( key, value, DEFAULT_VERSION_KEY, time );
+        set(key, value, DEFAULT_VERSION_KEY, time);
     }
 
     @Override
@@ -42,15 +47,15 @@ public class RedissonCacheService implements CacheService {
         }
         //
         RBucket<Object> bucket = this.redissonClient.getBucket(getKey(key));
-        if ( time.isZero() ) {
-            bucket.set( encode( value, version ) );
+        if (time.isZero()) {
+            bucket.set(encode(value, version));
         } else {
-            bucket.set( encode( value, version ), time.getSeconds(), TimeUnit.SECONDS );
+            bucket.set(encode(value, version), time.getSeconds(), TimeUnit.SECONDS);
         }
     }
 
     @Override
-    public String get(String key ) {
+    public String get(String key) {
         return getData(key, String.class);
     }
 
@@ -65,7 +70,7 @@ public class RedissonCacheService implements CacheService {
 
     @Override
     public <T> T get(String key, String versionKey, Class<T> clazz) {
-        Object value = getData( key, versionKey, clazz );
+        Object value = getData(key, versionKey, clazz);
         if (value != null) {
             return (T) value;
         }
@@ -73,7 +78,7 @@ public class RedissonCacheService implements CacheService {
     }
 
     private <T> T getData(String key, Class<T> clazz) {
-        return getData( key, DEFAULT_VERSION_KEY, clazz );
+        return getData(key, DEFAULT_VERSION_KEY, clazz);
     }
 
     private <T> T getData(String key, String versionKey, Class<T> clazz) {
@@ -83,11 +88,11 @@ public class RedissonCacheService implements CacheService {
             return null;
         }
         //
-        CacheItem data = JsonCodec.decodeAsBytes( ( byte[]) value, CacheItem.class);
+        CacheItem data = JsonCodec.decodeAsBytes((byte[]) value, CacheItem.class);
         if (!data.version.equals(versionKey)) {
             return null;
         }
-        return data.compressed ? JsonCodec.decodeAsBytes( decompress(data.data), clazz ) : JsonCodec.decodeAsBytes( data.data, clazz );
+        return data.compressed ? JsonCodec.decodeAsBytes(decompress(data.data), clazz) : JsonCodec.decodeAsBytes(data.data, clazz);
     }
 
     private byte[] encode(Object value, String version) {
@@ -136,13 +141,19 @@ public class RedissonCacheService implements CacheService {
     }
 
     @Override
+    public Boolean expire(String key, Duration time) {
+        RBucket<Object> bucket = this.redissonClient.getBucket(getKey(key));
+        return bucket.expire(time.getSeconds(), TimeUnit.SECONDS);
+    }
+
+    @Override
     public void remove(String key) {
         RBucket<Object> bucket = this.redissonClient.getBucket(getKey(key));
         bucket.delete();
     }
 
-    private String getKey( String key ) {
-        return String.format( KEY_TEMPLATE, keyPrefix, key );
+    private String getKey(String key) {
+        return String.format(KEY_TEMPLATE, keyPrefix, key);
     }
 
 }
