@@ -10,7 +10,7 @@ import java.util.List;
  */
 public final class BasicFilter extends Filter {
     //private static final ExprFilterItem EMPTY_FILTER_ITEM = new ExprFilterItem("1=1");
-    private static final BasicFilter EMPTY_FILTER = new BasicFilter().add( "1=1" );
+    private static final BasicFilter EMPTY_FILTER = new BasicFilter().add("1=1");
     private List<FilterItem> items;
 
     BasicFilter() {
@@ -30,6 +30,7 @@ public final class BasicFilter extends Filter {
 
     /**
      * 添加自定义表达式查询条件(慎用, 使用此方法将不能保证跨数据库兼容)
+     *
      * @param expr 表达式, 如: SUM(COUNT)>100
      * @return
      */
@@ -40,8 +41,9 @@ public final class BasicFilter extends Filter {
 
     /**
      * 添加简单查询条件
+     *
      * @param column 列
-     * @param value 值
+     * @param value  值
      * @return
      */
     public BasicFilter add(String column, Object value) {
@@ -51,12 +53,18 @@ public final class BasicFilter extends Filter {
 
     /**
      * 添加指定类型的查询条件
-     * @param column 列
+     *
+     * @param column     列
      * @param filterType 类型
-     * @param value 值
+     * @param value      值
      * @return
      */
     public BasicFilter add(String column, FilterType filterType, Object value) {
+        this.add(new OneColumnFilterItem(null, column, filterType, value));
+        return this;
+    }
+
+    public BasicFilter add(String column, FilterType filterType, Object value, Object value2) {
         this.add(new OneColumnFilterItem(null, column, filterType, value));
         return this;
     }
@@ -105,6 +113,7 @@ public final class BasicFilter extends Filter {
         private FilterType type;
         private String column;
         private Object value;
+        private Object value2;
 
         OneColumnFilterItem(String col, Object val) {
             this.column = col;
@@ -117,6 +126,14 @@ public final class BasicFilter extends Filter {
             this.column = col;
             this.type = type;
             this.value = val;
+        }
+
+        OneColumnFilterItem(Table t, String col, FilterType type, Object val, Object val2) {
+            this.table = t;
+            this.column = col;
+            this.type = type;
+            this.value = val;
+            this.value2 = val2;
         }
 
         @Override

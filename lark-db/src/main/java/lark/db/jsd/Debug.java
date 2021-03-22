@@ -13,7 +13,7 @@ public final class Debug {
     private static final Logger LOGGER = LoggerFactory.getLogger(LOGGER_NAME);
 
     static void log(BuildResult result) {
-        LOGGER.debug("sql: {}, args: {}", result.getSql(), result.getArgs());
+        LOGGER.info("sql: {}, args: {}", result.getSql(), result.getArgs());
 //        if (LOGGER.isDebugEnabled()) {
 //            LOGGER.debug("sql: {}, args: {}", result.getSql(), result.getArgs());
 //        }

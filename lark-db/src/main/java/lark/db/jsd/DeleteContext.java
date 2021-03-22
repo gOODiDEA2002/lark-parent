@@ -5,7 +5,8 @@ import lark.db.jsd.clause.DeleteEndClause;
 import lark.db.jsd.result.BuildResult;
 import lark.db.jsd.result.SimpleResult;
 
-/**删除操作上下文
+/**
+ * 删除操作上下文
  * Created by guohua.cui on 15/5/11.
  */
 public class DeleteContext implements DeleteClause, DeleteEndClause {
@@ -22,6 +23,20 @@ public class DeleteContext implements DeleteClause, DeleteEndClause {
     DeleteContext(ConnectionManager manager, Builder builder, Object obj) {
         this(manager, builder, obj, null);
     }
+
+    DeleteContext(ConnectionManager manager, Builder builder, Class cla) {
+        this.manager = manager;
+        this.builder = builder;
+
+        Mapper.EntityInfo entityInfo = Mapper.getEntityInfo(cla);
+        String[] columns = entityInfo.getIdColumns();
+        if (columns == null || columns.length == 0) {
+            String error = String.format("类型 %s 没有带 Id 注解的属性", cla.getName());
+            throw new JsdException(error);
+        }
+        this.info = new DeleteInfo(entityInfo.table);
+    }
+
 
     DeleteContext(ConnectionManager manager, Builder builder, Object obj, String table) {
         this.manager = manager;
@@ -67,6 +82,10 @@ public class DeleteContext implements DeleteClause, DeleteEndClause {
 
         public DeleteInfo(String table) {
             this.table = table;
+        }
+
+        public DeleteInfo(Class table) {
+            this.table = table.getName();
         }
     }
 }

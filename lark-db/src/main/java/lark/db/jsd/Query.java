@@ -2,6 +2,7 @@ package lark.db.jsd;
 
 import lark.db.jsd.clause.*;
 import lark.db.jsd.template.SqlTemplate;
+import lark.db.jsd.util.QueryFilter;
 
 import java.util.List;
 
@@ -81,6 +82,14 @@ public interface Query {
      * @return
      */
     SelectClause select(String column);
+
+    /**
+     * @description: TODO
+     * @return:
+     * @author: yandong
+     * @date: 2021/3/18 5:54 下午
+     */
+    <T> T one(QueryFilter<T> queryFilter);
 
     /**
      * 查询操作
@@ -164,4 +173,9 @@ public interface Query {
      * @return
      */
     TableQuery table(Object obj);
+
+
+    <T> LambadQuery<T> lambadQuery(Class<?> cla);
+
+
 }
