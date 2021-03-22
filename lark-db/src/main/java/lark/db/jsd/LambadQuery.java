@@ -28,6 +28,7 @@ public class LambadQuery<T> {
         this.entityClass = entityClass;
     }
 
+
     /**
      * 获取单个
      *

@@ -1,7 +1,6 @@
 package lark.db.jsd.lambad;
 
-public class WrapperLark<T> {
-
+public class WrapperLambad<T> {
 
     public static <T> SelectFilter<T> selectFilter() {
         SelectFilter<T> select = new CompareFilter<>();

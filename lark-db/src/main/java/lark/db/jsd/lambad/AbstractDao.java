@@ -1,13 +1,15 @@
-package lark.db.jsd.service;
+package lark.db.jsd.lambad;
 
 
-import lark.db.jsd.lambad.*;
+import lark.db.jsd.Transaction;
 
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
-public interface AbstractBaseDao<T> {
+public interface AbstractDao<T> {
 
     /**
      * 插入一条数据
@@ -112,7 +114,46 @@ public interface AbstractBaseDao<T> {
      * @author: yandong
      * @date: 2021/3/19 10:02 上午
      */
-    PageEntity<T> page(PageVO pageVO, SelectFilter<T> CompareFilter);
+    PageEntity<T> page(Pager pager, SelectFilter<T> CompareFilter);
 
 
+    /**
+     * 启动一个事务
+     *
+     * @return
+     */
+    Transaction begin();
+
+    /**
+     * 启动一个事务
+     *
+     * @param action 事务操作
+     * @return
+     */
+    void begin(Consumer<Transaction> action);
+
+    /**
+     * 启动一个事务
+     *
+     * @param func 事务操作
+     * @return 操作结果
+     */
+    <T> T begin(Function<Transaction, T> func);
+
+    /**
+     * 启动一个事务
+     *
+     * @param func 事务操作
+     * @return 操作结果
+     */
+    <T> T begin(Function<Transaction, T> func, boolean setContext);
+
+    /**
+     * 启动一个事务
+     *
+     * @param action     事务操作
+     * @param setContext 是否设置上下文事务
+     * @return
+     */
+    void begin(Consumer<Transaction> action, boolean setContext);
 }
