@@ -29,6 +29,7 @@
         <module>lark-util-cache</module>
         <!--config-->
         <module>lark-autoconfigure</module>
+        <module>lark-util-number</module>
     </modules>
 
     <properties>
