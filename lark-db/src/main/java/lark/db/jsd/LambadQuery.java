@@ -62,11 +62,7 @@ public class LambadQuery<T> {
 
 
     public int insert(Object entity) {
-        List<Object> keys = new InsertContext(this.manager, this.builder, entity).result().getKeys();
-        if (CollectionUtil.isNotEmpty(keys)) {
-            return keys.size();
-        }
-        return 0;
+        return new InsertContext(this.manager, this.builder, entity).result().getAffectedRows();
     }
 
 
@@ -83,19 +79,20 @@ public class LambadQuery<T> {
     }
 
 
-    public int insert(List<? extends Serializable> list) {
-        return new InsertContext(this.manager, this.builder, list).result().getKeys().size();
+    public int insert(Collection<? extends Serializable> list) {
+        return new InsertContext(this.manager, this.builder, list).result().getAffectedRows();
     }
 
     public int updateById(Object entity) {
-        UpdateContext updateContext = new UpdateContext(this.manager, builder, entity);
-        return updateContext.result().getAffectedRows();
+        return new UpdateContext(this.manager, builder, entity).result().getAffectedRows();
     }
 
     public int updateByIds(Collection<? extends Serializable> collection) {
         int i = 0;
         if (CollUtil.isNotEmpty(collection)) {
-            i += updateById(collection);
+            for (Serializable serializable : collection) {
+                i += updateById(serializable);
+            }
         }
         return i;
     }

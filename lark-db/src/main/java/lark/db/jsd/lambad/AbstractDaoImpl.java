@@ -68,7 +68,7 @@ public abstract class AbstractDaoImpl<T> implements AbstractDao<T> {
     @Override
     public int insert(Collection<? extends Serializable> collection) {
         LambadQuery<T> objectLambadQuery = getLambadQuery();
-        return objectLambadQuery.insert(collection);
+        return objectLambadQuery.insert( collection);
     }
 
     @Override
