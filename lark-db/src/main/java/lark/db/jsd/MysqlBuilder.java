@@ -1,5 +1,6 @@
 package lark.db.jsd;
 
+import cn.hutool.core.collection.CollUtil;
 import lark.db.jsd.result.BuildResult;
 
 import java.lang.reflect.Array;
@@ -178,7 +179,7 @@ public class MysqlBuilder implements Builder {
         }
 
         // GROUP BY
-        if (info.groups != null) {
+        if (CollUtil.isNotEmpty(info.groups)) {
             buffer.addSql(" GROUP BY ");
             for (int i = 0; i < info.groups.size(); i++) {
                 Groupers.Grouper g = info.groups.get(i);
@@ -201,7 +202,7 @@ public class MysqlBuilder implements Builder {
         }
 
         // ORDER BY
-        if (info.orders != null) {
+        if (CollUtil.isNotEmpty(info.orders)) {
             buffer.addSql(" ORDER BY ");
             for (int i = 0; i < info.orders.size(); i++) {
                 Sorters.Sorter order = info.orders.get(i);

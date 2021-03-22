@@ -1,6 +1,5 @@
 package lark.db.jsd;
 
-import lark.db.jsd.util.QueryFilter;
 import lombok.Getter;
 
 /**

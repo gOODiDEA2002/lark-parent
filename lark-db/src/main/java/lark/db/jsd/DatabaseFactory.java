@@ -3,7 +3,7 @@ package lark.db.jsd;
 import lark.db.jsd.clause.*;
 import lark.db.jsd.result.BuildResult;
 import lark.db.jsd.template.SqlTemplate;
-import lark.db.jsd.util.QueryFilter;
+import lark.db.jsd.lambad.CompareFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -122,9 +122,9 @@ public final class DatabaseFactory {
         }
 
         @Override
-        public <T> T one(QueryFilter<T> queryFilter) {
-            BasicFilter basicFilter = queryFilter.build();
-            Class<?> table = queryFilter.getEntity();
+        public <T> T one(CompareFilter<T> CompareFilter) {
+            BasicFilter basicFilter = CompareFilter.select();
+            Class<?> table = CompareFilter.getEntity();
             return (T) select(table).where(basicFilter).result().one(table);
         }
 

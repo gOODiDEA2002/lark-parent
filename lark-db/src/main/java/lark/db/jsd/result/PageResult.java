@@ -1,7 +1,7 @@
 package lark.db.jsd.result;
 
 import lark.db.jsd.*;
-import lark.db.jsd.util.PageEntity;
+import lark.db.jsd.lambad.PageEntity;
 
 import java.sql.*;
 import java.util.ArrayList;

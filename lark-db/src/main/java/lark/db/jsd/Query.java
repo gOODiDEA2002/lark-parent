@@ -2,7 +2,7 @@ package lark.db.jsd;
 
 import lark.db.jsd.clause.*;
 import lark.db.jsd.template.SqlTemplate;
-import lark.db.jsd.util.QueryFilter;
+import lark.db.jsd.lambad.CompareFilter;
 
 import java.util.List;
 
@@ -89,7 +89,7 @@ public interface Query {
      * @author: yandong
      * @date: 2021/3/18 5:54 下午
      */
-    <T> T one(QueryFilter<T> queryFilter);
+    <T> T one(CompareFilter<T> CompareFilter);
 
     /**
      * 查询操作

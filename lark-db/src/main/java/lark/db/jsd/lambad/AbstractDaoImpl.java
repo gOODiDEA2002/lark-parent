@@ -1,22 +1,21 @@
-package lark.db.jsd.service.impl;
+package lark.db.jsd.lambad;
 
 import lark.db.jsd.Database;
 import lark.db.jsd.LambadQuery;
-import lark.db.jsd.util.PageEntity;
-import lark.db.jsd.service.AbstractBaseDao;
-import lark.db.jsd.util.PageVO;
-import lark.db.jsd.util.QueryFilter;
+import lark.db.jsd.Transaction;
 
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
-public abstract class AbstractBaseDaoImpl<T> implements AbstractBaseDao<T> {
+public abstract class AbstractDaoImpl<T> implements AbstractDao<T> {
 
     private Class<T> entityClass;
 
-    public AbstractBaseDaoImpl() {
+    public AbstractDaoImpl() {
         this.entityClass = getEntityClass();
     }
 
@@ -29,6 +28,7 @@ public abstract class AbstractBaseDaoImpl<T> implements AbstractBaseDao<T> {
      * @date: 2021/3/19 10:50 上午
      */
     public abstract Database dataBase();
+
 
     private <T> LambadQuery<T> lambadQuery(Class<?> cla) {
         return dataBase().lambadQuery(cla);
@@ -68,7 +68,7 @@ public abstract class AbstractBaseDaoImpl<T> implements AbstractBaseDao<T> {
     @Override
     public int insert(Collection<? extends Serializable> collection) {
         LambadQuery<T> objectLambadQuery = getLambadQuery();
-        return objectLambadQuery.insert(collection);
+        return objectLambadQuery.insert( collection);
     }
 
     @Override
@@ -91,6 +91,26 @@ public abstract class AbstractBaseDaoImpl<T> implements AbstractBaseDao<T> {
         LambadQuery<T> objectLambadQuery = getLambadQuery();
         return objectLambadQuery.updateById(entity);
     }
+
+    public int updateByIds(Collection<? extends Serializable> collection) {
+        LambadQuery<T> objectLambadQuery = getLambadQuery();
+        return objectLambadQuery.updateByIds(collection);
+    }
+
+    public int update(UpdateFilter<T> CompareFilter) {
+        LambadQuery<T> objectLambadQuery = getLambadQuery();
+        return objectLambadQuery.update(CompareFilter);
+    }
+
+    ;
+
+    public int delete(DeleteFilter<T> CompareFilter) {
+        LambadQuery<T> objectLambadQuery = getLambadQuery();
+        return objectLambadQuery.delete(CompareFilter);
+    }
+
+    ;
+
 
     @Override
     public int deleteById(Serializable id) {
@@ -118,23 +138,47 @@ public abstract class AbstractBaseDaoImpl<T> implements AbstractBaseDao<T> {
     }
 
     @Override
-    public T selectOne(QueryFilter<T> queryFilter) {
+    public T selectOne(SelectFilter<T> CompareFilter) {
         LambadQuery<T> objectLambadQuery = getLambadQuery();
-        return objectLambadQuery.one(queryFilter);
+        return objectLambadQuery.one(CompareFilter);
     }
 
     @Override
-    public List<T> selectList(QueryFilter<T> queryFilter) {
+    public List<T> selectList(SelectFilter<T> CompareFilter) {
         LambadQuery<T> objectLambadQuery = getLambadQuery();
-        return objectLambadQuery.list(queryFilter);
+        return objectLambadQuery.list(CompareFilter);
     }
 
 
     @Override
-    public PageEntity<T> page(PageVO pageVO, QueryFilter<T> queryFilter) {
+    public PageEntity<T> page(Pager pager, SelectFilter<T> CompareFilter) {
         LambadQuery<T> objectLambadQuery = getLambadQuery();
-        return objectLambadQuery.page(pageVO.getPageIndex(), pageVO.getPageSize(), queryFilter);
+        return objectLambadQuery.page(pager.getPageIndex(), pager.getPageSize(), CompareFilter);
     }
 
 
+    @Override
+    public Transaction begin() {
+        return dataBase().begin();
+    }
+
+    @Override
+    public void begin(Consumer<Transaction> action) {
+        dataBase().begin(action);
+    }
+
+    @Override
+    public <T> T begin(Function<Transaction, T> func) {
+        return dataBase().begin(func);
+    }
+
+    @Override
+    public <T> T begin(Function<Transaction, T> func, boolean setContext) {
+        return dataBase().begin(func, setContext);
+    }
+
+    @Override
+    public void begin(Consumer<Transaction> action, boolean setContext) {
+        dataBase().begin(action, setContext);
+    }
 }

@@ -1,15 +1,15 @@
-package lark.db.jsd.service;
+package lark.db.jsd.lambad;
 
 
-import lark.db.jsd.util.PageEntity;
-import lark.db.jsd.util.PageVO;
-import lark.db.jsd.util.QueryFilter;
+import lark.db.jsd.Transaction;
 
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
-public interface AbstractBaseDao<T> {
+public interface AbstractDao<T> {
 
     /**
      * 插入一条数据
@@ -29,6 +29,7 @@ public interface AbstractBaseDao<T> {
 
 
     int saveOrUpdateById(T entity);
+
     /**
      * 根据id修改
      *
@@ -36,6 +37,14 @@ public interface AbstractBaseDao<T> {
      * @return
      */
     int updateById(Object id);
+
+
+    int updateByIds(Collection<? extends Serializable> id);
+
+    int update(UpdateFilter<T> CompareFilter);
+
+
+    int delete(DeleteFilter<T> deleteFilter);
 
 
     /**
@@ -88,7 +97,7 @@ public interface AbstractBaseDao<T> {
      * @author: yandong
      * @date: 2021/3/19 3:54 下午
      */
-    T selectOne(QueryFilter<T> queryFilter);
+    T selectOne(SelectFilter<T> CompareFilter);
 
     /**
      * 根据条件查询多个
@@ -98,7 +107,7 @@ public interface AbstractBaseDao<T> {
      * @author: yandong
      * @date: 2021/3/19 3:55 下午
      */
-    List<T> selectList(QueryFilter<T> queryFilter);
+    List<T> selectList(SelectFilter<T> CompareFilter);
 
 
     /**
@@ -109,7 +118,46 @@ public interface AbstractBaseDao<T> {
      * @author: yandong
      * @date: 2021/3/19 10:02 上午
      */
-    PageEntity<T> page(PageVO pageVO, QueryFilter<T> queryFilter);
+    PageEntity<T> page(Pager pager, SelectFilter<T> CompareFilter);
 
 
+    /**
+     * 启动一个事务
+     *
+     * @return
+     */
+    Transaction begin();
+
+    /**
+     * 启动一个事务
+     *
+     * @param action 事务操作
+     * @return
+     */
+    void begin(Consumer<Transaction> action);
+
+    /**
+     * 启动一个事务
+     *
+     * @param func 事务操作
+     * @return 操作结果
+     */
+    <T> T begin(Function<Transaction, T> func);
+
+    /**
+     * 启动一个事务
+     *
+     * @param func 事务操作
+     * @return 操作结果
+     */
+    <T> T begin(Function<Transaction, T> func, boolean setContext);
+
+    /**
+     * 启动一个事务
+     *
+     * @param action     事务操作
+     * @param setContext 是否设置上下文事务
+     * @return
+     */
+    void begin(Consumer<Transaction> action, boolean setContext);
 }

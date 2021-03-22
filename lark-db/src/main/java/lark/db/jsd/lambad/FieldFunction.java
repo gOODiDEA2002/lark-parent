@@ -1,4 +1,4 @@
-package lark.db.jsd.util;
+package lark.db.jsd.lambad;
 
 import java.io.Serializable;
 import java.util.function.Function;

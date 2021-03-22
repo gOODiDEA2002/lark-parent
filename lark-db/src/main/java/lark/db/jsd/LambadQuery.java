@@ -1,10 +1,10 @@
 package lark.db.jsd;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import lark.db.jsd.clause.DeleteClause;
 import lark.db.jsd.clause.FromClause;
-import lark.db.jsd.util.PageEntity;
-import lark.db.jsd.util.QueryFilter;
+import lark.db.jsd.lambad.*;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -16,17 +16,12 @@ import static lark.db.jsd.Shortcut.f;
 
 public class LambadQuery<T> {
 
-
-//    public Class<T> getTClass() {
-//        Class<T> tClass = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-//        return tClass;
-//    }
-
     private ConnectionManager manager;
 
     private Builder builder;
 
     private Class<?> entityClass;
+
 
     LambadQuery(Class<?> entityClass, ConnectionManager manager, Builder builder) {
         this.manager = manager;
@@ -34,10 +29,6 @@ public class LambadQuery<T> {
         this.entityClass = entityClass;
     }
 
-
-    public <T> QueryFilter lambadFilter() {
-        return new QueryFilter(entityClass);
-    }
 
     /**
      * 获取单个
@@ -47,16 +38,16 @@ public class LambadQuery<T> {
      * @author: yandong
      * @date: 2021/3/19 10:14 上午
      */
-    public T one(QueryFilter<T> queryFilter) {
-        BasicFilter basicFilter = queryFilter.build();
+    public T one(SelectFilter<T> selectFilter) {
+        BasicFilter basicFilter = selectFilter.select();
         FromClause fromClause = new SelectContext(this.manager, builder, this.entityClass);
-        return (T) fromClause.where(basicFilter).result().one(this.entityClass);
+        return (T) fromClause.where(basicFilter).groupBy(selectFilter.group()).orderBy(selectFilter.order()).result().one(this.entityClass);
     }
 
-    public List<T> list(QueryFilter<T> queryFilter) {
-        BasicFilter basicFilter = queryFilter.build();
+    public List<T> list(SelectFilter<T> selectFilter) {
+        BasicFilter basicFilter = selectFilter.select();
         FromClause fromClause = new SelectContext(this.manager, builder, this.entityClass);
-        return (List<T>) fromClause.where(basicFilter).result().all(this.entityClass);
+        return (List<T>) fromClause.where(basicFilter).groupBy(selectFilter.group()).orderBy(selectFilter.order()).result().all(this.entityClass);
     }
 
     public T selectById(Serializable id) {
@@ -71,11 +62,7 @@ public class LambadQuery<T> {
 
 
     public int insert(Object entity) {
-        List<Object> keys = new InsertContext(this.manager, this.builder, entity).result().getKeys();
-        if (CollectionUtil.isNotEmpty(keys)) {
-            return keys.size();
-        }
-        return 0;
+        return new InsertContext(this.manager, this.builder, entity).result().getAffectedRows();
     }
 
 
@@ -92,14 +79,35 @@ public class LambadQuery<T> {
     }
 
 
-    public int insert(Collection<? extends Serializable> entitys) {
-        return new InsertContext(this.manager, this.builder, entitys).result().getKeys().size();
+    public int insert(Collection<? extends Serializable> list) {
+        return new InsertContext(this.manager, this.builder, list).result().getAffectedRows();
     }
 
     public int updateById(Object entity) {
-        UpdateContext updateContext = new UpdateContext(this.manager, builder, entity);
-        return updateContext.result().getAffectedRows();
+        return new UpdateContext(this.manager, builder, entity).result().getAffectedRows();
     }
+
+    public int updateByIds(Collection<? extends Serializable> collection) {
+        int i = 0;
+        if (CollUtil.isNotEmpty(collection)) {
+            for (Serializable serializable : collection) {
+                i += updateById(serializable);
+            }
+        }
+        return i;
+    }
+
+    public int update(UpdateFilter<T> updateFilter) {
+        UpdateContext updateContext = new UpdateContext(this.manager, builder, this.entityClass);
+        return updateContext.set(updateFilter.set()).where(updateFilter.select()).result().getAffectedRows();
+    }
+
+
+    public int delete(DeleteFilter<T> deleteFilter) {
+        DeleteClause deleteContext = new DeleteContext(this.manager, builder, this.entityClass);
+        return deleteContext.where(deleteFilter.select()).result().getAffectedRows();
+    }
+
 
     public int deleteById(Serializable id) {
         DeleteClause deleteContext = new DeleteContext(this.manager, builder, this.entityClass);
@@ -111,10 +119,11 @@ public class LambadQuery<T> {
         return deleteContext.where(f("id", IN, ids.toArray())).result().getAffectedRows();
     }
 
-    public PageEntity<T> page(int pageIndex, int pageSize, QueryFilter<T> queryFilter) {
+    public PageEntity<T> page(int pageIndex, int pageSize, SelectFilter<T> selectFilter) {
         FromClause fromClause = new SelectContext(this.manager, builder, this.entityClass);
-        BasicFilter build = queryFilter.build();
-        PageEntity<T> pageEntity = (PageEntity<T>) fromClause.where(build).page(pageIndex, pageSize).page().pageResult(this.entityClass);
+
+        BasicFilter build = selectFilter.select();
+        PageEntity<T> pageEntity = (PageEntity<T>) fromClause.where(build).groupBy(selectFilter.group()).orderBy(selectFilter.order()).page(pageIndex, pageSize).page().pageResult(this.entityClass);
         return pageEntity;
     }
 
