@@ -18,13 +18,15 @@ import java.util.zip.GZIPOutputStream;
  * @author andy
  */
 public class RedissonCacheService implements CacheService {
-    private static final String KEY_TEMPLATE = "l-c-%s";
+    private static final String KEY_TEMPLATE = "l-c-%s-%s";
+    private final String keyPrefix;
     private static final String DEFAULT_VERSION_KEY = "";
     private static final int BUFFER_SIZE = 1024;
     private static final int COMPRESS_THRESHOLD = 16 * 1024;
     RedissonClient redissonClient;
 
-    public RedissonCacheService( RedissonClient redissonClient ) {
+    public RedissonCacheService( String keyPrefix, RedissonClient redissonClient ) {
+        this.keyPrefix = keyPrefix;
         this.redissonClient = redissonClient;
     }
 
@@ -40,7 +42,11 @@ public class RedissonCacheService implements CacheService {
         }
         //
         RBucket<Object> bucket = this.redissonClient.getBucket(getKey(key));
-        bucket.set( encode( value, version ), time.getSeconds(), TimeUnit.SECONDS );
+        if ( time.isZero() ) {
+            bucket.set( encode( value, version ) );
+        } else {
+            bucket.set( encode( value, version ), time.getSeconds(), TimeUnit.SECONDS );
+        }
     }
 
     @Override
@@ -136,7 +142,7 @@ public class RedissonCacheService implements CacheService {
     }
 
     private String getKey( String key ) {
-        return String.format( KEY_TEMPLATE, key );
+        return String.format( KEY_TEMPLATE, keyPrefix, key );
     }
 
 }

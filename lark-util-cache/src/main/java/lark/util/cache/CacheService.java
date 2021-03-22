@@ -6,6 +6,7 @@ import java.time.Duration;
  * @author andy
  */
 public interface CacheService {
+
     void set(String key, Object value, Duration time);
 
     void set(String key, Object value, String versionKey, Duration time);

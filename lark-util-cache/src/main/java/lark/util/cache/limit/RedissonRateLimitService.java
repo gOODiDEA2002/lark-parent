@@ -16,10 +16,12 @@ import org.slf4j.LoggerFactory;
  * @author andy
  */
 public class RedissonRateLimitService implements RateLimitService {
-    private static final String KEY_TEMPLATE = "l-r-%s";
+    private static final String KEY_TEMPLATE = "l-r-%s-%s";
     private static final Logger LOGGER = LoggerFactory.getLogger(RedissonRateLimitService.class);
     private final RedissonClient redisson;
-    public RedissonRateLimitService(RedissonClient redisson) {
+    private final String keyPrefix;
+    public RedissonRateLimitService(String keyPrefix, RedissonClient redisson) {
+        this.keyPrefix = keyPrefix;
         this.redisson = redisson;
     }
 
@@ -33,7 +35,7 @@ public class RedissonRateLimitService implements RateLimitService {
      */
     @Override
     public boolean tryProcess(String rateLimitKey, int rate, int intervalSecond, ExecuteHandle handle) {
-        RRateLimiter rateLimiter = redisson.getRateLimiter( String.format( KEY_TEMPLATE, rateLimitKey ) );
+        RRateLimiter rateLimiter = redisson.getRateLimiter( getKey( rateLimitKey ) );
         boolean result = rateLimiter.trySetRate(RateType.OVERALL, rate, intervalSecond, RateIntervalUnit.SECONDS);
 //        if ( !result ) {
 //            throw new ServiceException( "RedissonRateLimitService trySetRate fail!" );
@@ -51,5 +53,9 @@ public class RedissonRateLimitService implements RateLimitService {
             LOGGER.debug("RateLimiter limit: {}, rate:{} intervalSecond:{}", rateLimitKey, rate, intervalSecond );
             return false;
         }
+    }
+
+    private String getKey( String key ) {
+        return String.format( KEY_TEMPLATE, keyPrefix, key );
     }
 }

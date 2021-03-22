@@ -7,12 +7,14 @@ import lark.util.cache.cache.RedissonCacheService;
 import lark.util.cache.config.RedissonConfig;
 import lark.util.cache.limit.RedissonRateLimitService;
 import lark.util.cache.lock.RedissonLockService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 
 /**
  * @author andy
@@ -23,6 +25,9 @@ import org.springframework.context.annotation.Configuration;
 @EnableConfigurationProperties(CacheServiceProperties.class)
 public class CacheAutoConfiguration {
 
+    @Autowired
+    Environment environment;
+
     @Bean
     @ConditionalOnMissingBean
     public RedissonConfig redissonConfig(CacheServiceProperties props) {
@@ -32,18 +37,18 @@ public class CacheAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public CacheService cacheService( RedissonConfig redissonConfig ) {
-        return new RedissonCacheService( redissonConfig.redissonClient() );
+        return new RedissonCacheService( environment.getProperty( "spring.application.name"), redissonConfig.redissonClient() );
     }
 
     @Bean
     @ConditionalOnMissingBean
     public LockService lockService( RedissonConfig redissonConfig ) {
-        return new RedissonLockService( redissonConfig.redissonClient() );
+        return new RedissonLockService( environment.getProperty( "spring.application.name"), redissonConfig.redissonClient() );
     }
 
     @Bean
     @ConditionalOnMissingBean
     public RateLimitService rateLimitService(RedissonConfig redissonConfig ) {
-        return new RedissonRateLimitService( redissonConfig.redissonClient() );
+        return new RedissonRateLimitService( environment.getProperty( "spring.application.name"), redissonConfig.redissonClient() );
     }
 }

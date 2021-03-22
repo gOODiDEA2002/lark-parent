@@ -32,10 +32,12 @@ import java.util.concurrent.TimeUnit;
  * Created by Andy Yuan on 2020/10/27.
  */
 public class RedissonLockService implements LockService  {
-    private static final String KEY_TEMPLATE = "l-l-%s";
+    private static final String KEY_TEMPLATE = "l-l-%s-%s";
     private static final Logger LOGGER = LoggerFactory.getLogger(RedissonLockService.class);
     private final RedissonClient redisson;
-    public RedissonLockService(RedissonClient redisson) {
+    private final String keyPrefix;
+    public RedissonLockService(String keyPrefix, RedissonClient redisson) {
+        this.keyPrefix = keyPrefix;
         this.redisson = redisson;
     }
 
@@ -51,7 +53,7 @@ public class RedissonLockService implements LockService  {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public <T> T tryLock(String lockKey, int waitLockSeconds, int autoUnlockSeconds, ProcessHandle<T> handle) {
-        RLock lock = redisson.getLock( String.format( KEY_TEMPLATE, lockKey ) );
+        RLock lock = redisson.getLock( getKey( lockKey ) );
         boolean canLock = false;
         try {
             canLock = lock.tryLock( waitLockSeconds, autoUnlockSeconds, TimeUnit.SECONDS);
@@ -68,5 +70,9 @@ public class RedissonLockService implements LockService  {
         } finally {
             lock.unlock();
         }
+    }
+
+    private String getKey( String key ) {
+        return String.format( KEY_TEMPLATE, keyPrefix, key );
     }
 }
