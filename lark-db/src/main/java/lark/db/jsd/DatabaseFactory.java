@@ -3,6 +3,7 @@ package lark.db.jsd;
 import lark.db.jsd.clause.*;
 import lark.db.jsd.result.BuildResult;
 import lark.db.jsd.template.SqlTemplate;
+import lark.db.jsd.util.QueryFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -120,6 +121,13 @@ public final class DatabaseFactory {
             return new SelectContext(this, builder, new Columns(null, column));
         }
 
+        @Override
+        public <T> T one(QueryFilter<T> queryFilter) {
+            BasicFilter basicFilter = queryFilter.build();
+            Class<?> table = queryFilter.getEntity();
+            return (T) select(table).where(basicFilter).result().one(table);
+        }
+
         /**
          * 查询操作
          *
@@ -203,6 +211,12 @@ public final class DatabaseFactory {
         public TableQuery table(Object obj) {
             Mapper.EntityInfo info = Mapper.getEntityInfo(obj.getClass());
             return table(info.table, info.getShardValues(obj));
+        }
+
+        @Override
+        public <T> LambadQuery<T> lambadQuery(Class<?> cla) {
+            return new LambadQuery(cla, this, this.builder);
+
         }
 
         @Override
@@ -318,6 +332,8 @@ public final class DatabaseFactory {
                 }
             }
         }
+
+
     }
 
     static class TransactionImp extends QueryImp implements Transaction, AutoCloseable {

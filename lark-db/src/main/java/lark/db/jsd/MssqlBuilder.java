@@ -7,6 +7,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import static lark.db.jsd.FilterType.BETWEEN;
+
 /**
  * SQL Server 语句生成器
  * Created by guohua.cui on 15/5/25.
@@ -335,8 +337,8 @@ public class MssqlBuilder implements Builder {
     protected void buildOneColumnFilterItem(BuildBuffer buffer, BasicFilter.OneColumnFilterItem item) {
         Table t = item.getTable();
         if (t != null) buffer.addSql("[%s].", t.getPrefix());
-
-        switch (item.getType()) {
+        FilterType type = item.getType();
+        switch (type) {
             case NE:
                 if (item.getValue() == null) buffer.addSql("[%s] IS NOT NULL", item.getColumn());
                 else {
@@ -397,6 +399,7 @@ public class MssqlBuilder implements Builder {
                 else {
                     buffer.addSql("[%s]=?", item.getColumn());
                     buffer.addArg(item.getValue());
+
                 }
                 break;
         }

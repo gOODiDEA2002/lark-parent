@@ -1,4 +1,4 @@
-package lark.db.jsd;
+package lark.db.jsd.util;
 
 import lombok.Data;
 

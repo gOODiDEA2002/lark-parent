@@ -3,9 +3,12 @@ package lark.db.jsd;
 import lark.db.jsd.result.BuildResult;
 
 import java.lang.reflect.Array;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import static lark.db.jsd.FilterType.BETWEEN;
 
 /**
  * MySQL 语句生成器
@@ -328,8 +331,8 @@ public class MysqlBuilder implements Builder {
     protected void buildOneColumnFilterItem(BuildBuffer buffer, BasicFilter.OneColumnFilterItem item) {
         Table t = item.getTable();
         if (t != null) buffer.addSql("`%s`.", t.getPrefix());
-
-        switch (item.getType()) {
+        FilterType type = item.getType();
+        switch (type) {
             case NE:
                 if (item.getValue() == null) buffer.addSql("`%s` IS NOT NULL", item.getColumn());
                 else {
@@ -357,29 +360,51 @@ public class MysqlBuilder implements Builder {
                 buffer.addSql("`%s` LIKE CONCAT('%%', ?, '%%')", item.getColumn());
                 buffer.addArg(item.getValue());
                 break;
+            case NOTLK:
+                buffer.addSql("`%s` NOT LIKE CONCAT('%%', ?, '%%')", item.getColumn());
+                buffer.addArg(item.getValue());
+                break;
+            case LKLEFT:
+                buffer.addSql("`%s`  LIKE  CONCAT('%%', ?)", item.getColumn());
+                buffer.addArg(item.getValue());
+                break;
+            case LKRIGHT:
+                buffer.addSql("`%s`  LIKE  CONCAT( ?, '%%')", item.getColumn());
+                buffer.addArg(item.getValue());
+                break;
+
+            case BETWEEN:
+                buffer.addSql("`%s` BETWEEN ? AND  ?", item.getColumn());
+                buffer.addArg(item.getValue(), item.getValue2());
+                break;
+            case NOTBETWEEN:
+                buffer.addSql("`%s` NOT BETWEEN ? AND  ?", item.getColumn());
+                buffer.addArg(item.getValue(), item.getValue2());
+                break;
             case IN:
             case NIN:
                 Class<?> clazz = item.getValue().getClass();
                 if (clazz.isArray()) {
                     Class<?> elemType = clazz.getComponentType();
                     StringBuilder sb = new StringBuilder();
-                    if (elemType == String.class) {
-                        for (int i = 0; i < Array.getLength(item.getValue()); i++) {
-                            if (i > 0) {
-                                sb.append(",");
-                            }
-                            sb.append("'");
-                            sb.append(Array.get(item.getValue(), i));
-                            sb.append("'");
+//                    if (elemType == String.class) {
+                    for (int i = 0; i < Array.getLength(item.getValue()); i++) {
+                        if (i > 0) {
+                            sb.append(",");
                         }
-                    } else {
-                        for (int i = 0; i < Array.getLength(item.getValue()); i++) {
-                            if (i > 0) {
-                                sb.append(",");
-                            }
-                            sb.append(Array.get(item.getValue(), i));
-                        }
+                        sb.append("'");
+                        sb.append(Array.get(item.getValue(), i));
+                        sb.append("'");
                     }
+                    // }
+//                    else {
+//                        for (int i = 0; i < Array.getLength(item.getValue()); i++) {
+//                            if (i > 0) {
+//                                sb.append(",");
+//                            }
+//                            sb.append(Array.get(item.getValue(), i));
+//                        }
+//                    }
                     buffer.addSql("`%s` %s(%s)", item.getColumn(), item.getType().value, sb.toString());
                 } else {
                     buffer.addSql("`%s` %s(%s)", item.getColumn(), item.getType().value, item.getValue());
@@ -390,6 +415,9 @@ public class MysqlBuilder implements Builder {
                 else {
                     buffer.addSql("`%s`=?", item.getColumn());
                     buffer.addArg(item.getValue());
+                    if (type.value.equals(BETWEEN)) {
+                        buffer.addArg(item.getValue(), item.getValue2());
+                    }
                 }
                 break;
         }

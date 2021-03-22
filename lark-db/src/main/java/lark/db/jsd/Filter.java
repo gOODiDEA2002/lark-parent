@@ -1,10 +1,11 @@
 package lark.db.jsd;
 
+import lark.db.jsd.util.QueryFilter;
 import lombok.Getter;
 
 /**
  * 过滤条件
- *
+ * <p>
  * Created by guohua.cui on 15/5/13.
  */
 public abstract class Filter {
@@ -16,6 +17,7 @@ public abstract class Filter {
     public Filter not() {
         return new NotFilter(this);
     }
+
     /**
      * 返回一个与关系的条件
      *
@@ -28,6 +30,7 @@ public abstract class Filter {
 
     /**
      * 返回一个或关系的条件
+     *
      * @param filter
      * @return
      */
@@ -46,6 +49,7 @@ public abstract class Filter {
 
     /**
      * 创建一个基础过滤条件
+     *
      * @param column
      * @param value
      * @return
