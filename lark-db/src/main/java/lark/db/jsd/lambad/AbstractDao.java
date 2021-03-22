@@ -38,7 +38,11 @@ public interface AbstractDao<T> {
      */
     int updateById(Object id);
 
+
+    int updateByIds(Collection<? extends Serializable> id);
+
     int update(UpdateFilter<T> CompareFilter);
+
 
     int delete(DeleteFilter<T> deleteFilter);
 

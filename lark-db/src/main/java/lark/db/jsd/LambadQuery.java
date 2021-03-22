@@ -1,5 +1,6 @@
 package lark.db.jsd;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import lark.db.jsd.clause.DeleteClause;
 import lark.db.jsd.clause.FromClause;
@@ -89,6 +90,14 @@ public class LambadQuery<T> {
     public int updateById(Object entity) {
         UpdateContext updateContext = new UpdateContext(this.manager, builder, entity);
         return updateContext.result().getAffectedRows();
+    }
+
+    public int updateByIds(Collection<? extends Serializable> collection) {
+        int i = 0;
+        if (CollUtil.isNotEmpty(collection)) {
+            i += updateById(collection);
+        }
+        return i;
     }
 
     public int update(UpdateFilter<T> updateFilter) {

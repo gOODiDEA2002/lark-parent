@@ -92,6 +92,11 @@ public abstract class AbstractDaoImpl<T> implements AbstractDao<T> {
         return objectLambadQuery.updateById(entity);
     }
 
+    public int updateByIds(Collection<? extends Serializable> collection) {
+        LambadQuery<T> objectLambadQuery = getLambadQuery();
+        return objectLambadQuery.updateByIds(collection);
+    }
+
     public int update(UpdateFilter<T> CompareFilter) {
         LambadQuery<T> objectLambadQuery = getLambadQuery();
         return objectLambadQuery.update(CompareFilter);
