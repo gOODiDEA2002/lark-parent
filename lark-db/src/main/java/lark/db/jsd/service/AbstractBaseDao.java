@@ -1,9 +1,7 @@
 package lark.db.jsd.service;
 
 
-import lark.db.jsd.util.PageEntity;
-import lark.db.jsd.util.PageVO;
-import lark.db.jsd.util.QueryFilter;
+import lark.db.jsd.lambad.*;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -29,6 +27,7 @@ public interface AbstractBaseDao<T> {
 
 
     int saveOrUpdateById(T entity);
+
     /**
      * 根据id修改
      *
@@ -36,6 +35,10 @@ public interface AbstractBaseDao<T> {
      * @return
      */
     int updateById(Object id);
+
+    int update(UpdateFilter<T> CompareFilter);
+
+    int delete(DeleteFilter<T> deleteFilter);
 
 
     /**
@@ -88,7 +91,7 @@ public interface AbstractBaseDao<T> {
      * @author: yandong
      * @date: 2021/3/19 3:54 下午
      */
-    T selectOne(QueryFilter<T> queryFilter);
+    T selectOne(SelectFilter<T> CompareFilter);
 
     /**
      * 根据条件查询多个
@@ -98,7 +101,7 @@ public interface AbstractBaseDao<T> {
      * @author: yandong
      * @date: 2021/3/19 3:55 下午
      */
-    List<T> selectList(QueryFilter<T> queryFilter);
+    List<T> selectList(SelectFilter<T> CompareFilter);
 
 
     /**
@@ -109,7 +112,7 @@ public interface AbstractBaseDao<T> {
      * @author: yandong
      * @date: 2021/3/19 10:02 上午
      */
-    PageEntity<T> page(PageVO pageVO, QueryFilter<T> queryFilter);
+    PageEntity<T> page(PageVO pageVO, SelectFilter<T> CompareFilter);
 
 
 }

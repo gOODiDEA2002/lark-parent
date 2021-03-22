@@ -2,10 +2,8 @@ package lark.db.jsd.service.impl;
 
 import lark.db.jsd.Database;
 import lark.db.jsd.LambadQuery;
-import lark.db.jsd.util.PageEntity;
+import lark.db.jsd.lambad.*;
 import lark.db.jsd.service.AbstractBaseDao;
-import lark.db.jsd.util.PageVO;
-import lark.db.jsd.util.QueryFilter;
 
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
@@ -92,6 +90,21 @@ public abstract class AbstractBaseDaoImpl<T> implements AbstractBaseDao<T> {
         return objectLambadQuery.updateById(entity);
     }
 
+    public int update(UpdateFilter<T> CompareFilter) {
+        LambadQuery<T> objectLambadQuery = getLambadQuery();
+        return objectLambadQuery.update(CompareFilter);
+    }
+
+    ;
+
+    public int delete(DeleteFilter<T> CompareFilter) {
+        LambadQuery<T> objectLambadQuery = getLambadQuery();
+        return objectLambadQuery.delete(CompareFilter);
+    }
+
+    ;
+
+
     @Override
     public int deleteById(Serializable id) {
         LambadQuery<T> objectLambadQuery = getLambadQuery();
@@ -118,22 +131,22 @@ public abstract class AbstractBaseDaoImpl<T> implements AbstractBaseDao<T> {
     }
 
     @Override
-    public T selectOne(QueryFilter<T> queryFilter) {
+    public T selectOne(SelectFilter<T> CompareFilter) {
         LambadQuery<T> objectLambadQuery = getLambadQuery();
-        return objectLambadQuery.one(queryFilter);
+        return objectLambadQuery.one(CompareFilter);
     }
 
     @Override
-    public List<T> selectList(QueryFilter<T> queryFilter) {
+    public List<T> selectList(SelectFilter<T> CompareFilter) {
         LambadQuery<T> objectLambadQuery = getLambadQuery();
-        return objectLambadQuery.list(queryFilter);
+        return objectLambadQuery.list(CompareFilter);
     }
 
 
     @Override
-    public PageEntity<T> page(PageVO pageVO, QueryFilter<T> queryFilter) {
+    public PageEntity<T> page(PageVO pageVO, SelectFilter<T> CompareFilter) {
         LambadQuery<T> objectLambadQuery = getLambadQuery();
-        return objectLambadQuery.page(pageVO.getPageIndex(), pageVO.getPageSize(), queryFilter);
+        return objectLambadQuery.page(pageVO.getPageIndex(), pageVO.getPageSize(), CompareFilter);
     }
 
 
