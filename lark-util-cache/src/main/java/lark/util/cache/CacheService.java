@@ -7,6 +7,8 @@ import java.time.Duration;
  */
 public interface CacheService {
 
+    void set(String key, Object value);
+
     void set(String key, Object value, Duration time);
 
     void set(String key, Object value, String versionKey, Duration time);
@@ -18,6 +20,8 @@ public interface CacheService {
     <T> T get(String key, String versionKey, Class<T> clazz);
 
     boolean exist(String key);
+
+    Boolean expire(String key, Duration time);
 
     void remove(String key);
 }
