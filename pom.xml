@@ -34,7 +34,7 @@
 
     <properties>
         <lark.version>${project.version}</lark.version>
-        <java.version>1.8</java.version>
+        <java.version>11</java.version>
         <!--Vendor-->
         <guava.version>28.1-jre</guava.version>
         <rocketmq.version>4.8.0</rocketmq.version>
@@ -54,6 +54,7 @@
         <persistence.version>2.2</persistence.version>
         <swagger.version>3.0.0</swagger.version>
         <reflections8.version>0.11.7</reflections8.version>
+        <activation.version>1.2.0</activation.version>
     </properties>
 
     <dependencyManagement>
@@ -126,6 +127,12 @@
                 <groupId>javax.persistence</groupId>
                 <artifactId>javax.persistence-api</artifactId>
                 <version>${persistence.version}</version>
+            </dependency>
+            <!--activation-->
+            <dependency>
+                <groupId>javax.activation</groupId>
+                <artifactId>javax.activation-api</artifactId>
+                <version>${activation.version}</version>
             </dependency>
             <!--reflectasm-->
             <dependency>

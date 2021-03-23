@@ -1,5 +1,7 @@
 package lark.core.boot;
 
+import lark.core.data.Guid;
+import lark.core.lang.FatalException;
 import lark.core.util.Networks;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.Banner;
@@ -8,12 +10,11 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.event.ContextClosedEvent;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ResourceLoader;
-import lark.core.data.Guid;
-import lark.core.lang.FatalException;
-import org.springframework.util.StringUtils;
 
-import javax.annotation.PreDestroy;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author cuigh

@@ -18,7 +18,7 @@ public class OssTest {
     private String fileRoot = "/Users/andy/Downloads/";
     @Before
     public void before() {
-        config = new MinioConfig( "minio-qa.sanqlt.com", "minio", "1O4iE2BGre7R" );
+        config = new MinioConfig( "oss-dev.lark-cloud.com", "minio", "12345678" );
         minioOssService = new MinioOssService( config.minioClient() );
         ossService = new OssService( minioOssService );
     }

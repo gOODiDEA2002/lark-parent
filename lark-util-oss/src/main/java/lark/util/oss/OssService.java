@@ -1,16 +1,9 @@
 package lark.util.oss;
 
-import io.minio.errors.*;
-import lark.core.lang.BusinessException;
 import lark.core.lang.FatalException;
 import lark.util.oss.util.OssUtil;
-
-import javax.activation.MimetypesFileTypeMap;
-import java.io.*;
-import java.nio.file.Files;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 /**
  *
  * @author Andy Yuan
