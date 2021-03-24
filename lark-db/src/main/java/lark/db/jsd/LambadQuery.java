@@ -131,6 +131,6 @@ public class LambadQuery<T, M> {
 
     public int count(SelectFilter<T, M> compareFilter) {
         FromClause fromClause = new SelectContext(this.manager, builder, this.entityClass, Shortcut.count());
-        return fromClause.where(compareFilter.select()).result().one(Integer.class);
+        return Integer.valueOf(fromClause.where(compareFilter.select()).result().one().get("count").toString());
     }
 }

@@ -1,12 +1,10 @@
 package lark.db.jsd.lambad;
 
-import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import lark.db.jsd.*;
 
 import java.util.Collection;
 
-import static lark.db.jsd.Shortcut.s;
 
 public class CompareFilter<T, M> implements SelectFilter<T, M>, UpdateFilter<T, M>, DeleteFilter<T, M> {
 
@@ -41,129 +39,125 @@ public class CompareFilter<T, M> implements SelectFilter<T, M>, UpdateFilter<T, 
      * @date: 2021/3/18 5:36 下午
      */
     public CompareFilter<T, M> eq(FieldFunction<T, ?> column, Object value) {
-        return eq(false, column, value);
+        return eq(true, column, value);
     }
 
-    public CompareFilter<T, M> eq(Boolean ignoreNullValue, FieldFunction<T, ?> column, Object value) {
-        return addFilter(column, FilterType.EQ, value, ignoreNullValue);
+    public CompareFilter<T, M> eq(Boolean careNullValue, FieldFunction<T, ?> column, Object value) {
+        return addFilter(column, FilterType.EQ, value, careNullValue);
     }
 
 
     public CompareFilter<T, M> ne(FieldFunction<T, ?> column, Object value) {
-        return ne(false, column, value);
+        return ne(true, column, value);
     }
 
-    public CompareFilter<T, M> ne(Boolean ignoreNullValue, FieldFunction<T, ?> column, Object value) {
-        return addFilter(column, FilterType.NE, value, ignoreNullValue);
+    public CompareFilter<T, M> ne(Boolean careNullValue, FieldFunction<T, ?> column, Object value) {
+        return addFilter(column, FilterType.NE, value, careNullValue);
     }
 
 
     public CompareFilter<T, M> lt(FieldFunction<T, ?> column, Object value) {
-        return lt(false, column, value);
+        return lt(true, column, value);
     }
 
-    public CompareFilter<T, M> lt(Boolean ignoreNullValue, FieldFunction<T, ?> column, Object value) {
-        return addFilter(column, FilterType.LT, value, ignoreNullValue);
+    public CompareFilter<T, M> lt(Boolean careNullValue, FieldFunction<T, ?> column, Object value) {
+        return addFilter(column, FilterType.LT, value, careNullValue);
     }
 
 
     public CompareFilter<T, M> lte(FieldFunction<T, ?> column, Object value) {
-        return lte(false, column, value);
+        return lte(true, column, value);
     }
 
-    public CompareFilter<T, M> lte(Boolean ignoreNullValue, FieldFunction<T, ?> column, Object value) {
-        return addFilter(column, FilterType.LTE, value, ignoreNullValue);
+    public CompareFilter<T, M> lte(Boolean careNullValue, FieldFunction<T, ?> column, Object value) {
+        return addFilter(column, FilterType.LTE, value, careNullValue);
     }
 
 
     public CompareFilter<T, M> gt(FieldFunction<T, ?> column, Object value) {
-        return gt(false, column, value);
+        return gt(true, column, value);
     }
 
-    public CompareFilter<T, M> gt(Boolean ignoreNullValue, FieldFunction<T, ?> column, Object value) {
-        return addFilter(column, FilterType.GT, value, ignoreNullValue);
+    public CompareFilter<T, M> gt(Boolean careNullValue, FieldFunction<T, ?> column, Object value) {
+        return addFilter(column, FilterType.GT, value, careNullValue);
     }
 
 
-    public CompareFilter<T, M> gte(Boolean ignoreNullValue, FieldFunction<T, ?> column, Object value) {
-        return addFilter(column, FilterType.GTE, value, false);
+    public CompareFilter<T, M> gte(Boolean careNullValue, FieldFunction<T, ?> column, Object value) {
+        return addFilter(column, FilterType.GTE, value, true);
     }
 
     public CompareFilter<T, M> gte(FieldFunction<T, ?> column, Object value) {
-        return gte(false, column, value);
+        return gte(true, column, value);
     }
 
 
     public CompareFilter<T, M> in(FieldFunction<T, ?> column, Collection value) {
-        return in(false, column, value);
+        return in(true, column, value);
     }
 
-    public CompareFilter<T, M> in(Boolean ignoreNullValue, FieldFunction<T, ?> column, Collection value) {
-        return addFilter(column, FilterType.IN, value.toArray(), ignoreNullValue);
+    public CompareFilter<T, M> in(Boolean careNullValue, FieldFunction<T, ?> column, Collection value) {
+        return addFilter(column, FilterType.IN, value.toArray(), careNullValue);
     }
 
     public CompareFilter<T, M> notIn(FieldFunction<T, ?> column, Collection value) {
-        return notIn(false, column, value);
+        return notIn(true, column, value);
     }
 
-    public CompareFilter<T, M> notIn(Boolean ignoreNullValue, FieldFunction<T, ?> column, Collection value) {
-        return addFilter(column, FilterType.NIN, value.toArray(), ignoreNullValue);
+    public CompareFilter<T, M> notIn(Boolean careNullValue, FieldFunction<T, ?> column, Collection value) {
+        return addFilter(column, FilterType.NIN, value.toArray(), careNullValue);
     }
 
 
     public CompareFilter<T, M> like(FieldFunction<T, ?> column, Object value) {
-        return like(false, column, value);
+        return like(true, column, value);
     }
 
-    public CompareFilter<T, M> like(Boolean ignoreNullValue, FieldFunction<T, ?> column, Object value) {
-        return addFilter(column, FilterType.LK, value, ignoreNullValue);
+    public CompareFilter<T, M> like(Boolean careNullValue, FieldFunction<T, ?> column, Object value) {
+        return addFilter(column, FilterType.LK, value, careNullValue);
     }
 
     public CompareFilter<T, M> likeLeft(FieldFunction<T, ?> column, Object value) {
-        return likeLeft(false, column, value);
+        return likeLeft(true, column, value);
     }
 
-    public CompareFilter<T, M> likeLeft(Boolean ignoreNullValue, FieldFunction<T, ?> column, Object value) {
-        return addFilter(column, FilterType.LKLEFT, value, ignoreNullValue);
+    public CompareFilter<T, M> likeLeft(Boolean careNullValue, FieldFunction<T, ?> column, Object value) {
+        return addFilter(column, FilterType.LKLEFT, value, careNullValue);
     }
 
     public CompareFilter<T, M> likeRight(FieldFunction<T, ?> column, Object value) {
-        return likeRight(false, column, value);
+        return likeRight(true, column, value);
     }
 
-    public CompareFilter<T, M> likeRight(Boolean ignoreNullValue, FieldFunction<T, ?> column, Object value) {
-        return addFilter(column, FilterType.LKRIGHT, value, ignoreNullValue);
+    public CompareFilter<T, M> likeRight(Boolean careNullValue, FieldFunction<T, ?> column, Object value) {
+        return addFilter(column, FilterType.LKRIGHT, value, careNullValue);
     }
 
 
     public CompareFilter<T, M> notLike(FieldFunction<T, ?> column, Object value) {
-        return notLike(false, column, value);
+        return notLike(true, column, value);
     }
 
-    public CompareFilter<T, M> notLike(Boolean ignoreNullValue, FieldFunction<T, ?> column, Object value) {
-        return addFilter(column, FilterType.NOTLK, value, ignoreNullValue);
+    public CompareFilter<T, M> notLike(Boolean careNullValue, FieldFunction<T, ?> column, Object value) {
+        return addFilter(column, FilterType.NOTLK, value, careNullValue);
     }
 
 
-    public CompareFilter<T, M> between(Boolean ignoreNullValue, FieldFunction<T, ?> column, Object begin, Object end) {
-        return addFilter(column, FilterType.BETWEEN, begin, end, ignoreNullValue);
+    public CompareFilter<T, M> between(Boolean careNullValue, FieldFunction<T, ?> column, Object begin, Object end) {
+        return addFilter(column, FilterType.BETWEEN, begin, end, careNullValue);
     }
 
     public CompareFilter<T, M> between(FieldFunction<T, ?> column, Object begin, Object end) {
-        return between(false, column, begin, end);
+        return between(true, column, begin, end);
     }
 
-    public CompareFilter<T, M> notBetween(Boolean ignoreNullValue, FieldFunction<T, ?> column, Object begin, Object end) {
-        return addFilter(column, FilterType.BETWEEN, begin, end, ignoreNullValue);
+    public CompareFilter<T, M> notBetween(Boolean careNullValue, FieldFunction<T, ?> column, Object begin, Object end) {
+        return addFilter(column, FilterType.BETWEEN, begin, end, careNullValue);
     }
-
-
-
-
 
 
     public CompareFilter<T, M> notBetween(FieldFunction<T, ?> column, Object begin, Object end) {
-        return notBetween(false, column, begin, end);
+        return notBetween(true, column, begin, end);
     }
 
 
@@ -195,37 +189,31 @@ public class CompareFilter<T, M> implements SelectFilter<T, M>, UpdateFilter<T, 
 
     // ------------------update---------------------
     public CompareFilter<T, M> set(FieldFunction<T, ?> column, Object value) {
-        return set(false, column, UpdateType.EQ, value);
+        return set(true, column, UpdateType.EQ, value);
     }
 
-    public CompareFilter<T, M> set(Boolean ignoreNullValue, FieldFunction<T, ?> column, UpdateType updateType, Object value) {
-        return setFilter(column, updateType, value, ignoreNullValue);
+    public CompareFilter<T, M> set(Boolean careNullValue, FieldFunction<T, ?> column, UpdateType updateType, Object value) {
+        return setFilter(column, updateType, value, careNullValue);
     }
 
-    private CompareFilter<T, M> setFilter(FieldFunction<T, ?> column, UpdateType updateType, Object value, Boolean ignoreNullValue) {
-        if (ignoreNullValue) {
-            if (ObjectUtil.isNotEmpty(value)) {
-                uv.add(FieldUtil.getColumnName(column), updateType, value);
-            }
+    private CompareFilter<T, M> setFilter(FieldFunction<T, ?> column, UpdateType updateType, Object value, Boolean careNullValue) {
+        if (careNullValue) {
+            uv.add(FieldUtil.getColumnName(column), updateType, value);
         }
         return this;
     }
 
 
-    private CompareFilter<T, M> addFilter(FieldFunction<T, ?> column, FilterType filterType, Object value, Boolean ignoreNullValue) {
-        if (ignoreNullValue) {
-            if (ObjectUtil.isNotEmpty(value)) {
-                basicFilter.add(FieldUtil.getColumnName(column), filterType, value);
-            }
+    private CompareFilter<T, M> addFilter(FieldFunction<T, ?> column, FilterType filterType, Object value, Boolean careNullValue) {
+        if (careNullValue) {
+            basicFilter.add(FieldUtil.getColumnName(column), filterType, value);
         }
         return this;
     }
 
-    private CompareFilter<T, M> addFilter(FieldFunction<T, ?> column, FilterType filterType, Object begin, Object end, Boolean ignoreNullValue) {
-        if (ignoreNullValue) {
-            if (ObjectUtil.isNotEmpty(begin) && ObjectUtil.isNotEmpty(end)) {
-                basicFilter.add(FieldUtil.getColumnName(column), filterType, begin, end);
-            }
+    private CompareFilter<T, M> addFilter(FieldFunction<T, ?> column, FilterType filterType, Object begin, Object end, Boolean careNullValue) {
+        if (careNullValue) {
+            basicFilter.add(FieldUtil.getColumnName(column), filterType, begin, end);
         }
         return this;
     }
