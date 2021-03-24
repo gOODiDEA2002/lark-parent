@@ -1,5 +1,6 @@
 package lark.db.jsd;
 
+import lark.db.jsd.lambad.SelectFilter;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -49,6 +50,11 @@ public final class BasicFilter extends Filter {
      */
     public BasicFilter addSql(String sql) {
         this.add(new SqlFilterItem((sql)));
+        return this;
+    }
+
+    public <T, M> BasicFilter addSelectFilter(BasicFilter basicFilter) {
+        this.add(new SelectFilterItem(basicFilter));
         return this;
     }
 
@@ -114,11 +120,13 @@ public final class BasicFilter extends Filter {
      * 条件项类型
      */
     enum FilterItemType {
-        EXPR, ONE_COLUMN, TWO_COLUMN, SQL;
+        EXPR, ONE_COLUMN, TWO_COLUMN, SQL, SELECTFILTER;
     }
 
     interface FilterItem {
         FilterItemType getItemType();
+
+
     }
 
     @Getter
@@ -154,6 +162,8 @@ public final class BasicFilter extends Filter {
         public FilterItemType getItemType() {
             return FilterItemType.ONE_COLUMN;
         }
+
+
     }
 
     @Getter
@@ -176,6 +186,8 @@ public final class BasicFilter extends Filter {
         public FilterItemType getItemType() {
             return FilterItemType.TWO_COLUMN;
         }
+
+
     }
 
     @Getter
@@ -204,6 +216,21 @@ public final class BasicFilter extends Filter {
         public FilterItemType getItemType() {
             return FilterItemType.SQL;
         }
-
     }
+
+    @Getter
+    static class SelectFilterItem implements FilterItem {
+        private BasicFilter selectFilter;
+
+        SelectFilterItem(BasicFilter selectFilter) {
+            this.selectFilter = selectFilter;
+        }
+
+        @Override
+        public FilterItemType getItemType() {
+            return FilterItemType.SELECTFILTER;
+        }
+    }
+
+
 }

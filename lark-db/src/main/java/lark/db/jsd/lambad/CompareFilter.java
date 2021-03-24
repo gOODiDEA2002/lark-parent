@@ -9,8 +9,6 @@ import java.util.Collection;
 public class CompareFilter<T, M> implements SelectFilter<T, M>, UpdateFilter<T, M>, DeleteFilter<T, M> {
 
     private BasicFilter basicFilter;
-
-
     private UpdateValues uv;
     private Sorters sorters;
     private Groupers groupers;
@@ -198,6 +196,13 @@ public class CompareFilter<T, M> implements SelectFilter<T, M>, UpdateFilter<T, 
         return or(true, column, value);
     }
 
+
+    public CompareFilter<T, M> or(SelectFilter<T, M> selectFilter) {
+        BasicFilter build = selectFilter.build();
+        basicFilter.addSelectFilter(build);
+        return this;
+    }
+
     @Override
     public CompareFilter<T, M> apply(String sql) {
         basicFilter.addSql(sql);
@@ -241,7 +246,7 @@ public class CompareFilter<T, M> implements SelectFilter<T, M>, UpdateFilter<T, 
         return this;
     }
 
-    public BasicFilter select() {
+    public BasicFilter build() {
         return basicFilter;
     }
 

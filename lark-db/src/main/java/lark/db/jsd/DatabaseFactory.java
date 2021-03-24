@@ -123,7 +123,7 @@ public final class DatabaseFactory {
 
         @Override
         public <T, M> T one(CompareFilter<T, M> CompareFilter) {
-            BasicFilter basicFilter = CompareFilter.select();
+            BasicFilter basicFilter = CompareFilter.build();
             Class<?> table = CompareFilter.getEntity();
             return (T) select(table).where(basicFilter).result().one(table);
         }

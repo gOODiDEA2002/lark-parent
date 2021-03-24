@@ -10,12 +10,14 @@ import java.util.List;
 import java.util.Map;
 
 import static lark.db.jsd.FilterType.BETWEEN;
+import static lark.db.jsd.FilterType.OR;
 
 /**
  * MySQL 语句生成器
  * Created by guohua.cui on 15/5/19.
  */
 public class MysqlBuilder implements Builder {
+
     @Override
     public BuildResult buildInsert(InsertContext.InsertInfo info) {
         BuildBuffer buffer = new BuildBuffer();
@@ -261,6 +263,35 @@ public class MysqlBuilder implements Builder {
 //        return sb.toString();
 //    }
 
+    public BuildResult buildFilter0(Filter filter) {
+        if (filter instanceof BasicFilter) {
+            BasicFilter f = (BasicFilter) filter;
+            if (!f.hasItems()) return null;
+
+            BuildBuffer buffer = new BuildBuffer();
+            List<BasicFilter.FilterItem> items = f.getItems();
+            for (int i = 0; i < items.size(); i++) {
+                BasicFilter.FilterItem filterItem = items.get(i);
+                if (filterItem instanceof BasicFilter.SelectFilterItem) {
+                    BasicFilter basicFilter = ((BasicFilter.SelectFilterItem) filterItem).getSelectFilter();
+                    buffer.addSql(" OR ");
+                    buffer.addSql(" ( ");
+                    BuildResult buildResult = buildFilter0(basicFilter);
+                    buffer.addSql(buildResult.getSql());
+                    buffer.addArg(buildResult.getArgs());
+                    buffer.addSql(" ) ");
+                } else {
+                    if (i > 0) {
+                        buffer.addSql(" AND ");
+                    }
+                }
+                this.buildFilterItem(buffer, items.get(i));
+            }
+            return buffer.getResult();
+        }
+        return null;
+    }
+
     @Override
     public BuildResult buildFilter(Filter filter) {
         if (filter instanceof BasicFilter) {
@@ -271,9 +302,28 @@ public class MysqlBuilder implements Builder {
             List<BasicFilter.FilterItem> items = f.getItems();
             for (int i = 0; i < items.size(); i++) {
                 BasicFilter.FilterItem filterItem = items.get(i);
-                if (!(filterItem instanceof BasicFilter.SqlFilterItem)) {
-                    buffer.addSql(" AND ");
+                if (filterItem instanceof BasicFilter.SelectFilterItem) {
+                    BasicFilter basicFilter = ((BasicFilter.SelectFilterItem) filterItem).getSelectFilter();
+                    buffer.addSql(" OR ");
+                    buffer.addSql(" ( ");
+                    BuildResult buildResult = buildFilter0(basicFilter);
+                    buffer.addSql(buildResult.getSql());
+                    buffer.addArg(buildResult.getArgs());
+                    buffer.addSql(" ) ");
+                } else {
+                    FilterType type = null;
+                    if (filterItem instanceof BasicFilter.OneColumnFilterItem) {
+                        type = ((BasicFilter.OneColumnFilterItem) filterItem).getType();
+                    } else if (filterItem instanceof BasicFilter.TwoColumnFilterItem) {
+                        type = ((BasicFilter.TwoColumnFilterItem) filterItem).getType();
+                    }
+                    if (type != null && type.equals(OR)) {
+                        buffer.addSql(" OR ");
+                    } else {
+                        buffer.addSql(" AND ");
+                    }
                 }
+
                 this.buildFilterItem(buffer, items.get(i));
             }
             return buffer.getResult();
@@ -332,6 +382,9 @@ public class MysqlBuilder implements Builder {
             case SQL:
                 this.buildSqlFilterItem(buffer, (BasicFilter.SqlFilterItem) item);
                 break;
+//            case SELECTFILTER:
+//                this.buildOneColumnFilterItem(buffer, (BasicFilter.SelectFilterItem) item);
+//                break;
         }
     }
 
@@ -388,8 +441,8 @@ public class MysqlBuilder implements Builder {
                 buffer.addArg(item.getValue(), item.getValue2());
                 break;
             case OR:
-                buffer.addSql("`%s` OR ? ", item.getColumn());
-                buffer.addArg(item.getValue(), item.getValue2());
+                buffer.addSql("`%s` = ? ", item.getColumn());
+                buffer.addArg(item.getValue());
                 break;
             case IN:
             case NIN:

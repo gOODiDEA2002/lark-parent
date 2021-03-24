@@ -3,8 +3,6 @@ package lark.db.jsd;
 import cn.hutool.core.collection.CollUtil;
 import lark.db.jsd.clause.DeleteClause;
 import lark.db.jsd.clause.FromClause;
-import lark.db.jsd.clause.SelectClause;
-import lark.db.jsd.clause.WhereClause;
 import lark.db.jsd.lambad.*;
 
 import java.io.Serializable;
@@ -13,7 +11,6 @@ import java.util.List;
 
 import static lark.db.jsd.FilterType.EQ;
 import static lark.db.jsd.FilterType.IN;
-import static lark.db.jsd.Shortcut.c;
 import static lark.db.jsd.Shortcut.f;
 
 public class LambadQuery<T, M> {
@@ -41,13 +38,13 @@ public class LambadQuery<T, M> {
      * @date: 2021/3/19 10:14 上午
      */
     public M one(SelectFilter<T, M> selectFilter) {
-        BasicFilter basicFilter = selectFilter.select();
+        BasicFilter basicFilter = selectFilter.build();
         FromClause fromClause = new SelectContext(this.manager, builder, this.entityClass);
         return (M) fromClause.where(basicFilter).groupBy(selectFilter.group()).orderBy(selectFilter.order()).result().one(this.entityClass);
     }
 
     public List<M> list(SelectFilter<T, M> selectFilter) {
-        BasicFilter basicFilter = selectFilter.select();
+        BasicFilter basicFilter = selectFilter.build();
         FromClause fromClause = new SelectContext(this.manager, builder, this.entityClass);
         return (List<M>) fromClause.where(basicFilter).groupBy(selectFilter.group()).orderBy(selectFilter.order()).result().all(this.entityClass);
     }
@@ -101,13 +98,13 @@ public class LambadQuery<T, M> {
 
     public int update(UpdateFilter<T, ?> updateFilter) {
         UpdateContext updateContext = new UpdateContext(this.manager, builder, this.entityClass, true);
-        return updateContext.set(updateFilter.set()).where(updateFilter.select()).result().getAffectedRows();
+        return updateContext.set(updateFilter.set()).where(updateFilter.build()).result().getAffectedRows();
     }
 
 
     public int delete(DeleteFilter<T, ?> deleteFilter) {
         DeleteClause deleteContext = new DeleteContext(this.manager, builder, this.entityClass);
-        return deleteContext.where(deleteFilter.select()).result().getAffectedRows();
+        return deleteContext.where(deleteFilter.build()).result().getAffectedRows();
     }
 
 
@@ -123,7 +120,7 @@ public class LambadQuery<T, M> {
 
     public PageEntity<M> page(int pageIndex, int pageSize, SelectFilter<T, M> selectFilter) {
         FromClause fromClause = new SelectContext(this.manager, builder, this.entityClass);
-        BasicFilter build = selectFilter.select();
+        BasicFilter build = selectFilter.build();
         PageEntity<M> pageEntity = (PageEntity<M>) fromClause.where(build).groupBy(selectFilter.group()).orderBy(selectFilter.order()).page(pageIndex, pageSize).page().pageResult(this.entityClass);
         return pageEntity;
     }
@@ -131,6 +128,10 @@ public class LambadQuery<T, M> {
 
     public int count(SelectFilter<T, M> compareFilter) {
         FromClause fromClause = new SelectContext(this.manager, builder, this.entityClass, Shortcut.count());
-        return Integer.valueOf(fromClause.where(compareFilter.select()).result().one().get("count").toString());
+        return Integer.valueOf(fromClause.where(compareFilter.build()).result().one().get("count").toString());
+    }
+
+   public Builder getBuilder() {
+        return builder;
     }
 }

@@ -78,7 +78,7 @@ public interface Compare<T, M> {
     CompareFilter<T, M> apply(String sql, Object... objects);
 
 
-    BasicFilter select();
+    BasicFilter build();
 
     Groupers group();
 

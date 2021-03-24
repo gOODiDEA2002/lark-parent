@@ -11,6 +11,8 @@ import java.util.function.Function;
 
 public interface AbstractDao<T> {
 
+
+
     /**
      * 插入一条数据
      *

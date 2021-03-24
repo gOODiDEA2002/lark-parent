@@ -107,10 +107,13 @@ public abstract class AbstractDaoImpl<T> implements AbstractDao<T> {
 
     public  int delete(DeleteFilter<T, ?> CompareFilter) {
         LambadQuery<T, ?> objectLambadQuery = getLambadQuery();
+        objectLambadQuery.getBuilder();
         return objectLambadQuery.delete(CompareFilter);
     }
 
-    ;
+    public void or(){
+
+    }
 
 
     @Override
