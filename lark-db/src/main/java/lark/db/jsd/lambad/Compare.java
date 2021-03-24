@@ -73,6 +73,11 @@ public interface Compare<T, M> {
 
     CompareFilter<T, M> or(Boolean careNullValue, FieldFunction<T, ?> column, Object value);
 
+    CompareFilter<T, M> or(FieldFunction<T, ?> column, Object value);
+
+
+    CompareFilter<T, M> or(SelectFilter<T, M> selectFilter);
+
     CompareFilter<T, M> apply(String sql);
 
     CompareFilter<T, M> apply(String sql, Object... objects);
