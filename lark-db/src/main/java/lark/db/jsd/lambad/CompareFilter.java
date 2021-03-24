@@ -211,6 +211,8 @@ public class CompareFilter<T, M> implements SelectFilter<T, M>, UpdateFilter<T, 
 
     @Override
     public CompareFilter<T, M> apply(String sql, Object... objects) {
+        sql = StrUtil.format(sql, objects);
+        apply(sql);
         return null;
     }
 

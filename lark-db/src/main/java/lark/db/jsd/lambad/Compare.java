@@ -80,6 +80,15 @@ public interface Compare<T, M> {
 
     CompareFilter<T, M> apply(String sql);
 
+
+    /**
+     * 支持 {}, 参数会在后面转换
+     *
+     * @description: TODO
+     * @return:
+     * @author: yandong
+     * @date: 2021/3/24 6:22 下午
+     */
     CompareFilter<T, M> apply(String sql, Object... objects);
 
 
