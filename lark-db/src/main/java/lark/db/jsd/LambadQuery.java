@@ -1,23 +1,22 @@
 package lark.db.jsd;
 
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.json.JSONUtil;
 import lark.db.jsd.clause.DeleteClause;
 import lark.db.jsd.clause.FromClause;
+import lark.db.jsd.clause.SelectClause;
+import lark.db.jsd.clause.WhereClause;
 import lark.db.jsd.lambad.*;
 
 import java.io.Serializable;
-import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.List;
 
 import static lark.db.jsd.FilterType.EQ;
 import static lark.db.jsd.FilterType.IN;
+import static lark.db.jsd.Shortcut.c;
 import static lark.db.jsd.Shortcut.f;
 
-public class LambadQuery<T> {
+public class LambadQuery<T, M> {
 
     private ConnectionManager manager;
 
@@ -41,16 +40,16 @@ public class LambadQuery<T> {
      * @author: yandong
      * @date: 2021/3/19 10:14 上午
      */
-    public T one(SelectFilter<T> selectFilter) {
+    public M one(SelectFilter<T, M> selectFilter) {
         BasicFilter basicFilter = selectFilter.select();
         FromClause fromClause = new SelectContext(this.manager, builder, this.entityClass);
-        return (T) fromClause.where(basicFilter).groupBy(selectFilter.group()).orderBy(selectFilter.order()).result().one(this.entityClass);
+        return (M) fromClause.where(basicFilter).groupBy(selectFilter.group()).orderBy(selectFilter.order()).result().one(this.entityClass);
     }
 
-    public List<T> list(SelectFilter<T> selectFilter) {
+    public List<M> list(SelectFilter<T, M> selectFilter) {
         BasicFilter basicFilter = selectFilter.select();
         FromClause fromClause = new SelectContext(this.manager, builder, this.entityClass);
-        return (List<T>) fromClause.where(basicFilter).groupBy(selectFilter.group()).orderBy(selectFilter.order()).result().all(this.entityClass);
+        return (List<M>) fromClause.where(basicFilter).groupBy(selectFilter.group()).orderBy(selectFilter.order()).result().all(this.entityClass);
     }
 
     public T selectById(Serializable id) {
@@ -100,13 +99,13 @@ public class LambadQuery<T> {
         return i;
     }
 
-    public int update(UpdateFilter<T> updateFilter) {
-        UpdateContext updateContext = new UpdateContext(this.manager, builder, this.entityClass,true);
+    public int update(UpdateFilter<T, ?> updateFilter) {
+        UpdateContext updateContext = new UpdateContext(this.manager, builder, this.entityClass, true);
         return updateContext.set(updateFilter.set()).where(updateFilter.select()).result().getAffectedRows();
     }
 
 
-    public int delete(DeleteFilter<T> deleteFilter) {
+    public int delete(DeleteFilter<T, ?> deleteFilter) {
         DeleteClause deleteContext = new DeleteContext(this.manager, builder, this.entityClass);
         return deleteContext.where(deleteFilter.select()).result().getAffectedRows();
     }
@@ -122,13 +121,16 @@ public class LambadQuery<T> {
         return deleteContext.where(f("id", IN, ids.toArray())).result().getAffectedRows();
     }
 
-    public PageEntity<T> page(int pageIndex, int pageSize, SelectFilter<T> selectFilter) {
+    public PageEntity<M> page(int pageIndex, int pageSize, SelectFilter<T, M> selectFilter) {
         FromClause fromClause = new SelectContext(this.manager, builder, this.entityClass);
-
         BasicFilter build = selectFilter.select();
-        PageEntity<T> pageEntity = (PageEntity<T>) fromClause.where(build).groupBy(selectFilter.group()).orderBy(selectFilter.order()).page(pageIndex, pageSize).page().pageResult(this.entityClass);
+        PageEntity<M> pageEntity = (PageEntity<M>) fromClause.where(build).groupBy(selectFilter.group()).orderBy(selectFilter.order()).page(pageIndex, pageSize).page().pageResult(this.entityClass);
         return pageEntity;
     }
 
 
+    public int count(SelectFilter<T, M> compareFilter) {
+        FromClause fromClause = new SelectContext(this.manager, builder, this.entityClass, Shortcut.count());
+        return fromClause.where(compareFilter.select()).result().one(Integer.class);
+    }
 }

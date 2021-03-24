@@ -89,7 +89,7 @@ public interface Query {
      * @author: yandong
      * @date: 2021/3/18 5:54 下午
      */
-    <T> T one(CompareFilter<T> CompareFilter);
+    <T,M> T one(CompareFilter<T,M> CompareFilter);
 
     /**
      * 查询操作
@@ -175,7 +175,7 @@ public interface Query {
     TableQuery table(Object obj);
 
 
-    <T> LambadQuery<T> lambadQuery(Class<?> cla);
+    <T,M> LambadQuery<T,M> lambadQuery(Class<?> cla);
 
 
 }

@@ -6,7 +6,7 @@ import lark.db.jsd.UpdateValues;
 
 import java.util.Collection;
 
-public interface UpdateFilter<T> extends Compare<T> {
+public interface UpdateFilter<T,M> extends Compare<T,M> {
 
 
 

@@ -7,69 +7,70 @@ import lark.db.jsd.UpdateValues;
 
 import java.util.Collection;
 
-public interface Compare<T> {
+public interface Compare<T, M> {
 
-    CompareFilter<T> eq(FieldFunction<T, ?> column, Object value);
+    CompareFilter<T, M> eq(FieldFunction<T, ?> column, Object value);
 
-    CompareFilter<T> eq(Boolean ignoreNullValue, FieldFunction<T, ?> column, Object value);
+    CompareFilter<T, M> eq(Boolean ignoreNullValue, FieldFunction<T, ?> column, Object value);
 
-    CompareFilter<T> ne(FieldFunction<T, ?> column, Object value);
+    CompareFilter<T, M> ne(FieldFunction<T, ?> column, Object value);
 
-    CompareFilter<T> ne(Boolean ignoreNullValue, FieldFunction<T, ?> column, Object value);
+    CompareFilter<T, M> ne(Boolean ignoreNullValue, FieldFunction<T, ?> column, Object value);
 
-    CompareFilter<T> lt(FieldFunction<T, ?> column, Object value);
+    CompareFilter<T, M> lt(FieldFunction<T, ?> column, Object value);
 
-    CompareFilter<T> lt(Boolean ignoreNullValue, FieldFunction<T, ?> column, Object value);
+    CompareFilter<T, M> lt(Boolean ignoreNullValue, FieldFunction<T, ?> column, Object value);
 
-    CompareFilter<T> lte(FieldFunction<T, ?> column, Object value);
+    CompareFilter<T, M> lte(FieldFunction<T, ?> column, Object value);
 
-    CompareFilter<T> lte(Boolean ignoreNullValue, FieldFunction<T, ?> column, Object value);
+    CompareFilter<T, M> lte(Boolean ignoreNullValue, FieldFunction<T, ?> column, Object value);
 
-    CompareFilter<T> gt(FieldFunction<T, ?> column, Object value);
+    CompareFilter<T, M> gt(FieldFunction<T, ?> column, Object value);
 
-    CompareFilter<T> gt(Boolean ignoreNullValue, FieldFunction<T, ?> column, Object value);
+    CompareFilter<T, M> gt(Boolean ignoreNullValue, FieldFunction<T, ?> column, Object value);
 
-    CompareFilter<T> gte(Boolean ignoreNullValue, FieldFunction<T, ?> column, Object value);
+    CompareFilter<T, M> gte(Boolean ignoreNullValue, FieldFunction<T, ?> column, Object value);
 
-    CompareFilter<T> gte(FieldFunction<T, ?> column, Object value);
+    CompareFilter<T, M> gte(FieldFunction<T, ?> column, Object value);
 
-    CompareFilter<T> in(FieldFunction<T, ?> column, Collection value);
+    CompareFilter<T, M> in(FieldFunction<T, ?> column, Collection value);
 
-    CompareFilter<T> in(Boolean ignoreNullValue, FieldFunction<T, ?> column, Collection value);
+    CompareFilter<T, M> in(Boolean ignoreNullValue, FieldFunction<T, ?> column, Collection value);
 
-    CompareFilter<T> notIn(FieldFunction<T, ?> column, Collection value);
+    CompareFilter<T, M> notIn(FieldFunction<T, ?> column, Collection value);
 
-    CompareFilter<T> notIn(Boolean ignoreNullValue, FieldFunction<T, ?> column, Collection value);
+    CompareFilter<T, M> notIn(Boolean ignoreNullValue, FieldFunction<T, ?> column, Collection value);
 
-    CompareFilter<T> like(FieldFunction<T, ?> column, Object value);
+    CompareFilter<T, M> like(FieldFunction<T, ?> column, Object value);
 
-    CompareFilter<T> like(Boolean ignoreNullValue, FieldFunction<T, ?> column, Object value);
+    CompareFilter<T, M> like(Boolean ignoreNullValue, FieldFunction<T, ?> column, Object value);
 
-    CompareFilter<T> likeLeft(FieldFunction<T, ?> column, Object value);
+    CompareFilter<T, M> likeLeft(FieldFunction<T, ?> column, Object value);
 
-    CompareFilter<T> likeLeft(Boolean ignoreNullValue, FieldFunction<T, ?> column, Object value);
+    CompareFilter<T, M> likeLeft(Boolean ignoreNullValue, FieldFunction<T, ?> column, Object value);
 
-    CompareFilter<T> likeRight(FieldFunction<T, ?> column, Object value);
+    CompareFilter<T, M> likeRight(FieldFunction<T, ?> column, Object value);
 
-    CompareFilter<T> likeRight(Boolean ignoreNullValue, FieldFunction<T, ?> column, Object value);
+    CompareFilter<T, M> likeRight(Boolean ignoreNullValue, FieldFunction<T, ?> column, Object value);
 
-    CompareFilter<T> notLike(FieldFunction<T, ?> column, Object value);
+    CompareFilter<T, M> notLike(FieldFunction<T, ?> column, Object value);
 
-    CompareFilter<T> notLike(Boolean ignoreNullValue, FieldFunction<T, ?> column, Object value);
+    CompareFilter<T, M> notLike(Boolean ignoreNullValue, FieldFunction<T, ?> column, Object value);
 
-    CompareFilter<T> between(Boolean ignoreNullValue, FieldFunction<T, ?> column, Object begin, Object end);
+    CompareFilter<T, M> between(Boolean ignoreNullValue, FieldFunction<T, ?> column, Object begin, Object end);
 
-    CompareFilter<T> between(FieldFunction<T, ?> column, Object begin, Object end);
+    CompareFilter<T, M> between(FieldFunction<T, ?> column, Object begin, Object end);
 
-    CompareFilter<T> notBetween(Boolean ignoreNullValue, FieldFunction<T, ?> column, Object begin, Object end);
+    CompareFilter<T, M> notBetween(Boolean ignoreNullValue, FieldFunction<T, ?> column, Object begin, Object end);
 
-    CompareFilter<T> notBetween(FieldFunction<T, ?> column, Object begin, Object end);
+    CompareFilter<T, M> notBetween(FieldFunction<T, ?> column, Object begin, Object end);
 
-    CompareFilter<T> orderByDesc(FieldFunction<T, ?> column);
+    CompareFilter<T, M> orderByDesc(FieldFunction<T, ?> column);
 
-    CompareFilter<T> orderByAsc(FieldFunction<T, ?> column);
+    CompareFilter<T, M> orderByAsc(FieldFunction<T, ?> column);
 
-    CompareFilter<T> groupBy(FieldFunction<T, ?> column);
+    CompareFilter<T, M> groupBy(FieldFunction<T, ?> column);
+
 
     BasicFilter select();
 

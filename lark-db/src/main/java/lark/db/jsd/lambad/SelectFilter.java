@@ -6,7 +6,7 @@ import lark.db.jsd.Sorters;
 
 import java.util.Collection;
 
-public interface SelectFilter<T>  extends Compare<T>{
+public interface SelectFilter<T,M>  extends Compare<T,M>{
 
 
 

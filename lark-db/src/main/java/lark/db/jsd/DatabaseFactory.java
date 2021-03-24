@@ -122,7 +122,7 @@ public final class DatabaseFactory {
         }
 
         @Override
-        public <T> T one(CompareFilter<T> CompareFilter) {
+        public <T, M> T one(CompareFilter<T, M> CompareFilter) {
             BasicFilter basicFilter = CompareFilter.select();
             Class<?> table = CompareFilter.getEntity();
             return (T) select(table).where(basicFilter).result().one(table);
@@ -214,7 +214,7 @@ public final class DatabaseFactory {
         }
 
         @Override
-        public <T> LambadQuery<T> lambadQuery(Class<?> cla) {
+        public <T, M> LambadQuery<T, M> lambadQuery(Class<?> cla) {
             return new LambadQuery(cla, this, this.builder);
 
         }

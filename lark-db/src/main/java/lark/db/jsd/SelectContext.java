@@ -18,7 +18,7 @@ public final class SelectContext implements SelectClause, FromClause, WhereClaus
     private SelectInfo info;
 
     SelectContext(ConnectionManager manager, Builder builder, Class<?> clazz) {
-        this(manager, builder, clazz, null);
+        this(manager, builder, clazz, (String) null);
     }
 
     SelectContext(ConnectionManager manager, Builder builder, Class<?> clazz, String table) {
@@ -30,6 +30,15 @@ public final class SelectContext implements SelectClause, FromClause, WhereClaus
         this.manager = manager;
         this.builder = builder;
         this.info = new SelectInfo(columns.list, false);
+        this.from(t);
+    }
+
+    SelectContext(ConnectionManager manager, Builder builder, Class<?> clazz, Columns columns) {
+        Mapper.EntityInfo entityInfo = Mapper.getEntityInfo(clazz);
+        Table t = Table.create(entityInfo.table);
+        this.manager = manager;
+        this.builder = builder;
+        this.info = new SelectInfo(columns.list, columns.distinct);
         this.from(t);
     }
 

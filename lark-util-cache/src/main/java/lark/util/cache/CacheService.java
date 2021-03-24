@@ -1,6 +1,7 @@
 package lark.util.cache;
 
 import java.time.Duration;
+import java.util.List;
 
 /**
  * @author andy
@@ -18,6 +19,7 @@ public interface CacheService {
     <T> T get(String key, Class<T> clazz);
 
     <T> T get(String key, String versionKey, Class<T> clazz);
+
 
     boolean exist(String key);
 

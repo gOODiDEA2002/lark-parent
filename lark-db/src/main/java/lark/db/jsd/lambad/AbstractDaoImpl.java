@@ -30,11 +30,12 @@ public abstract class AbstractDaoImpl<T> implements AbstractDao<T> {
     public abstract Database dataBase();
 
 
-    private <T> LambadQuery<T> lambadQuery(Class<?> cla) {
-        return dataBase().lambadQuery(cla);
+    private <T, M> LambadQuery<T, M> lambadQuery(Class<?> cla) {
+        LambadQuery<T, M> objectMLambadQuery = (LambadQuery<T, M>) dataBase().lambadQuery(cla);
+        return objectMLambadQuery;
     }
 
-    private <T> LambadQuery<T> getLambadQuery() {
+    private <T, M> LambadQuery<T, M> getLambadQuery() {
         return lambadQuery(this.entityClass);
     }
 
@@ -53,7 +54,7 @@ public abstract class AbstractDaoImpl<T> implements AbstractDao<T> {
      */
     @Override
     public int insert(T entity) {
-        LambadQuery<T> objectLambadQuery = getLambadQuery();
+        LambadQuery<T, ?> objectLambadQuery = getLambadQuery();
         return objectLambadQuery.insert(entity);
     }
 
@@ -67,13 +68,13 @@ public abstract class AbstractDaoImpl<T> implements AbstractDao<T> {
      */
     @Override
     public int insert(Collection<? extends Serializable> collection) {
-        LambadQuery<T> objectLambadQuery = getLambadQuery();
-        return objectLambadQuery.insert( collection);
+        LambadQuery<T, ?> objectLambadQuery = getLambadQuery();
+        return objectLambadQuery.insert(collection);
     }
 
     @Override
     public int saveOrUpdateById(T entity) {
-        LambadQuery<T> objectLambadQuery = getLambadQuery();
+        LambadQuery<T, ?> objectLambadQuery = getLambadQuery();
         return objectLambadQuery.saveOrUpdateById(entity);
     }
 
@@ -88,24 +89,24 @@ public abstract class AbstractDaoImpl<T> implements AbstractDao<T> {
      */
     @Override
     public int updateById(Object entity) {
-        LambadQuery<T> objectLambadQuery = getLambadQuery();
+        LambadQuery<T, ?> objectLambadQuery = getLambadQuery();
         return objectLambadQuery.updateById(entity);
     }
 
     public int updateByIds(Collection<? extends Serializable> collection) {
-        LambadQuery<T> objectLambadQuery = getLambadQuery();
+        LambadQuery<T, ?> objectLambadQuery = getLambadQuery();
         return objectLambadQuery.updateByIds(collection);
     }
 
-    public int update(UpdateFilter<T> CompareFilter) {
-        LambadQuery<T> objectLambadQuery = getLambadQuery();
+    public int update(UpdateFilter<T, ?> CompareFilter) {
+        LambadQuery<T, ?> objectLambadQuery = getLambadQuery();
         return objectLambadQuery.update(CompareFilter);
     }
 
     ;
 
-    public int delete(DeleteFilter<T> CompareFilter) {
-        LambadQuery<T> objectLambadQuery = getLambadQuery();
+    public  int delete(DeleteFilter<T, ?> CompareFilter) {
+        LambadQuery<T, ?> objectLambadQuery = getLambadQuery();
         return objectLambadQuery.delete(CompareFilter);
     }
 
@@ -113,46 +114,52 @@ public abstract class AbstractDaoImpl<T> implements AbstractDao<T> {
 
 
     @Override
-    public int deleteById(Serializable id) {
-        LambadQuery<T> objectLambadQuery = getLambadQuery();
+    public  int deleteById(Serializable id) {
+        LambadQuery<T, ?> objectLambadQuery = getLambadQuery();
         return objectLambadQuery.deleteById(id);
     }
 
     @Override
-    public int deleteByIds(Collection<? extends Serializable> ids) {
-        LambadQuery<T> objectLambadQuery = getLambadQuery();
+    public  int deleteByIds(Collection<? extends Serializable> ids) {
+        LambadQuery<T, ?> objectLambadQuery = getLambadQuery();
         return objectLambadQuery.deleteByIds(ids);
     }
 
 
     @Override
-    public T selectById(Serializable id) {
-        LambadQuery<T> objectLambadQuery = getLambadQuery();
+    public  T selectById(Serializable id) {
+        LambadQuery<T, ?> objectLambadQuery = getLambadQuery();
         return objectLambadQuery.selectById(id);
     }
 
     @Override
-    public List<T> selectByIds(Collection<? extends Serializable> collections) {
-        LambadQuery<T> objectLambadQuery = getLambadQuery();
+    public  List<T> selectByIds(Collection<? extends Serializable> collections) {
+        LambadQuery<T, ?> objectLambadQuery = getLambadQuery();
         return objectLambadQuery.selectByIds(collections);
     }
 
     @Override
-    public T selectOne(SelectFilter<T> CompareFilter) {
-        LambadQuery<T> objectLambadQuery = getLambadQuery();
+    public <M> M selectOne(SelectFilter<T, M> CompareFilter) {
+        LambadQuery<T, M> objectLambadQuery = getLambadQuery();
         return objectLambadQuery.one(CompareFilter);
     }
 
     @Override
-    public List<T> selectList(SelectFilter<T> CompareFilter) {
-        LambadQuery<T> objectLambadQuery = getLambadQuery();
+    public <M> List<M> selectList(SelectFilter<T, M> CompareFilter) {
+        LambadQuery<T, M> objectLambadQuery = getLambadQuery();
         return objectLambadQuery.list(CompareFilter);
     }
 
 
     @Override
-    public PageEntity<T> page(Pager pager, SelectFilter<T> CompareFilter) {
-        LambadQuery<T> objectLambadQuery = getLambadQuery();
+    public <M> int count(SelectFilter<T, M> CompareFilter) {
+        LambadQuery<T, M> objectLambadQuery = getLambadQuery();
+        return objectLambadQuery.count(CompareFilter);
+    }
+
+    @Override
+    public <M> PageEntity<M> page(Pager pager, SelectFilter<T, M> CompareFilter) {
+        LambadQuery<T, M> objectLambadQuery = getLambadQuery();
         return objectLambadQuery.page(pager.getPageIndex(), pager.getPageSize(), CompareFilter);
     }
 

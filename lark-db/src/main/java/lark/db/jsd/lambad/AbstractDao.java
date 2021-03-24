@@ -41,10 +41,10 @@ public interface AbstractDao<T> {
 
     int updateByIds(Collection<? extends Serializable> id);
 
-    int update(UpdateFilter<T> CompareFilter);
+    int update(UpdateFilter<T, ?> CompareFilter);
 
 
-    int delete(DeleteFilter<T> deleteFilter);
+    int delete(DeleteFilter<T, ?> deleteFilter);
 
 
     /**
@@ -66,6 +66,9 @@ public interface AbstractDao<T> {
      * @date: 2021/3/19 3:49 下午
      */
     int deleteByIds(Collection<? extends Serializable> ids);
+
+
+    <M> int count(SelectFilter<T, M> CompareFilter);
 
 
     /**
@@ -97,7 +100,7 @@ public interface AbstractDao<T> {
      * @author: yandong
      * @date: 2021/3/19 3:54 下午
      */
-    T selectOne(SelectFilter<T> CompareFilter);
+    <M> M selectOne(SelectFilter<T, M> CompareFilter);
 
     /**
      * 根据条件查询多个
@@ -107,7 +110,7 @@ public interface AbstractDao<T> {
      * @author: yandong
      * @date: 2021/3/19 3:55 下午
      */
-    List<T> selectList(SelectFilter<T> CompareFilter);
+    <M> List<M> selectList(SelectFilter<T, M> CompareFilter);
 
 
     /**
@@ -118,7 +121,7 @@ public interface AbstractDao<T> {
      * @author: yandong
      * @date: 2021/3/19 10:02 上午
      */
-    PageEntity<T> page(Pager pager, SelectFilter<T> CompareFilter);
+    <M> PageEntity<M> page(Pager pager, SelectFilter<T, M> CompareFilter);
 
 
     /**

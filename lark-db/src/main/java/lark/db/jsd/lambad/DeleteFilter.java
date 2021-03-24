@@ -4,6 +4,6 @@ import lark.db.jsd.BasicFilter;
 
 import java.util.Collection;
 
-public interface DeleteFilter<T> extends Compare<T> {
+public interface DeleteFilter<T,M> extends Compare<T,M> {
 
 }
