@@ -40,6 +40,20 @@ public final class BasicFilter extends Filter {
     }
 
     /**
+     * 添加自定义sql 直接拼接
+     *
+     * @description: TODO
+     * @return:
+     * @author: yandong
+     * @date: 2021/3/24 2:46 下午
+     */
+    public BasicFilter addSql(String sql) {
+        this.add(new SqlFilterItem((sql)));
+        return this;
+    }
+
+
+    /**
      * 添加简单查询条件
      *
      * @param column 列
@@ -100,7 +114,7 @@ public final class BasicFilter extends Filter {
      * 条件项类型
      */
     enum FilterItemType {
-        EXPR, ONE_COLUMN, TWO_COLUMN;
+        EXPR, ONE_COLUMN, TWO_COLUMN, SQL;
     }
 
     interface FilterItem {
@@ -176,5 +190,20 @@ public final class BasicFilter extends Filter {
         public FilterItemType getItemType() {
             return FilterItemType.EXPR;
         }
+    }
+
+    @Getter
+    static class SqlFilterItem implements FilterItem {
+        private String sql;
+
+        SqlFilterItem(String sql) {
+            this.sql = sql;
+        }
+
+        @Override
+        public FilterItemType getItemType() {
+            return FilterItemType.SQL;
+        }
+
     }
 }

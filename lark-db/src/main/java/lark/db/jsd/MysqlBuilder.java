@@ -60,7 +60,7 @@ public class MysqlBuilder implements Builder {
         if (info.where != null) {
             BuildResult br = buildFilter(info.where);
             if (br != null) {
-                buffer.addSql(" WHERE ");
+                buffer.addSql(" WHERE 1=1 ");
                 buffer.addSql(br.getSql());
                 buffer.addArg(br.getArgs());
             }
@@ -101,7 +101,7 @@ public class MysqlBuilder implements Builder {
         if (info.where != null) {
             BuildResult br = buildFilter(info.where);
             if (br != null) {
-                buffer.addSql(" WHERE ");
+                buffer.addSql(" WHERE 1=1 ");
                 buffer.addSql(br.getSql());
                 buffer.addArg(br.getArgs());
             }
@@ -172,7 +172,7 @@ public class MysqlBuilder implements Builder {
         if (info.where != null) {
             BuildResult br = this.buildFilter(info.where);
             if (br != null) {
-                buffer.addSql(" WHERE ");
+                buffer.addSql(" WHERE 1=1 ");
                 buffer.addSql(br.getSql());
                 buffer.addArg(br.getArgs());
             }
@@ -270,7 +270,10 @@ public class MysqlBuilder implements Builder {
             BuildBuffer buffer = new BuildBuffer();
             List<BasicFilter.FilterItem> items = f.getItems();
             for (int i = 0; i < items.size(); i++) {
-                if (i > 0) buffer.addSql(" AND ");
+                BasicFilter.FilterItem filterItem = items.get(i);
+                if (!(filterItem instanceof BasicFilter.SqlFilterItem)) {
+                    buffer.addSql(" AND ");
+                }
                 this.buildFilterItem(buffer, items.get(i));
             }
             return buffer.getResult();
@@ -326,6 +329,9 @@ public class MysqlBuilder implements Builder {
             case EXPR:
                 this.buildExprFilterItem(buffer, (BasicFilter.ExprFilterItem) item);
                 break;
+            case SQL:
+                this.buildSqlFilterItem(buffer, (BasicFilter.SqlFilterItem) item);
+                break;
         }
     }
 
@@ -373,13 +379,16 @@ public class MysqlBuilder implements Builder {
                 buffer.addSql("`%s`  LIKE  CONCAT( ?, '%%')", item.getColumn());
                 buffer.addArg(item.getValue());
                 break;
-
             case BETWEEN:
                 buffer.addSql("`%s` BETWEEN ? AND  ?", item.getColumn());
                 buffer.addArg(item.getValue(), item.getValue2());
                 break;
             case NOTBETWEEN:
                 buffer.addSql("`%s` NOT BETWEEN ? AND  ?", item.getColumn());
+                buffer.addArg(item.getValue(), item.getValue2());
+                break;
+            case OR:
+                buffer.addSql("`%s` OR ? ", item.getColumn());
                 buffer.addArg(item.getValue(), item.getValue2());
                 break;
             case IN:
@@ -452,4 +461,10 @@ public class MysqlBuilder implements Builder {
     protected void buildExprFilterItem(BuildBuffer buffer, BasicFilter.ExprFilterItem item) {
         buffer.addSql(item.getExpr());
     }
+
+    protected void buildSqlFilterItem(BuildBuffer buffer, BasicFilter.SqlFilterItem item) {
+        buffer.addSql(item.getSql());
+    }
+
+
 }

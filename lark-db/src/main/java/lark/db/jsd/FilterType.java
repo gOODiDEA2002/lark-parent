@@ -17,7 +17,8 @@ public enum FilterType {
     LKRIGHT("LIKE RIGHT"),
     NOTLK("NOT LIKE"),
     BETWEEN("BETWEEN"),
-    NOTBETWEEN("NOT BETWEEN");
+    NOTBETWEEN("NOT BETWEEN"),
+    OR("OR");
 
     String value;
 

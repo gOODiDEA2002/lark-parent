@@ -33,7 +33,7 @@ public abstract class Filter {
      * @param filter
      * @return
      */
-    public Filter or(Filter filter) {
+    public OrFilter or(Filter filter) {
         return new OrFilter(this, filter);
     }
 
@@ -81,7 +81,7 @@ public abstract class Filter {
         }
     }
 
-    static class OrFilter extends Filter {
+    public static class OrFilter extends Filter {
         @Getter
         private Filter left;
         @Getter

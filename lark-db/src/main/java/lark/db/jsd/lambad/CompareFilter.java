@@ -9,6 +9,8 @@ import java.util.Collection;
 public class CompareFilter<T, M> implements SelectFilter<T, M>, UpdateFilter<T, M>, DeleteFilter<T, M> {
 
     private BasicFilter basicFilter;
+
+
     private UpdateValues uv;
     private Sorters sorters;
     private Groupers groupers;
@@ -92,20 +94,20 @@ public class CompareFilter<T, M> implements SelectFilter<T, M>, UpdateFilter<T, 
     }
 
 
-    public CompareFilter<T, M> in(FieldFunction<T, ?> column, Collection value) {
+    public CompareFilter<T, M> in(FieldFunction<T, ?> column, Object... value) {
         return in(true, column, value);
     }
 
-    public CompareFilter<T, M> in(Boolean careNullValue, FieldFunction<T, ?> column, Collection value) {
-        return addFilter(column, FilterType.IN, value.toArray(), careNullValue);
+    public CompareFilter<T, M> in(Boolean careNullValue, FieldFunction<T, ?> column, Object... value) {
+        return addFilter(column, FilterType.IN, value, careNullValue);
     }
 
-    public CompareFilter<T, M> notIn(FieldFunction<T, ?> column, Collection value) {
+    public CompareFilter<T, M> notIn(FieldFunction<T, ?> column, Object... value) {
         return notIn(true, column, value);
     }
 
-    public CompareFilter<T, M> notIn(Boolean careNullValue, FieldFunction<T, ?> column, Collection value) {
-        return addFilter(column, FilterType.NIN, value.toArray(), careNullValue);
+    public CompareFilter<T, M> notIn(Boolean careNullValue, FieldFunction<T, ?> column, Object... value) {
+        return addFilter(column, FilterType.NIN, value, careNullValue);
     }
 
 
@@ -184,6 +186,27 @@ public class CompareFilter<T, M> implements SelectFilter<T, M>, UpdateFilter<T, 
             groupers.add(columnName);
         }
         return this;
+    }
+
+    @Override
+    public CompareFilter<T, M> or(Boolean careNullValue, FieldFunction<T, ?> column, Object value) {
+        addFilter(column, FilterType.OR, value, careNullValue);
+        return this;
+    }
+
+    public CompareFilter<T, M> or(FieldFunction<T, ?> column, Object value) {
+        return or(true, column, value);
+    }
+
+    @Override
+    public CompareFilter<T, M> apply(String sql) {
+        basicFilter.addSql(sql);
+        return this;
+    }
+
+    @Override
+    public CompareFilter<T, M> apply(String sql, Object... objects) {
+        return null;
     }
 
 

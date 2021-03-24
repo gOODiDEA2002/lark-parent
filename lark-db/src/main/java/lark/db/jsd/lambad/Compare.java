@@ -11,57 +11,57 @@ public interface Compare<T, M> {
 
     CompareFilter<T, M> eq(FieldFunction<T, ?> column, Object value);
 
-    CompareFilter<T, M> eq(Boolean ignoreNullValue, FieldFunction<T, ?> column, Object value);
+    CompareFilter<T, M> eq(Boolean careNullValue, FieldFunction<T, ?> column, Object value);
 
     CompareFilter<T, M> ne(FieldFunction<T, ?> column, Object value);
 
-    CompareFilter<T, M> ne(Boolean ignoreNullValue, FieldFunction<T, ?> column, Object value);
+    CompareFilter<T, M> ne(Boolean careNullValue, FieldFunction<T, ?> column, Object value);
 
     CompareFilter<T, M> lt(FieldFunction<T, ?> column, Object value);
 
-    CompareFilter<T, M> lt(Boolean ignoreNullValue, FieldFunction<T, ?> column, Object value);
+    CompareFilter<T, M> lt(Boolean careNullValue, FieldFunction<T, ?> column, Object value);
 
     CompareFilter<T, M> lte(FieldFunction<T, ?> column, Object value);
 
-    CompareFilter<T, M> lte(Boolean ignoreNullValue, FieldFunction<T, ?> column, Object value);
+    CompareFilter<T, M> lte(Boolean careNullValue, FieldFunction<T, ?> column, Object value);
 
     CompareFilter<T, M> gt(FieldFunction<T, ?> column, Object value);
 
-    CompareFilter<T, M> gt(Boolean ignoreNullValue, FieldFunction<T, ?> column, Object value);
+    CompareFilter<T, M> gt(Boolean careNullValue, FieldFunction<T, ?> column, Object value);
 
-    CompareFilter<T, M> gte(Boolean ignoreNullValue, FieldFunction<T, ?> column, Object value);
+    CompareFilter<T, M> gte(Boolean careNullValue, FieldFunction<T, ?> column, Object value);
 
     CompareFilter<T, M> gte(FieldFunction<T, ?> column, Object value);
 
-    CompareFilter<T, M> in(FieldFunction<T, ?> column, Collection value);
+    CompareFilter<T, M> in(FieldFunction<T, ?> column, Object... value);
 
-    CompareFilter<T, M> in(Boolean ignoreNullValue, FieldFunction<T, ?> column, Collection value);
+    CompareFilter<T, M> in(Boolean careNullValue, FieldFunction<T, ?> column, Object... value);
 
-    CompareFilter<T, M> notIn(FieldFunction<T, ?> column, Collection value);
+    CompareFilter<T, M> notIn(FieldFunction<T, ?> column, Object... value);
 
-    CompareFilter<T, M> notIn(Boolean ignoreNullValue, FieldFunction<T, ?> column, Collection value);
+    CompareFilter<T, M> notIn(Boolean careNullValue, FieldFunction<T, ?> column, Object... value);
 
     CompareFilter<T, M> like(FieldFunction<T, ?> column, Object value);
 
-    CompareFilter<T, M> like(Boolean ignoreNullValue, FieldFunction<T, ?> column, Object value);
+    CompareFilter<T, M> like(Boolean careNullValue, FieldFunction<T, ?> column, Object value);
 
     CompareFilter<T, M> likeLeft(FieldFunction<T, ?> column, Object value);
 
-    CompareFilter<T, M> likeLeft(Boolean ignoreNullValue, FieldFunction<T, ?> column, Object value);
+    CompareFilter<T, M> likeLeft(Boolean careNullValue, FieldFunction<T, ?> column, Object value);
 
     CompareFilter<T, M> likeRight(FieldFunction<T, ?> column, Object value);
 
-    CompareFilter<T, M> likeRight(Boolean ignoreNullValue, FieldFunction<T, ?> column, Object value);
+    CompareFilter<T, M> likeRight(Boolean careNullValue, FieldFunction<T, ?> column, Object value);
 
     CompareFilter<T, M> notLike(FieldFunction<T, ?> column, Object value);
 
-    CompareFilter<T, M> notLike(Boolean ignoreNullValue, FieldFunction<T, ?> column, Object value);
+    CompareFilter<T, M> notLike(Boolean careNullValue, FieldFunction<T, ?> column, Object value);
 
-    CompareFilter<T, M> between(Boolean ignoreNullValue, FieldFunction<T, ?> column, Object begin, Object end);
+    CompareFilter<T, M> between(Boolean careNullValue, FieldFunction<T, ?> column, Object begin, Object end);
 
     CompareFilter<T, M> between(FieldFunction<T, ?> column, Object begin, Object end);
 
-    CompareFilter<T, M> notBetween(Boolean ignoreNullValue, FieldFunction<T, ?> column, Object begin, Object end);
+    CompareFilter<T, M> notBetween(Boolean careNullValue, FieldFunction<T, ?> column, Object begin, Object end);
 
     CompareFilter<T, M> notBetween(FieldFunction<T, ?> column, Object begin, Object end);
 
@@ -70,6 +70,12 @@ public interface Compare<T, M> {
     CompareFilter<T, M> orderByAsc(FieldFunction<T, ?> column);
 
     CompareFilter<T, M> groupBy(FieldFunction<T, ?> column);
+
+    CompareFilter<T, M> or(Boolean careNullValue, FieldFunction<T, ?> column, Object value);
+
+    CompareFilter<T, M> apply(String sql);
+
+    CompareFilter<T, M> apply(String sql, Object... objects);
 
 
     BasicFilter select();
