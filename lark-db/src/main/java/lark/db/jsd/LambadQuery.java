@@ -40,6 +40,7 @@ public class LambadQuery<T, M> {
     public M one(SelectFilter<T, M> selectFilter) {
         BasicFilter basicFilter = selectFilter.build();
         FromClause fromClause = new SelectContext(this.manager, builder, this.entityClass, selectFilter.col());
+
         return (M) fromClause.where(basicFilter).groupBy(selectFilter.group()).orderBy(selectFilter.order()).result().one(this.entityClass);
     }
 

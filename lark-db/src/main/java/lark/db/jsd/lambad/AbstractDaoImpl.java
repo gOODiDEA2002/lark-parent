@@ -44,6 +44,7 @@ public abstract class AbstractDaoImpl<T> implements AbstractDao<T> {
         return tClass;
     }
 
+
     /**
      * 单个插入
      *
@@ -105,38 +106,34 @@ public abstract class AbstractDaoImpl<T> implements AbstractDao<T> {
 
     ;
 
-    public  int delete(DeleteFilter<T, ?> CompareFilter) {
+    public int delete(DeleteFilter<T, ?> CompareFilter) {
         LambadQuery<T, ?> objectLambadQuery = getLambadQuery();
         objectLambadQuery.getBuilder();
         return objectLambadQuery.delete(CompareFilter);
     }
 
-    public void or(){
-
-    }
-
 
     @Override
-    public  int deleteById(Serializable id) {
+    public int deleteById(Serializable id) {
         LambadQuery<T, ?> objectLambadQuery = getLambadQuery();
         return objectLambadQuery.deleteById(id);
     }
 
     @Override
-    public  int deleteByIds(Collection<? extends Serializable> ids) {
+    public int deleteByIds(Collection<? extends Serializable> ids) {
         LambadQuery<T, ?> objectLambadQuery = getLambadQuery();
         return objectLambadQuery.deleteByIds(ids);
     }
 
 
     @Override
-    public  T selectById(Serializable id) {
+    public T selectById(Serializable id) {
         LambadQuery<T, ?> objectLambadQuery = getLambadQuery();
         return objectLambadQuery.selectById(id);
     }
 
     @Override
-    public  List<T> selectByIds(Collection<? extends Serializable> collections) {
+    public List<T> selectByIds(Collection<? extends Serializable> collections) {
         LambadQuery<T, ?> objectLambadQuery = getLambadQuery();
         return objectLambadQuery.selectByIds(collections);
     }

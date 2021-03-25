@@ -4,9 +4,11 @@ import lark.db.jsd.*;
 import lark.db.jsd.clause.SelectClause;
 import org.springframework.data.relational.core.sql.Select;
 
+import java.lang.reflect.ParameterizedType;
 import java.util.Collection;
 
 public interface Compare<T, M> {
+
 
     CompareFilter<T, M> eq(FieldFunction<T, ?> column, Object value);
 
@@ -95,7 +97,7 @@ public interface Compare<T, M> {
     CompareFilter<T, M> last(String sql);
 
 
-    CompareFilter<T, M> last(String sql,Object... obj);
+    CompareFilter<T, M> last(String sql, Object... obj);
 
     /**
      * 支持 {}, 参数会在后面转换
