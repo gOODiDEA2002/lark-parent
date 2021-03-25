@@ -1,9 +1,8 @@
 package lark.db.jsd.lambad;
 
-import lark.db.jsd.BasicFilter;
-import lark.db.jsd.Groupers;
-import lark.db.jsd.Sorters;
-import lark.db.jsd.UpdateValues;
+import lark.db.jsd.*;
+import lark.db.jsd.clause.SelectClause;
+import org.springframework.data.relational.core.sql.Select;
 
 import java.util.Collection;
 
@@ -77,8 +76,26 @@ public interface Compare<T, M> {
 
     CompareFilter<T, M> or(SelectFilter<T, M> selectFilter);
 
+    CompareFilter<T, M> or();
+
     CompareFilter<T, M> apply(String sql);
 
+    CompareFilter<T, M> select(FieldFunction<T, ?>... column);
+
+    CompareFilter<T, M> select(String... column);
+
+    /**
+     * 将sql 拼接到最后
+     *
+     * @description: TODO
+     * @return:
+     * @author: yandong
+     * @date: 2021/3/25 1:41 下午
+     */
+    CompareFilter<T, M> last(String sql);
+
+
+    CompareFilter<T, M> last(String sql,Object... obj);
 
     /**
      * 支持 {}, 参数会在后面转换
@@ -90,6 +107,7 @@ public interface Compare<T, M> {
      */
     CompareFilter<T, M> apply(String sql, Object... objects);
 
+    Columns col();
 
     BasicFilter build();
 
@@ -98,5 +116,6 @@ public interface Compare<T, M> {
     Sorters order();
 
     UpdateValues set();
+
 
 }

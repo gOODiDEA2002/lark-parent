@@ -118,7 +118,7 @@ public final class DatabaseFactory {
 
         @Override
         public SelectClause select(String column) {
-            return new SelectContext(this, builder, new Columns(null, column));
+            return new SelectContext(this, builder, new Columns((Table) null, column));
         }
 
         @Override

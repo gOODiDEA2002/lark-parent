@@ -10,12 +10,16 @@ public class FieldUtil {
 
     public static <T> String getFieldName(FieldFunction<T, ?> lambda) {
         try {
-            Method method = lambda.getClass().getDeclaredMethod("writeReplace");
-            method.setAccessible(true);
+            if (lambda != null) {
+                Method method = lambda.getClass().getDeclaredMethod("writeReplace");
+                method.setAccessible(true);
 
-            SerializedLambda serializedLambda = (SerializedLambda) method.invoke(lambda);
-            String implMethodName = serializedLambda.getImplMethodName();
-            return methodToProperty(implMethodName);
+                SerializedLambda serializedLambda = (SerializedLambda) method.invoke(lambda);
+                String implMethodName = serializedLambda.getImplMethodName();
+                return methodToProperty(implMethodName);
+            }
+            return null;
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

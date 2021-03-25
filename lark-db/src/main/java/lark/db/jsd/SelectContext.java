@@ -1,5 +1,6 @@
 package lark.db.jsd;
 
+import cn.hutool.core.collection.CollUtil;
 import lark.db.jsd.clause.*;
 import lark.db.jsd.result.BuildResult;
 import lark.db.jsd.result.PageResult;
@@ -36,6 +37,9 @@ public final class SelectContext implements SelectClause, FromClause, WhereClaus
     SelectContext(ConnectionManager manager, Builder builder, Class<?> clazz, Columns columns) {
         Mapper.EntityInfo entityInfo = Mapper.getEntityInfo(clazz);
         Table t = Table.create(entityInfo.table);
+        if (CollUtil.isEmpty(columns.list)) {
+            columns = new Columns(t, entityInfo.getUpdateColumns());
+        }
         this.manager = manager;
         this.builder = builder;
         this.info = new SelectInfo(columns.list, columns.distinct);

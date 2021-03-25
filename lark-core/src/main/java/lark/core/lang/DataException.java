@@ -10,9 +10,9 @@ public class DataException extends BusinessException {
     protected Object data;
 
 
-    public DataException(BaseEnum baseEnum) {
+    public DataException(BaseEnum baseEnum, String... arg) {
         super.code = baseEnum.getCode();
-        super.detail = baseEnum.getMsg();
+        super.detail = MessageFormat.format(baseEnum.getMsg(), arg);
         this.data = null;
     }
 
@@ -25,7 +25,7 @@ public class DataException extends BusinessException {
     public DataException(Integer code, String msg, String... arg) {
         super.code = code;
         super.detail = MessageFormat.format(msg, arg);
-        this.data = data;
+        this.data = null;
     }
 
     public Object getData() {

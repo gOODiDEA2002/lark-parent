@@ -53,6 +53,12 @@ public final class BasicFilter extends Filter {
         return this;
     }
 
+    public BasicFilter addLastSql(String sql) {
+        this.add(new LastSqlFilterItem((sql)));
+        return this;
+    }
+
+
     public <T, M> BasicFilter addSelectFilter(BasicFilter basicFilter) {
         this.add(new SelectFilterItem(basicFilter));
         return this;
@@ -120,7 +126,7 @@ public final class BasicFilter extends Filter {
      * 条件项类型
      */
     enum FilterItemType {
-        EXPR, ONE_COLUMN, TWO_COLUMN, SQL, SELECTFILTER;
+        EXPR, ONE_COLUMN, TWO_COLUMN, SQL, SELECTFILTER, LASTSQL;
     }
 
     interface FilterItem {
@@ -217,6 +223,21 @@ public final class BasicFilter extends Filter {
             return FilterItemType.SQL;
         }
     }
+
+    @Getter
+    static class LastSqlFilterItem implements FilterItem {
+        private String sql;
+
+        LastSqlFilterItem(String sql) {
+            this.sql = sql;
+        }
+
+        @Override
+        public FilterItemType getItemType() {
+            return FilterItemType.LASTSQL;
+        }
+    }
+
 
     @Getter
     static class SelectFilterItem implements FilterItem {

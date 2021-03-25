@@ -12,6 +12,7 @@ public class CompareFilter<T, M> implements SelectFilter<T, M>, UpdateFilter<T, 
     private UpdateValues uv;
     private Sorters sorters;
     private Groupers groupers;
+    private Columns columns;
 
     private Class<?> entity;
 
@@ -20,6 +21,7 @@ public class CompareFilter<T, M> implements SelectFilter<T, M>, UpdateFilter<T, 
         uv = new UpdateValues();
         sorters = new Sorters();
         groupers = new Groupers();
+        columns = new Columns();
     }
 
     public void table(Class<T> entity) {
@@ -192,6 +194,13 @@ public class CompareFilter<T, M> implements SelectFilter<T, M>, UpdateFilter<T, 
         return this;
     }
 
+
+    @Override
+    public CompareFilter<T, M> or() {
+        addFilter(null, FilterType.OR, null, true);
+        return this;
+    }
+
     public CompareFilter<T, M> or(FieldFunction<T, ?> column, Object value) {
         return or(true, column, value);
     }
@@ -216,6 +225,33 @@ public class CompareFilter<T, M> implements SelectFilter<T, M>, UpdateFilter<T, 
         return this;
     }
 
+    @Override
+    public CompareFilter<T, M> select(FieldFunction<T, ?>... column) {
+        return addColumn(column);
+    }
+
+    @Override
+    public CompareFilter<T, M> select(String... column) {
+        return addColumn(column);
+    }
+
+    @Override
+    public CompareFilter<T, M> last(String sql) {
+        basicFilter.addLastSql(sql);
+        return this;
+    }
+
+    ;
+
+    @Override
+    public CompareFilter<T, M> last(String sql, Object... objects) {
+        sql = StrUtil.format(sql, objects);
+        basicFilter.addLastSql(sql);
+        return this;
+    }
+
+    ;
+
 
     // ------------------update---------------------
     public CompareFilter<T, M> set(FieldFunction<T, ?> column, Object value) {
@@ -231,6 +267,26 @@ public class CompareFilter<T, M> implements SelectFilter<T, M>, UpdateFilter<T, 
             uv.add(FieldUtil.getColumnName(column), updateType, value);
         }
         return this;
+    }
+
+    private CompareFilter<T, M> addColumn(FieldFunction<T, ?>... column) {
+        for (FieldFunction<T, ?> tFieldFunction : column) {
+            String columnName = FieldUtil.getColumnName(tFieldFunction);
+            columns.add(columnName);
+        }
+        return this;
+    }
+
+    private CompareFilter<T, M> addColumn(String... column) {
+        for (String s : column) {
+            columns.addSql(s);
+        }
+        return this;
+    }
+
+
+    public Columns col() {
+        return columns;
     }
 
 

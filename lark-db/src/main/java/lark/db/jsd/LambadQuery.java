@@ -39,13 +39,13 @@ public class LambadQuery<T, M> {
      */
     public M one(SelectFilter<T, M> selectFilter) {
         BasicFilter basicFilter = selectFilter.build();
-        FromClause fromClause = new SelectContext(this.manager, builder, this.entityClass);
+        FromClause fromClause = new SelectContext(this.manager, builder, this.entityClass, selectFilter.col());
         return (M) fromClause.where(basicFilter).groupBy(selectFilter.group()).orderBy(selectFilter.order()).result().one(this.entityClass);
     }
 
     public List<M> list(SelectFilter<T, M> selectFilter) {
         BasicFilter basicFilter = selectFilter.build();
-        FromClause fromClause = new SelectContext(this.manager, builder, this.entityClass);
+        FromClause fromClause = new SelectContext(this.manager, builder, this.entityClass, selectFilter.col());
         return (List<M>) fromClause.where(basicFilter).groupBy(selectFilter.group()).orderBy(selectFilter.order()).result().all(this.entityClass);
     }
 
@@ -119,7 +119,7 @@ public class LambadQuery<T, M> {
     }
 
     public PageEntity<M> page(int pageIndex, int pageSize, SelectFilter<T, M> selectFilter) {
-        FromClause fromClause = new SelectContext(this.manager, builder, this.entityClass);
+        FromClause fromClause = new SelectContext(this.manager, builder, this.entityClass, selectFilter.col());
         BasicFilter build = selectFilter.build();
         PageEntity<M> pageEntity = (PageEntity<M>) fromClause.where(build).groupBy(selectFilter.group()).orderBy(selectFilter.order()).page(pageIndex, pageSize).page().pageResult(this.entityClass);
         return pageEntity;
@@ -131,7 +131,7 @@ public class LambadQuery<T, M> {
         return Integer.valueOf(fromClause.where(compareFilter.build()).result().one().get("count").toString());
     }
 
-   public Builder getBuilder() {
+    public Builder getBuilder() {
         return builder;
     }
 }

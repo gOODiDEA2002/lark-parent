@@ -14,6 +14,11 @@ public final class Columns {
         // default ctor
     }
 
+
+    public Columns(String... cols) {
+        this.add(cols);
+    }
+
     public Columns(Table t, String... cols) {
         this.add(t, cols);
     }
@@ -74,12 +79,48 @@ public final class Columns {
         return this;
     }
 
+    public Columns add(String... cols) {
+        for (String col : cols) {
+            list.add(new SimpleColumn(col));
+        }
+        return this;
+    }
+
+    public Columns addSql(String... cols) {
+        for (String col : cols) {
+            list.add(new SqlColumn(col));
+        }
+        return this;
+    }
+
     /**
      * 列
      */
     interface Column {
         String getAlias();
     }
+
+    /**
+     * 自定义sql 列
+     */
+    static class SqlColumn implements Column {
+        Table table;
+        String column;
+        String alias;
+
+
+        SqlColumn(String column) {
+            this.column = column;
+        }
+
+
+        @Override
+        public String getAlias() {
+            return alias;
+        }
+
+    }
+
 
     /**
      * 常规数据列
@@ -94,6 +135,11 @@ public final class Columns {
             this.column = column;
             this.alias = alias;
         }
+
+        SimpleColumn(String column) {
+            this.column = column;
+        }
+
 
         @Override
         public String getAlias() {
