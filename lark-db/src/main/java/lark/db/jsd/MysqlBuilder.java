@@ -1,24 +1,17 @@
 package lark.db.jsd;
 
-import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.util.StrUtil;
 import lark.db.jsd.result.BuildResult;
 
 import java.lang.reflect.Array;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import static lark.db.jsd.FilterType.BETWEEN;
-import static lark.db.jsd.FilterType.OR;
 
 /**
  * MySQL 语句生成器
  * Created by guohua.cui on 15/5/19.
  */
 public class MysqlBuilder implements Builder {
-
     @Override
     public BuildResult buildInsert(InsertContext.InsertInfo info) {
         BuildBuffer buffer = new BuildBuffer();
@@ -63,7 +56,7 @@ public class MysqlBuilder implements Builder {
         if (info.where != null) {
             BuildResult br = buildFilter(info.where);
             if (br != null) {
-                buffer.addSql(" WHERE 1=1 ");
+                buffer.addSql(" WHERE ");
                 buffer.addSql(br.getSql());
                 buffer.addArg(br.getArgs());
             }
@@ -104,7 +97,7 @@ public class MysqlBuilder implements Builder {
         if (info.where != null) {
             BuildResult br = buildFilter(info.where);
             if (br != null) {
-                buffer.addSql(" WHERE 1=1 ");
+                buffer.addSql(" WHERE ");
                 buffer.addSql(br.getSql());
                 buffer.addArg(br.getArgs());
             }
@@ -143,15 +136,6 @@ public class MysqlBuilder implements Builder {
                 }
             } else if (col instanceof Columns.PolyColumn) {
                 // todo:
-            } else if (col instanceof Columns.SqlColumn) {
-                Columns.SqlColumn sqlColumn = (Columns.SqlColumn) col;
-                if (sqlColumn.table != null) {
-                    buffer.addSql(" `%s` .", sqlColumn.table.getPrefix());
-                }
-                buffer.addSql(" %s ", sqlColumn.column);
-                if (sqlColumn.alias != null && !sqlColumn.alias.isEmpty()) {
-                    buffer.addSql(" AS %s", sqlColumn.alias);
-                }
             }
         }
 
@@ -184,14 +168,14 @@ public class MysqlBuilder implements Builder {
         if (info.where != null) {
             BuildResult br = this.buildFilter(info.where);
             if (br != null) {
-                buffer.addSql(" WHERE 1=1 ");
+                buffer.addSql(" WHERE ");
                 buffer.addSql(br.getSql());
                 buffer.addArg(br.getArgs());
             }
         }
 
         // GROUP BY
-        if (CollUtil.isNotEmpty(info.groups)) {
+        if (info.groups != null) {
             buffer.addSql(" GROUP BY ");
             for (int i = 0; i < info.groups.size(); i++) {
                 Groupers.Grouper g = info.groups.get(i);
@@ -214,7 +198,7 @@ public class MysqlBuilder implements Builder {
         }
 
         // ORDER BY
-        if (CollUtil.isNotEmpty(info.orders)) {
+        if (info.orders != null) {
             buffer.addSql(" ORDER BY ");
             for (int i = 0; i < info.orders.size(); i++) {
                 Sorters.Sorter order = info.orders.get(i);
@@ -273,35 +257,6 @@ public class MysqlBuilder implements Builder {
 //        return sb.toString();
 //    }
 
-    public BuildResult buildFilter0(Filter filter) {
-        if (filter instanceof BasicFilter) {
-            BasicFilter f = (BasicFilter) filter;
-            if (!f.hasItems()) return null;
-
-            BuildBuffer buffer = new BuildBuffer();
-            List<BasicFilter.FilterItem> items = f.getItems();
-            for (int i = 0; i < items.size(); i++) {
-                BasicFilter.FilterItem filterItem = items.get(i);
-                if (filterItem instanceof BasicFilter.SelectFilterItem) {
-                    BasicFilter basicFilter = ((BasicFilter.SelectFilterItem) filterItem).getSelectFilter();
-                    buffer.addSql(" OR ");
-                    buffer.addSql(" ( ");
-                    BuildResult buildResult = buildFilter0(basicFilter);
-                    buffer.addSql(buildResult.getSql());
-                    buffer.addArg(buildResult.getArgs());
-                    buffer.addSql(" ) ");
-                } else {
-                    if (i > 0) {
-                        buffer.addSql(" AND ");
-                    }
-                }
-                this.buildFilterItem(buffer, items.get(i));
-            }
-            return buffer.getResult();
-        }
-        return null;
-    }
-
     @Override
     public BuildResult buildFilter(Filter filter) {
         if (filter instanceof BasicFilter) {
@@ -310,65 +265,10 @@ public class MysqlBuilder implements Builder {
 
             BuildBuffer buffer = new BuildBuffer();
             List<BasicFilter.FilterItem> items = f.getItems();
-            StringBuffer lastSql = new StringBuffer(" ");
             for (int i = 0; i < items.size(); i++) {
-                BasicFilter.FilterItem filterItem = items.get(i);
-
-                if (filterItem instanceof BasicFilter.SelectFilterItem) {
-                    BasicFilter basicFilter = ((BasicFilter.SelectFilterItem) filterItem).getSelectFilter();
-                    buffer.addSql(" OR ");
-                    buffer.addSql(" ( ");
-                    BuildResult buildResult = buildFilter0(basicFilter);
-                    buffer.addSql(buildResult.getSql());
-                    buffer.addArg(buildResult.getArgs());
-                    buffer.addSql(" ) ");
-                } else if (filterItem instanceof BasicFilter.LastSqlFilterItem) {
-                    lastSql.append(((BasicFilter.LastSqlFilterItem) filterItem).getSql());
-                } else {
-                    FilterType type = null;
-                    String column = null;
-                    if (filterItem instanceof BasicFilter.OneColumnFilterItem) {
-                        type = ((BasicFilter.OneColumnFilterItem) filterItem).getType();
-                    } else if (filterItem instanceof BasicFilter.TwoColumnFilterItem) {
-                        type = ((BasicFilter.TwoColumnFilterItem) filterItem).getType();
-                    }
-
-                    if (filterItem instanceof BasicFilter.OneColumnFilterItem) {
-                        column = ((BasicFilter.OneColumnFilterItem) filterItem).getColumn();
-                    } else if (filterItem instanceof BasicFilter.TwoColumnFilterItem) {
-                        column = ((BasicFilter.TwoColumnFilterItem) filterItem).getColumn1();
-                    }
-
-
-                    if (type != null && type.equals(OR)) {
-                        buffer.addSql(" OR ");
-                    } else {
-                        if (i > 0) {
-                            BasicFilter.FilterItem filterItem1 = items.get(i - 1);
-                            if (filterItem instanceof BasicFilter.OneColumnFilterItem) {
-                                column = ((BasicFilter.OneColumnFilterItem) filterItem1).getColumn();
-                            } else if (filterItem instanceof BasicFilter.TwoColumnFilterItem) {
-                                column = ((BasicFilter.TwoColumnFilterItem) filterItem1).getColumn1();
-                            }
-
-                            if (filterItem instanceof BasicFilter.OneColumnFilterItem) {
-                                type = ((BasicFilter.OneColumnFilterItem) filterItem1).getType();
-                            } else if (filterItem instanceof BasicFilter.TwoColumnFilterItem) {
-                                type = ((BasicFilter.TwoColumnFilterItem) filterItem1).getType();
-                            }
-                        }
-
-                        if (type != null && type.equals(OR) && StrUtil.isEmpty(column)) {
-
-                        } else {
-                            buffer.addSql(" AND ");
-                        }
-                    }
-                }
-
+                if (i > 0) buffer.addSql(" AND ");
                 this.buildFilterItem(buffer, items.get(i));
             }
-            buffer.addSql(lastSql.toString());
             return buffer.getResult();
         } else if (filter instanceof Filter.AndFilter) {
             Filter.AndFilter f = (Filter.AndFilter) filter;
@@ -422,20 +322,14 @@ public class MysqlBuilder implements Builder {
             case EXPR:
                 this.buildExprFilterItem(buffer, (BasicFilter.ExprFilterItem) item);
                 break;
-            case SQL:
-                this.buildSqlFilterItem(buffer, (BasicFilter.SqlFilterItem) item);
-                break;
-//            case SELECTFILTER:
-//                this.buildOneColumnFilterItem(buffer, (BasicFilter.SelectFilterItem) item);
-//                break;
         }
     }
 
     protected void buildOneColumnFilterItem(BuildBuffer buffer, BasicFilter.OneColumnFilterItem item) {
         Table t = item.getTable();
         if (t != null) buffer.addSql("`%s`.", t.getPrefix());
-        FilterType type = item.getType();
-        switch (type) {
+
+        switch (item.getType()) {
             case NE:
                 if (item.getValue() == null) buffer.addSql("`%s` IS NOT NULL", item.getColumn());
                 else {
@@ -463,44 +357,28 @@ public class MysqlBuilder implements Builder {
                 buffer.addSql("`%s` LIKE CONCAT('%%', ?, '%%')", item.getColumn());
                 buffer.addArg(item.getValue());
                 break;
-            case NOTLK:
-                buffer.addSql("`%s` NOT LIKE CONCAT('%%', ?, '%%')", item.getColumn());
-                buffer.addArg(item.getValue());
-                break;
-            case LKLEFT:
-                buffer.addSql("`%s`  LIKE  CONCAT('%%', ?)", item.getColumn());
-                buffer.addArg(item.getValue());
-                break;
-            case LKRIGHT:
-                buffer.addSql("`%s`  LIKE  CONCAT( ?, '%%')", item.getColumn());
-                buffer.addArg(item.getValue());
-                break;
-            case BETWEEN:
-                buffer.addSql("`%s` BETWEEN ? AND  ?", item.getColumn());
-                buffer.addArg(item.getValue(), item.getValue2());
-                break;
-            case NOTBETWEEN:
-                buffer.addSql("`%s` NOT BETWEEN ? AND  ?", item.getColumn());
-                buffer.addArg(item.getValue(), item.getValue2());
-                break;
-            case OR:
-                if (StrUtil.isNotEmpty(item.getColumn())) {
-                    buffer.addSql("`%s` = ? ", item.getColumn());
-                    buffer.addArg(item.getValue());
-                }
-                break;
             case IN:
             case NIN:
                 Class<?> clazz = item.getValue().getClass();
                 if (clazz.isArray()) {
+                    Class<?> elemType = clazz.getComponentType();
                     StringBuilder sb = new StringBuilder();
-                    for (int i = 0; i < Array.getLength(item.getValue()); i++) {
-                        if (i > 0) {
-                            sb.append(",");
+                    if (elemType == String.class) {
+                        for (int i = 0; i < Array.getLength(item.getValue()); i++) {
+                            if (i > 0) {
+                                sb.append(",");
+                            }
+                            sb.append("'");
+                            sb.append(Array.get(item.getValue(), i));
+                            sb.append("'");
                         }
-                        sb.append("'");
-                        sb.append(Array.get(item.getValue(), i));
-                        sb.append("'");
+                    } else {
+                        for (int i = 0; i < Array.getLength(item.getValue()); i++) {
+                            if (i > 0) {
+                                sb.append(",");
+                            }
+                            sb.append(Array.get(item.getValue(), i));
+                        }
                     }
                     buffer.addSql("`%s` %s(%s)", item.getColumn(), item.getType().value, sb.toString());
                 } else {
@@ -512,9 +390,6 @@ public class MysqlBuilder implements Builder {
                 else {
                     buffer.addSql("`%s`=?", item.getColumn());
                     buffer.addArg(item.getValue());
-                    if (type.value.equals(BETWEEN)) {
-                        buffer.addArg(item.getValue(), item.getValue2());
-                    }
                 }
                 break;
         }
@@ -548,10 +423,4 @@ public class MysqlBuilder implements Builder {
     protected void buildExprFilterItem(BuildBuffer buffer, BasicFilter.ExprFilterItem item) {
         buffer.addSql(item.getExpr());
     }
-
-    protected void buildSqlFilterItem(BuildBuffer buffer, BasicFilter.SqlFilterItem item) {
-        buffer.addSql(item.getSql());
-    }
-
-
 }

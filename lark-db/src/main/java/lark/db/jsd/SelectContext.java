@@ -1,9 +1,7 @@
 package lark.db.jsd;
 
-import cn.hutool.core.collection.CollUtil;
 import lark.db.jsd.clause.*;
 import lark.db.jsd.result.BuildResult;
-import lark.db.jsd.result.PageResult;
 import lark.db.jsd.result.SelectResult;
 
 import java.util.ArrayList;
@@ -19,7 +17,7 @@ public final class SelectContext implements SelectClause, FromClause, WhereClaus
     private SelectInfo info;
 
     SelectContext(ConnectionManager manager, Builder builder, Class<?> clazz) {
-        this(manager, builder, clazz, (String) null);
+        this(manager, builder, clazz, null);
     }
 
     SelectContext(ConnectionManager manager, Builder builder, Class<?> clazz, String table) {
@@ -31,18 +29,6 @@ public final class SelectContext implements SelectClause, FromClause, WhereClaus
         this.manager = manager;
         this.builder = builder;
         this.info = new SelectInfo(columns.list, false);
-        this.from(t);
-    }
-
-    SelectContext(ConnectionManager manager, Builder builder, Class<?> clazz, Columns columns) {
-        Mapper.EntityInfo entityInfo = Mapper.getEntityInfo(clazz);
-        Table t = Table.create(entityInfo.table);
-        if (CollUtil.isEmpty(columns.list)) {
-            columns = new Columns(t, entityInfo.getUpdateColumns());
-        }
-        this.manager = manager;
-        this.builder = builder;
-        this.info = new SelectInfo(columns.list, columns.distinct);
         this.from(t);
     }
 
@@ -191,14 +177,6 @@ public final class SelectContext implements SelectClause, FromClause, WhereClaus
     public BuildResult print() {
         return this.builder.buildSelect(this.info);
     }
-
-    @Override
-    public PageResult page() {
-        BuildResult br = this.builder.buildSelect(this.info);
-        Debug.log(br);
-        return new PageResult(manager, br.getSql(), br.getArgs(), this.info.skip, this.info.take);
-    }
-
 
     static class SelectInfo {
         Table table;

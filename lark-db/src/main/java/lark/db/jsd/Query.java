@@ -2,7 +2,6 @@ package lark.db.jsd;
 
 import lark.db.jsd.clause.*;
 import lark.db.jsd.template.SqlTemplate;
-import lark.db.jsd.lambad.CompareFilter;
 
 import java.util.List;
 
@@ -84,14 +83,6 @@ public interface Query {
     SelectClause select(String column);
 
     /**
-     * @description: TODO
-     * @return:
-     * @author: yandong
-     * @date: 2021/3/18 5:54 下午
-     */
-    <T,M> T one(CompareFilter<T,M> CompareFilter);
-
-    /**
      * 查询操作
      *
      * @param columns 查询返回列
@@ -122,7 +113,6 @@ public interface Query {
      * @return
      */
     SelectEndClause select(Object obj);
-
 
     /**
      * 直接执行 SQL 语句
@@ -173,9 +163,4 @@ public interface Query {
      * @return
      */
     TableQuery table(Object obj);
-
-
-    <T,M> LambadQuery<T,M> lambadQuery(Class<?> cla);
-
-
 }

@@ -1,6 +1,5 @@
 package lark.db.jsd;
 
-import lark.db.jsd.lambad.SelectFilter;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -10,8 +9,6 @@ import java.util.List;
  * Created by guohua.cui on 15/5/26.
  */
 public final class BasicFilter extends Filter {
-    //private static final ExprFilterItem EMPTY_FILTER_ITEM = new ExprFilterItem("1=1");
-    private static final BasicFilter EMPTY_FILTER = new BasicFilter().add("1=1");
     private List<FilterItem> items;
 
     BasicFilter() {
@@ -21,17 +18,12 @@ public final class BasicFilter extends Filter {
         return items;
     }
 
-    public static BasicFilter emptyFilter() {
-        return EMPTY_FILTER;
-    }
-
     boolean hasItems() {
         return items != null && !items.isEmpty();
     }
 
     /**
      * 添加自定义表达式查询条件(慎用, 使用此方法将不能保证跨数据库兼容)
-     *
      * @param expr 表达式, 如: SUM(COUNT)>100
      * @return
      */
@@ -41,35 +33,9 @@ public final class BasicFilter extends Filter {
     }
 
     /**
-     * 添加自定义sql 直接拼接
-     *
-     * @description: TODO
-     * @return:
-     * @author: yandong
-     * @date: 2021/3/24 2:46 下午
-     */
-    public BasicFilter addSql(String sql) {
-        this.add(new SqlFilterItem((sql)));
-        return this;
-    }
-
-    public BasicFilter addLastSql(String sql) {
-        this.add(new LastSqlFilterItem((sql)));
-        return this;
-    }
-
-
-    public <T, M> BasicFilter addSelectFilter(BasicFilter basicFilter) {
-        this.add(new SelectFilterItem(basicFilter));
-        return this;
-    }
-
-
-    /**
      * 添加简单查询条件
-     *
      * @param column 列
-     * @param value  值
+     * @param value 值
      * @return
      */
     public BasicFilter add(String column, Object value) {
@@ -79,18 +45,12 @@ public final class BasicFilter extends Filter {
 
     /**
      * 添加指定类型的查询条件
-     *
-     * @param column     列
+     * @param column 列
      * @param filterType 类型
-     * @param value      值
+     * @param value 值
      * @return
      */
     public BasicFilter add(String column, FilterType filterType, Object value) {
-        this.add(new OneColumnFilterItem(null, column, filterType, value));
-        return this;
-    }
-
-    public BasicFilter add(String column, FilterType filterType, Object value, Object value2) {
         this.add(new OneColumnFilterItem(null, column, filterType, value));
         return this;
     }
@@ -126,13 +86,11 @@ public final class BasicFilter extends Filter {
      * 条件项类型
      */
     enum FilterItemType {
-        EXPR, ONE_COLUMN, TWO_COLUMN, SQL, SELECTFILTER, LASTSQL;
+        EXPR, ONE_COLUMN, TWO_COLUMN;
     }
 
     interface FilterItem {
         FilterItemType getItemType();
-
-
     }
 
     @Getter
@@ -141,7 +99,6 @@ public final class BasicFilter extends Filter {
         private FilterType type;
         private String column;
         private Object value;
-        private Object value2;
 
         OneColumnFilterItem(String col, Object val) {
             this.column = col;
@@ -156,20 +113,10 @@ public final class BasicFilter extends Filter {
             this.value = val;
         }
 
-        OneColumnFilterItem(Table t, String col, FilterType type, Object val, Object val2) {
-            this.table = t;
-            this.column = col;
-            this.type = type;
-            this.value = val;
-            this.value2 = val2;
-        }
-
         @Override
         public FilterItemType getItemType() {
             return FilterItemType.ONE_COLUMN;
         }
-
-
     }
 
     @Getter
@@ -192,8 +139,6 @@ public final class BasicFilter extends Filter {
         public FilterItemType getItemType() {
             return FilterItemType.TWO_COLUMN;
         }
-
-
     }
 
     @Getter
@@ -209,49 +154,4 @@ public final class BasicFilter extends Filter {
             return FilterItemType.EXPR;
         }
     }
-
-    @Getter
-    static class SqlFilterItem implements FilterItem {
-        private String sql;
-
-        SqlFilterItem(String sql) {
-            this.sql = sql;
-        }
-
-        @Override
-        public FilterItemType getItemType() {
-            return FilterItemType.SQL;
-        }
-    }
-
-    @Getter
-    static class LastSqlFilterItem implements FilterItem {
-        private String sql;
-
-        LastSqlFilterItem(String sql) {
-            this.sql = sql;
-        }
-
-        @Override
-        public FilterItemType getItemType() {
-            return FilterItemType.LASTSQL;
-        }
-    }
-
-
-    @Getter
-    static class SelectFilterItem implements FilterItem {
-        private BasicFilter selectFilter;
-
-        SelectFilterItem(BasicFilter selectFilter) {
-            this.selectFilter = selectFilter;
-        }
-
-        @Override
-        public FilterItemType getItemType() {
-            return FilterItemType.SELECTFILTER;
-        }
-    }
-
-
 }

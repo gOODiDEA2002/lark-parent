@@ -1,7 +1,5 @@
 package lark.db.jsd;
 
-import cn.hutool.core.util.StrUtil;
-
 /**
  * Created by noname on 15/11/19.
  */
@@ -26,17 +24,15 @@ public enum NameStyle {
     private static String toCamel(String name) {
         StringBuilder sb = new StringBuilder();
         char lastChar = ' ';
-        if (StrUtil.isNotEmpty(name)) {
-            for (int i = 0; i < name.length(); i++) {
-                char c = name.charAt(i);
-                if (i == 0) sb.append(Character.toLowerCase(c));
-                else if (c != '_') {
-                    if (lastChar == '_') sb.append(Character.toUpperCase(c));
-                    else if (Character.isLowerCase(lastChar) && Character.isUpperCase(c)) sb.append(c);
-                    else sb.append(Character.toLowerCase(c));
-                }
-                lastChar = c;
+        for (int i = 0; i < name.length(); i++) {
+            char c = name.charAt(i);
+            if (i == 0) sb.append(Character.toLowerCase(c));
+            else if (c != '_') {
+                if (lastChar == '_') sb.append(Character.toUpperCase(c));
+                else if (Character.isLowerCase(lastChar) && Character.isUpperCase(c)) sb.append(c);
+                else sb.append(Character.toLowerCase(c));
             }
+            lastChar = c;
         }
         return sb.toString();
     }
@@ -44,17 +40,15 @@ public enum NameStyle {
     private static String toPascal(String name) {
         StringBuilder sb = new StringBuilder();
         char lastChar = ' ';
-        if (StrUtil.isNotEmpty(name)) {
-            for (int i = 0; i < name.length(); i++) {
-                char c = name.charAt(i);
-                if (i == 0) sb.append(Character.toUpperCase(c));
-                else if (c != '_') {
-                    if (lastChar == '_') sb.append(Character.toUpperCase(c));
-                    else if (Character.isLowerCase(lastChar) && Character.isUpperCase(c)) sb.append(c);
-                    else sb.append(Character.toLowerCase(c));
-                }
-                lastChar = c;
+        for (int i = 0; i < name.length(); i++) {
+            char c = name.charAt(i);
+            if (i == 0) sb.append(Character.toUpperCase(c));
+            else if (c != '_') {
+                if (lastChar == '_') sb.append(Character.toUpperCase(c));
+                else if (Character.isLowerCase(lastChar) && Character.isUpperCase(c)) sb.append(c);
+                else sb.append(Character.toLowerCase(c));
             }
+            lastChar = c;
         }
         return sb.toString();
     }
@@ -62,17 +56,15 @@ public enum NameStyle {
     private static String toUpper(String name) {
         StringBuilder sb = new StringBuilder();
         char lastChar = ' ';
-        if (StrUtil.isNotEmpty(name)) {
-            for (int i = 0; i < name.length(); i++) {
-                char c = name.charAt(i);
-                if (Character.isUpperCase(c)) {
-                    if (Character.isLowerCase(lastChar)) sb.append('_');
-                    sb.append(c);
-                } else {
-                    sb.append(Character.toUpperCase(c));
-                }
-                lastChar = c;
+        for (int i = 0; i < name.length(); i++) {
+            char c = name.charAt(i);
+            if (Character.isUpperCase(c)) {
+                if (Character.isLowerCase(lastChar)) sb.append('_');
+                sb.append(c);
+            } else {
+                sb.append(Character.toUpperCase(c));
             }
+            lastChar = c;
         }
         return sb.toString();
     }
@@ -80,18 +72,15 @@ public enum NameStyle {
     private static String toLower(String name) {
         StringBuilder sb = new StringBuilder();
         char lastChar = ' ';
-        if (StrUtil.isNotEmpty(name)) {
-            for (int i = 0; i < name.length(); i++) {
-                char c = name.charAt(i);
-                if (Character.isLowerCase(c) || c == '_' || Character.isDigit(c)) sb.append(c);
-                else if (Character.isUpperCase(c)) {
-                    if (Character.isLowerCase(lastChar)) sb.append('_');
-                    sb.append(Character.toLowerCase(c));
-                }
-                lastChar = c;
+        for (int i = 0; i < name.length(); i++) {
+            char c = name.charAt(i);
+            if (Character.isLowerCase(c) || c == '_' || Character.isDigit(c)) sb.append(c);
+            else if (Character.isUpperCase(c)) {
+                if (Character.isLowerCase(lastChar)) sb.append('_');
+                sb.append(Character.toLowerCase(c));
             }
+            lastChar = c;
         }
-
         return sb.toString();
     }
 }

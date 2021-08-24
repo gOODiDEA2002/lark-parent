@@ -1,6 +1,5 @@
 package lark.db.jsd;
 
-import cn.hutool.core.convert.Convert;
 import com.esotericsoftware.reflectasm.MethodAccess;
 import lark.core.util.Beans;
 import lark.core.util.Strings;
@@ -262,9 +261,8 @@ public final class Mapper {
 
             FieldInfo fi = fields.get(field);
             if (fi == null) return;
-            Class<?> type = fi.type;
-            Object convert = Convert.convert(type, value);
-            method.invoke(obj, fi.setIndex, fi.getJavaValue(convert));
+
+            method.invoke(obj, fi.setIndex, fi.getJavaValue(value));
         }
 
         private int getMethodIndex(String name) {

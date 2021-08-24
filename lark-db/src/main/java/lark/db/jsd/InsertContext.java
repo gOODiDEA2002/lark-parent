@@ -14,7 +14,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -51,11 +50,11 @@ public class InsertContext implements InsertClause, ColumnsClause, ValuesClause,
         this.values(entityInfo.getInsertValues(obj));
     }
 
-    <T> InsertContext(ConnectionManager manager, Builder builder, Collection<T> objects) {
+    <T> InsertContext(ConnectionManager manager, Builder builder, List<T> objects) {
         this(manager, builder, objects, null);
     }
 
-    <T> InsertContext(ConnectionManager manager, Builder builder, Collection<T> objects, String table) {
+    <T> InsertContext(ConnectionManager manager, Builder builder, List<T> objects, String table) {
         if (objects == null || objects.isEmpty()) {
             throw new JsdException("parameter objects can't be null or empty");
         }
@@ -63,7 +62,7 @@ public class InsertContext implements InsertClause, ColumnsClause, ValuesClause,
         this.manager = manager;
         this.builder = builder;
 
-        Mapper.EntityInfo entityInfo = Mapper.getEntityInfo(objects.stream().findFirst().get().getClass());
+        Mapper.EntityInfo entityInfo = Mapper.getEntityInfo(objects.get(0).getClass());
         this.info = new InsertInfo(table == null ? entityInfo.table : table);
         this.columns(entityInfo.getInsertColumns());
         objects.forEach(v -> this.values(entityInfo.getInsertValues(v)));
@@ -94,8 +93,8 @@ public class InsertContext implements InsertClause, ColumnsClause, ValuesClause,
             statement = conn.prepareStatement(result.getSql(), option);
             List<Object> args = result.getArgs();
             if (args != null) {
-                for (int i = 0; i < args.size(); i++) {
-                    statement.setObject(i + 1, args.get(i));
+                for (int i=0; i<args.size(); i++) {
+                    statement.setObject(i+1, args.get(i));
                 }
             }
 

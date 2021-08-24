@@ -1,7 +1,5 @@
 package lark.db.jsd;
 
-import org.springframework.util.ObjectUtils;
-
 /**
  * 提供创建查询对象的快捷方式
  * Created by guohua.cui on 15/6/9.
@@ -28,27 +26,6 @@ public final class Shortcut {
 
     public static BasicFilter f(Table table1, String column1, Table table2, String column2) {
         return Filter.create().add(table1, column1, FilterType.EQ, table2, column2);
-    }
-
-    public static BasicFilter fIf(String column, Object value) {
-        if (ObjectUtils.isEmpty(value)) {
-            return BasicFilter.emptyFilter();
-        }
-        return Filter.create(column, value);
-    }
-
-    public static BasicFilter fIf(String column, FilterType filterType, Object value) {
-        if (ObjectUtils.isEmpty(value)) {
-            return BasicFilter.emptyFilter();
-        }
-        return Filter.create(column, filterType, value);
-    }
-
-    public static BasicFilter fIf(Table table, String column, FilterType filterType, Object value) {
-        if (ObjectUtils.isEmpty(value)) {
-            return BasicFilter.emptyFilter();
-        }
-        return Filter.create().add(table, column, filterType, value);
     }
 
     public static Table t(String name) {

@@ -28,7 +28,6 @@ public final class SelectResult implements AutoCloseable {
         this.args = args;
     }
 
-
     /**
      * 读取第一行记录的第一列, 并在读取后关闭数据库资源
      *
@@ -144,7 +143,6 @@ public final class SelectResult implements AutoCloseable {
         }
     }
 
-
     /**
      * 订阅处理每一条数据, 并在读取所有数据后关闭数据库资源
      *
@@ -194,6 +192,5 @@ public final class SelectResult implements AutoCloseable {
         rs = statement.executeQuery();
         return rs;
     }
-
-
+    
 }

@@ -2,7 +2,6 @@ package lark.db.jsd.clause;
 
 import lark.db.jsd.LockMode;
 import lark.db.jsd.result.BuildResult;
-import lark.db.jsd.result.PageResult;
 import lark.db.jsd.result.SelectResult;
 
 /**
@@ -10,12 +9,6 @@ import lark.db.jsd.result.SelectResult;
  */
 public interface SelectEndClause {
     SelectResult result();
-
     SelectResult result(LockMode lockMode);
-
     BuildResult print();
-
-    PageResult page();
-
-
 }
