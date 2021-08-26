@@ -4,6 +4,7 @@ include:
   - project: 'devops/ci-templates'
     file: '/deploy/java.deploy.gitlab-ci.yml'
 
+
 build:
   extends:
     - .qa
