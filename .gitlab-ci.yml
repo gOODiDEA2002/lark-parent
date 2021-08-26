@@ -6,7 +6,7 @@ include:
 
 build:
   extends:
-    - .playground
+    - .qa
     - .build
   script:
     - mvn deploy -ff -B
