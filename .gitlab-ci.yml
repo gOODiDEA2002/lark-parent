@@ -9,4 +9,4 @@ build:
     - .qa
     - .build
   script:
-    - mvn deploy -ff -B
+    - mvn clean deploy -X
