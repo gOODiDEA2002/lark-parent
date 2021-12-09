@@ -28,9 +28,9 @@ public class ApiAutoConfiguration {
     }
 
     @Bean
-    public ApiDocConfig swaggerConfig() {
-        ApiDocConfig swaggerConfig = new ApiDocConfig();
-        return swaggerConfig;
+    public ApiDocConfig docConfig() {
+        ApiDocConfig docConfig = new ApiDocConfig();
+        return docConfig;
     }
 
 }

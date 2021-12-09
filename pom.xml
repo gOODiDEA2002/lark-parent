@@ -35,7 +35,7 @@
         <lark.version>${project.version}</lark.version>
         <java.version>11</java.version>
         <!--Vendor-->
-        <guava.version>28.1-jre</guava.version>
+        <guava.version>31.0.1-jre</guava.version>
         <rocketmq.version>4.8.0</rocketmq.version>
         <minio.version>7.1.4</minio.version>
         <aliyun-sdk-oss.version>3.9.1</aliyun-sdk-oss.version>
@@ -51,7 +51,7 @@
         <mongodb.version>3.11.1</mongodb.version>
         <reflectasm.version>1.11.9</reflectasm.version>
         <persistence.version>2.2</persistence.version>
-        <swagger.version>3.0.0</swagger.version>
+        <springdoc.version>1.6.0</springdoc.version>
         <reflections8.version>0.11.7</reflections8.version>
         <activation.version>1.2.0</activation.version>
     </properties>
@@ -173,16 +173,11 @@
                 <artifactId>spring-data-mongodb</artifactId>
                 <version>${spring.data.mongodb.version}</version>
             </dependency>
-            <!--swagger-->
+            <!--springdoc-->
             <dependency>
-                <groupId>io.springfox</groupId>
-                <artifactId>springfox-boot-starter</artifactId>
-                <version>${swagger.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.springfox</groupId>
-                <artifactId>springfox-swagger-ui</artifactId>
-                <version>${swagger.version}</version>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-ui</artifactId>
+                <version>${springdoc.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
