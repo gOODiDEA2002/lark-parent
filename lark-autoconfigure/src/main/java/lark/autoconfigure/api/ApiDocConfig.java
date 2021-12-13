@@ -18,10 +18,10 @@ public class ApiDocConfig {
 
     @Bean
     public GroupedOpenApi api() {
-        String title = String.format( "%s API", environment.getProperty( "spring.application.name"));
+        String title = String.format( "%s API", environment.getProperty( "spring.application.name") );
         return GroupedOpenApi.builder()
                 .group(title)
-                .pathsToMatch("/v*/**")
+                .pathsToMatch("/api/**")
                 .build();
     }
 }

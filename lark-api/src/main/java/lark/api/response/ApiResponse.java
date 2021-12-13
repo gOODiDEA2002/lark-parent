@@ -20,6 +20,7 @@ import org.slf4j.helpers.MessageFormatter;
 public class ApiResponse<T> {
     protected int code = BaseEnum.DefaultEnum.SUCCESS.getCode();
     protected String msg = BaseEnum.DefaultEnum.SUCCESS.getMsg();
+    protected Long time = Long.MIN_VALUE;
     protected T data;
 
     public ApiResponse() {
@@ -51,6 +52,10 @@ public class ApiResponse<T> {
 
     public void setData(T data) {
         this.data = data;
+    }
+
+    public void setProcessTime( Long time ) {
+        this.time = time;
     }
 
     static class ErrorResponse extends ApiResponse {
@@ -148,7 +153,7 @@ public class ApiResponse<T> {
     public static ApiResponse EXCEPTION(BusinessException e) {
         return ApiResponse
                 .builder()
-                .msg(e.getDetail())
+                .msg(e.getMessage())
                 .code(e.getCode())
                 .data(null)
                 .build();
@@ -157,7 +162,7 @@ public class ApiResponse<T> {
     public static ApiResponse EXCEPTION(BusinessException e, Object data) {
         return ApiResponse
                 .builder()
-                .msg(e.getDetail())
+                .msg(e.getMessage())
                 .code(e.getCode())
                 .data(data)
                 .build();

@@ -1,16 +1,14 @@
 package lark.autoconfigure.api;
 
-import lark.api.web.ApiFilter;
-import lark.api.web.ApiInterceptor;
-import lark.api.web.ApiServlet;
+import lark.api.web.*;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.config.annotation.*;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,27 +17,17 @@ import java.util.List;
  */
 @Configuration
 public class ApiMvcConfig implements WebMvcConfigurer {
+    private static final String API_PREFIX = "/api";
+    private static final String API_PATTERN = API_PREFIX + "/**";
+
+    @Override
+    public void configurePathMatch(PathMatchConfigurer configurer) {
+        configurer.addPathPrefix( API_PREFIX ,c -> c.isAnnotationPresent(ApiRestController.class));
+    }
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new ApiInterceptor()).addPathPatterns("/**");
-    }
-
-    @Bean
-    public FilterRegistrationBean<ApiFilter> filterRegistrationBean() {
-        FilterRegistrationBean<ApiFilter> filterRegistrationBean = new FilterRegistrationBean<>();
-        List<String> uriList = new ArrayList<>(1);
-        uriList.add("/**");
-        filterRegistrationBean.setFilter(new ApiFilter());
-        filterRegistrationBean.setEnabled(true);
-        filterRegistrationBean.setUrlPatterns(uriList);
-        filterRegistrationBean.setName("ApiFilter");
-        filterRegistrationBean.setOrder(1);
-        return filterRegistrationBean;
-    }
-
-    @Bean
-    public ServletRegistrationBean servletRegistrationBean() {
-        return new ServletRegistrationBean(new ApiServlet(), "/servlet");
+        registry.addInterceptor(new ApiInterceptor()).addPathPatterns(API_PATTERN);
     }
 
     /**
@@ -51,7 +39,7 @@ public class ApiMvcConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry
                 //允许访问的接口地址
-                .addMapping("/**")
+                .addMapping("/api/**")
                 //允许发起跨域访问的域名
                 .allowedOriginPatterns("*")
                 //允许跨域访问的方法
@@ -60,5 +48,36 @@ public class ApiMvcConfig implements WebMvcConfigurer {
                 .allowCredentials(true)
                 .maxAge(3600)
                 .allowedHeaders("*");
+    }
+
+    /**
+     * 添加静态资源--过滤swagger-api (开源的在线API文档)
+     * @param registry
+     */
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry
+                .addResourceHandler("/resources/**")
+                .addResourceLocations("/resources/");
+
+        registry.addResourceHandler("swagger-ui.html")
+                .addResourceLocations("classpath:/META-INF/resources/");
+
+        registry.addResourceHandler("/webjars/**")
+                .addResourceLocations("classpath:/META-INF/resources/webjars/");
+
+        registry.addResourceHandler("/swagger-resources/**")
+                .addResourceLocations("classpath:/META-INF/resources/swagger-resources/");
+
+        registry.addResourceHandler("/swagger/**")
+                .addResourceLocations("classpath:/META-INF/resources/swagger*");
+
+        registry.addResourceHandler("/v2/api-docs/**")
+                .addResourceLocations("classpath:/META-INF/resources/v2/api-docs/");
+
+        registry.addResourceHandler("/v3/api-docs/**")
+                .addResourceLocations("classpath:/META-INF/resources/v3/api-docs/");
+
+
     }
 }
