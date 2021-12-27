@@ -24,8 +24,8 @@ public class ApiInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        Long startTime = System.currentTimeMillis();
-        request.setAttribute("startTime", startTime );
+        Long beginTime = System.currentTimeMillis();
+        request.setAttribute("beginTime", beginTime );
         logger.info("ApiInterceptor->preHandle: {}", request.getRequestURI());
         return true;
     }

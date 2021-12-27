@@ -40,6 +40,7 @@ public class ApiResponseBodyWrapHandler implements HandlerMethodReturnValueHandl
 
     private Long getProcessTime( NativeWebRequest nativeWebRequest ) {
         HttpServletRequest request = nativeWebRequest.getNativeRequest(HttpServletRequest.class);
+        // beginTime in ApiInterceptor->preHandle
         Object beginTime = request.getAttribute( "beginTime");
         if ( beginTime == null ) {
             return Long.MIN_VALUE;
