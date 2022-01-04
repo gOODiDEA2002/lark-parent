@@ -23,4 +23,9 @@ public interface RegistryService {
      * @return 服务节点的访问地址
      */
     String getServiceUrl( String serviceName, String groupName );
+
+    /**
+     * 获取配置
+     */
+    String getConfig( String key );
 }

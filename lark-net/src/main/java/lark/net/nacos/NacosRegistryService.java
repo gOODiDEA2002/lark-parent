@@ -23,6 +23,7 @@ public class NacosRegistryService implements RegistryService {
     NamingService namingService;
     ConfigService configService;
     private final static String DEFAULT_GROUP = "LARK";
+    private final static long DEFAULT_TIMEOUT = 3 * 1000;
     private final TaskScheduler scheduler;
     private ScheduledFuture future;
     private final Duration interval = Duration.ofMinutes( 3 );
@@ -84,4 +85,17 @@ public class NacosRegistryService implements RegistryService {
         }
         return Strings.EMPTY;
     }
+
+    @Override
+    public String getConfig(String key) {
+        try {
+            String config = configService.getConfig( key, DEFAULT_GROUP, DEFAULT_TIMEOUT );
+            return config;
+        } catch (NacosException e) {
+            LOGGER.error("===> getConfig failure: {} , Cause:{}", key, e.getMessage() );
+        }
+        return Strings.EMPTY;
+    }
+
+
 }
