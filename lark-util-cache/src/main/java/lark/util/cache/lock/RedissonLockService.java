@@ -32,7 +32,7 @@ import java.util.concurrent.TimeUnit;
  * Created by Andy Yuan on 2020/10/27.
  */
 public class RedissonLockService implements LockService  {
-    private static final String KEY_TEMPLATE = "l-l-%s-%s";
+    private static final String KEY_TEMPLATE = "l-l.-%s-%s";
     private static final Logger LOGGER = LoggerFactory.getLogger(RedissonLockService.class);
     private final RedissonClient redisson;
     private final String keyPrefix;

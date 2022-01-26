@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
  * @author andy
  */
 public class RedissonRateLimitService implements RateLimitService {
-    private static final String KEY_TEMPLATE = "l-r-%s-%s";
+    private static final String KEY_TEMPLATE = "l-r.%s-%s";
     private static final Logger LOGGER = LoggerFactory.getLogger(RedissonRateLimitService.class);
     private final RedissonClient redisson;
     private final String keyPrefix;
@@ -36,12 +36,22 @@ public class RedissonRateLimitService implements RateLimitService {
     @Override
     public boolean tryProcess(String rateLimitKey, int rate, int intervalSecond, ExecuteHandle handle) {
         RRateLimiter rateLimiter = redisson.getRateLimiter( getKey( rateLimitKey ) );
-        boolean result = rateLimiter.trySetRate(RateType.OVERALL, rate, intervalSecond, RateIntervalUnit.SECONDS);
-//        if ( !result ) {
-//            throw new ServiceException( "RedissonRateLimitService trySetRate fail!" );
-//        }
+        if ( !rateLimiter.isExists() ) {
+            boolean setRateResult = rateLimiter.trySetRate(RateType.OVERALL, rate, intervalSecond, RateIntervalUnit.SECONDS);
+            if (!setRateResult) {
+                throw new ServiceException("RedissonRateLimitService trySetRate fail!");
+            }
+        }
         //
-        boolean acquireResult = rateLimiter.tryAcquire();
+        boolean acquireResult = false;
+        try {
+            acquireResult = rateLimiter.tryAcquire();
+        } catch ( Exception exception ) {
+            // https://github.com/redisson/redisson/issues/4090
+            LOGGER.error( "RateLimiter limit:", exception );
+            rateLimiter.delete();
+        }
+        //
         if ( acquireResult ) {
             try {
                 handle.execute();

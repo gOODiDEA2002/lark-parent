@@ -20,7 +20,7 @@ import java.util.zip.GZIPOutputStream;
  * @author andy
  */
 public class RedissonCacheService implements CacheService {
-    private static final String KEY_TEMPLATE = "l-c-%s-%s";
+    private static final String KEY_TEMPLATE = "l-c.%s-%s";
     private final String keyPrefix;
     private static final String DEFAULT_VERSION_KEY = "";
     private static final int BUFFER_SIZE = 1024;
