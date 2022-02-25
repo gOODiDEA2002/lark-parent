@@ -9,9 +9,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.util.ContentCachingRequestWrapper;
+import org.springframework.web.util.WebUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * @desc: 创建一个拦截器
@@ -24,9 +27,22 @@ public class ApiInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        logger.info("ApiInterceptor->preHandle: {}", request.getRequestURI());
         Long beginTime = System.currentTimeMillis();
         request.setAttribute("beginTime", beginTime );
-        logger.info("ApiInterceptor->preHandle: {}", request.getRequestURI());
+        // request
+        String postData;
+        HttpServletRequest requestCacheWrapperObject = null;
+        try {
+            // To overcome request stream closed issue
+            requestCacheWrapperObject = new ContentCachingRequestWrapper(request);
+            requestCacheWrapperObject.getParameterMap();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        } finally {
+            postData = readPayload(requestCacheWrapperObject);
+            logger.info("REQUEST DATA: {}", postData);
+        }
         return true;
     }
 
@@ -39,4 +55,17 @@ public class ApiInterceptor implements HandlerInterceptor {
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
         logger.info("ApiInterceptor->afterCompletion: {}", request.getRequestURI());
     }
+
+    private static String readPayload(final HttpServletRequest request) throws IOException {
+        String payloadData = null;
+        ContentCachingRequestWrapper contentCachingRequestWrapper = WebUtils.getNativeRequest(request, ContentCachingRequestWrapper.class);
+        if (null != contentCachingRequestWrapper) {
+            byte[] buf = contentCachingRequestWrapper.getContentAsByteArray();
+            if (buf.length > 0) {
+                payloadData = new String(buf, 0, buf.length, contentCachingRequestWrapper.getCharacterEncoding());
+            }
+        }
+        return payloadData;
+    }
+
 }
