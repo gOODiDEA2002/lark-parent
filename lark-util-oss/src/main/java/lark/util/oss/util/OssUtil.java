@@ -1,6 +1,7 @@
 package lark.util.oss.util;
 
-import javax.activation.MimetypesFileTypeMap;
+import jakarta.activation.MimetypesFileTypeMap;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
