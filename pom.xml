@@ -40,7 +40,7 @@
         <minio.version>7.1.4</minio.version>
         <aliyun-sdk-oss.version>3.9.1</aliyun-sdk-oss.version>
         <elasticsearch.version>7.9.2</elasticsearch.version>
-        <redisson.version>3.16.8</redisson.version>
+        <redisson.version>3.17.1</redisson.version>
         <xxl-job.version>2.2.0</xxl-job.version>
         <nacos.version>1.4.1</nacos.version>
         <asm.version>7.2</asm.version>
