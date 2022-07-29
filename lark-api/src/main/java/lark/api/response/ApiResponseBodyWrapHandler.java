@@ -2,6 +2,7 @@ package lark.api.response;
 
 import lark.core.enums.BaseEnum;
 import lark.core.lang.DataException;
+import lark.core.lang.RawResult;
 import lark.core.util.Strings;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -9,6 +10,7 @@ import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 import javax.servlet.http.HttpServletRequest;
+import java.lang.annotation.Annotation;
 
 /**
  * @author Andy Yuan
@@ -33,7 +35,11 @@ public class ApiResponseBodyWrapHandler implements HandlerMethodReturnValueHandl
         if ( processTime == Long.MIN_VALUE ) {
             delegate.handleReturnValue(o, methodParameter, modelAndViewContainer, nativeWebRequest);
         } else {
-            delegate.handleReturnValue(wrapApiResult(o, processTime ), methodParameter, modelAndViewContainer, nativeWebRequest);
+            if ( methodParameter.hasMethodAnnotation( RawResult.class ) ) {
+                delegate.handleReturnValue(o, methodParameter, modelAndViewContainer, nativeWebRequest);
+            } else {
+                delegate.handleReturnValue(wrapApiResult(o, processTime ), methodParameter, modelAndViewContainer, nativeWebRequest);
+            }
         }
 
     }
